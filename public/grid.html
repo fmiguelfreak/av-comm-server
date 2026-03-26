@@ -83,11 +83,11 @@
 <!-- TopAppBar - Tactical Header -->
 <header class="bg-surface text-primary font-headline uppercase tracking-tighter border-b-2 border-primary/30 flex justify-between items-center px-4 h-14 w-full fixed top-0 z-40">
 <div class="flex flex-col leading-none">
-<div class="text-[10px] text-primary/60 font-bold">NODE_ID: <span class="text-primary">8842</span></div>
-<div class="text-[10px] text-primary/60 font-bold">PIN: <span class="text-primary">0921</span></div>
+<div class="text-[11px] font-black"><span class="text-primary/60">ID:</span> <span id="header-id">----</span></div>
+<div class="text-[11px] font-black"><span class="text-primary/60">PIN:</span> <span id="header-pin">----</span></div>
 </div>
 <div class="flex flex-col items-center">
-<span class="text-xs font-black tracking-widest border border-primary px-2 py-0.5">ROLE: FOH_LEAD</span>
+<span class="text-xs font-black tracking-widest border-2 border-primary px-3 py-0.5 bg-primary/10" id="header-role">UNASSIGNED</span>
 </div>
 <div class="flex items-center gap-2">
 <div class="flex flex-col items-end leading-none">
@@ -97,7 +97,7 @@
 <div class="w-3 h-3 rounded-full bg-primary animate-pulse shadow-[0_0_10px_#00ff41]" id="sync-indicator"></div>
 </div>
 </header>
-<!-- Main Content Canvas - 2x6 Grid -->
+<!-- Main Content Canvas - Dynamic Grid -->
 <main class="mt-14 mb-[72px] w-full bg-background overflow-hidden" id="channel-grid">
 <!-- Channels will be injected here via JavaScript -->
 </main>
@@ -141,12 +141,27 @@
 <span>Alerts</span>
 <span class="absolute top-0 right-1 w-1.5 h-1.5 bg-error rounded-full"></span>
 </div>
-<div class="flex flex-col items-center justify-center" onclick="window.location.reload()">
+<div class="flex flex-col items-center justify-center" onclick="window.location.href='config.html'">
 <span class="material-symbols-outlined mb-1 text-xl">settings</span>
 <span>Config</span>
 </div>
 </nav>
 <script>
+        // Data management: Check URL params first, then fallback to localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const config = {
+            showId: urlParams.get('showId') || localStorage.getItem('showId') || '8842',
+            pin: urlParams.get('pin') || localStorage.getItem('pin') || '0921',
+            channels: parseInt(urlParams.get('channels')) || parseInt(localStorage.getItem('channels')) || 12,
+            role: urlParams.get('role') || localStorage.getItem('role') || 'FOH_LEAD'
+        };
+
+        // Update UI with config values
+        document.getElementById('header-id').innerText = config.showId;
+        document.getElementById('header-pin').innerText = config.pin;
+        document.getElementById('header-role').innerText = config.role;
+
         const socket = io('https://tacomamultimedia-production.up.railway.app/');
         const gridContainer = document.getElementById('channel-grid');
         const syncStatus = document.getElementById('sync-status');
@@ -157,9 +172,6 @@
             "LEAD_VOC_01", "BACK_VOC_01", "GTR_STK_A", "GTR_STK_B",
             "COMMS_01", "L_WASH_STG", "R_WASH_STG", "PYRO_MSTR"
         ];
-
-        // Ensure exactly 12 channels for the 2x6 tactical grid
-        const channelCount = 12;
 
         function renderGrid(count) {
             gridContainer.innerHTML = '';
@@ -196,7 +208,7 @@
             }
         }
 
-        renderGrid(channelCount);
+        renderGrid(config.channels);
 
         socket.on('connect', () => {
             syncStatus.innerText = 'STABLE';
@@ -234,7 +246,7 @@
             const recognition = new SpeechRecognition();
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
-                socket.emit('new_message', { content: transcript.toUpperCase(), source: 'FOH_LOCAL' });
+                socket.emit('new_message', { content: transcript.toUpperCase(), source: config.role });
             };
             pttBtn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
