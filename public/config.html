@@ -116,6 +116,10 @@
 <span class="font-label font-bold text-[9px] tracking-widest">CUSTOM</span>
 </button>
 </div>
+<!-- Custom Role Input (Hidden by default) -->
+<div class="hidden mt-2" id="custom-role-container">
+<input class="w-full bg-[#000] border border-[#333] border-b-[#00FF41] text-[#00FF41] font-headline p-3 uppercase tracking-widest focus:ring-0 focus:outline-none placeholder:text-zinc-800" id="custom-role-input" placeholder="SPECIFY ROLE..." type="text"/>
+</div>
 </div>
 </div>
 <!-- Start Session Button -->
@@ -156,6 +160,8 @@
         const showIdDisplay = document.getElementById('display-show-id');
         const pinDisplay = document.getElementById('display-access-pin');
         const roleButtons = document.querySelectorAll('.role-btn');
+        const customRoleContainer = document.getElementById('custom-role-container');
+        const customRoleInput = document.getElementById('custom-role-input');
         const launchCta = document.getElementById('launch-cta');
 
         // Initial State
@@ -166,7 +172,7 @@
 
         // 1. Generation Logic on Load
         window.addEventListener('DOMContentLoaded', () => {
-            // Generate random 4-digit ID and PIN
+            // Generate strictly numeric 4-digit ID and PIN
             currentShowId = Math.floor(1000 + Math.random() * 9000).toString();
             currentPin = Math.floor(1000 + Math.random() * 9000).toString();
 
@@ -201,11 +207,24 @@
                 roleButtons.forEach(b => b.classList.remove('role-active'));
                 btn.classList.add('role-active');
                 selectedRole = btn.getAttribute('data-role');
+
+                // Show/Hide Custom Input
+                if (selectedRole === 'CUSTOM') {
+                    customRoleContainer.classList.remove('hidden');
+                    customRoleInput.focus();
+                } else {
+                    customRoleContainer.classList.add('hidden');
+                }
             });
         });
 
         // 4. Initialize Uplink Socket Logic
         launchCta.addEventListener('click', () => {
+            let finalRole = selectedRole;
+            if (selectedRole === 'CUSTOM') {
+                finalRole = customRoleInput.value.trim().toUpperCase() || 'CUSTOM';
+            }
+
             launchCta.disabled = true;
             launchCta.textContent = 'CONNECTING...';
             launchCta.classList.remove('bg-[#00FF41]');
@@ -220,7 +239,7 @@
                 socket.emit('create_show', {
                     name: `SHOW_${currentShowId}`,
                     channels: channels,
-                    role: selectedRole,
+                    role: finalRole,
                     showId: currentShowId,
                     pin: currentPin
                 });
@@ -233,7 +252,7 @@
                 localStorage.setItem('stage_tech_show_id', currentShowId);
                 localStorage.setItem('stage_tech_pin', currentPin);
                 localStorage.setItem('stage_tech_channels', channels);
-                localStorage.setItem('stage_tech_role', selectedRole);
+                localStorage.setItem('stage_tech_role', finalRole);
                 localStorage.setItem('stage_tech_server_id', data.id || '');
                 
                 // Redirect
