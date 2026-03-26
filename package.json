@@ -1,16 +1,16 @@
 {
-  "name": "av-comm-server",
-  "version": "1.0.0",
-  "description": "Event Mics Signaling Bridge - Production Engine",
+  "name": "av-comm-server-production",
+  "version": "1.8.0",
+  "description": "Event Mics Signaling Bridge - Real-time Sync Engine",
   "main": "server.js",
   "engines": {
     "node": ">=18.0.0"
   },
-  "scripts": {
-    "start": "node server.js"
-  },
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.7.2"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }
