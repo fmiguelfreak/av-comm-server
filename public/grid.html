@@ -38,6 +38,37 @@
           },
         },
       }
+    </script><script>
+        const roles = ['FOH', 'BOH', 'MICS', 'CUSTOM', 'UNASSIGNED'];
+        
+        function toggleRole() {
+            const roleEl = document.getElementById('header-role');
+            let currentIndex = roles.indexOf(config.role);
+            if (currentIndex === -1) currentIndex = roles.length - 1;
+            
+            const nextIndex = (currentIndex + 1) % roles.length;
+            const newRole = roles[nextIndex];
+            
+            // Update Local State
+            config.role = newRole;
+            localStorage.setItem('av_comm_role', newRole);
+            
+            // Update UI
+            roleEl.innerText = newRole;
+            
+            // Notify Server
+            if (socket.connected) {
+                socket.emit('join_show', { 
+                    showId: config.showId, 
+                    pin: config.pin, 
+                    role: newRole 
+                });
+            }
+            
+            console.log('Role updated to:', newRole);
+        }
+
+        document.getElementById('header-role').addEventListener('click', toggleRole);
     </script>
 <style>
         body {
@@ -97,7 +128,7 @@
 <div class="text-[14px] font-black" id="header-pin">0000</div>
 </div>
 <div class="flex flex-col items-center">
-<span class="text-sm font-black tracking-widest border-2 border-primary px-4 py-1 bg-primary/10" id="header-role">UNASSIGNED</span>
+<span class="text-sm font-black tracking-widest border-2 border-primary px-4 py-1 bg-primary/10 cursor-pointer hover:bg-primary/20 transition-colors select-none" id="header-role">UNASSIGNED</span>
 </div>
 <div class="flex items-center gap-2">
 <div class="flex flex-col items-end leading-none">
@@ -317,5 +348,36 @@
                 container.classList.add('hidden-popup');
             }, 3500);
         });
+    </script><script>
+        const roles = ['FOH', 'BOH', 'MICS', 'CUSTOM', 'UNASSIGNED'];
+        
+        function toggleRole() {
+            const roleEl = document.getElementById('header-role');
+            let currentIndex = roles.indexOf(config.role);
+            if (currentIndex === -1) currentIndex = roles.length - 1;
+            
+            const nextIndex = (currentIndex + 1) % roles.length;
+            const newRole = roles[nextIndex];
+            
+            // Update Local State
+            config.role = newRole;
+            localStorage.setItem('av_comm_role', newRole);
+            
+            // Update UI
+            roleEl.innerText = newRole;
+            
+            // Notify Server
+            if (socket.connected) {
+                socket.emit('join_show', { 
+                    showId: config.showId, 
+                    pin: config.pin, 
+                    role: newRole 
+                });
+            }
+            
+            console.log('Role updated to:', newRole);
+        }
+
+        document.getElementById('header-role').addEventListener('click', toggleRole);
     </script>
 </body></html>
