@@ -149,13 +149,16 @@
     let currentShowId = '';
     let currentPin = '';
 
+    // Function to generate random 4-digit number
+    const generate4DigitCode = () => {
+        return Math.floor(1000 + Math.random() * 9000).toString();
+    };
+
     // 1. Generation Logic on Load
     window.addEventListener('DOMContentLoaded', () => {
-        // Generate random 4-digit ID (strictly numbers, no letters)
-        currentShowId = Math.floor(1000 + Math.random() * 9000).toString();
-        
-        // Generate random 4-digit PIN (strictly numbers, no letters)
-        currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+        // Generate strictly numeric IDs
+        currentShowId = generate4DigitCode();
+        currentPin = generate4DigitCode();
 
         // Update UI
         showIdDisplay.textContent = currentShowId;
@@ -185,8 +188,11 @@
     // 3. Role Selection Logic
     roleButtons.forEach(btn => {
         btn.addEventListener('click', () => {
+            // Visual Update
             roleButtons.forEach(b => b.classList.remove('role-active'));
             btn.classList.add('role-active');
+            
+            // State Update
             selectedRole = btn.getAttribute('data-role');
         });
     });
