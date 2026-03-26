@@ -9,12 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
+        :root {
+            --primary: #00FF41;
+            --bg-dark: #0a0a0a;
+            --surface: #111111;
+            --surface-accent: #1a1a1a;
+        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         body {
-            background-color: #0a0a0a;
+            background-color: var(--bg-dark);
             color: #e5e2e1;
+            font-family: 'Space Grotesk', sans-serif;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
@@ -24,10 +31,9 @@
             background-size: 40px 40px;
         }
         .role-active {
-            background-color: #00ff41 !important;
+            background-color: var(--primary) !important;
             color: #000000 !important;
-            box-shadow: 0 0 25px rgba(0, 255, 65, 0.5);
-            border: 2px solid #00ff41;
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
         }
         .role-active .material-symbols-outlined {
             color: inherit;
@@ -45,50 +51,50 @@
         ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
-<body class="font-body flex flex-col">
+<body class="flex flex-col">
 <!-- Top Navigation Anchor -->
 <header class="flex justify-between items-center px-6 h-16 w-full z-50 bg-[#000] border-b-2 border-[#00FF41] shrink-0">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#00FF41] status-pulse" data-icon="sensors">sensors</span>
-<span class="font-headline font-bold tracking-tighter text-[#00FF41] text-lg uppercase">Stage_Tech_Auth</span>
+<span class="material-symbols-outlined text-[#00FF41] status-pulse">sensors</span>
+<span class="font-bold tracking-tighter text-[#00FF41] text-lg uppercase">Stage_Tech_Auth</span>
 </div>
 <div class="flex items-center gap-6">
 <div class="flex gap-4">
-<span class="font-headline uppercase tracking-widest text-[10px] text-[#00FF41]">System_Ready</span>
+<span class="uppercase tracking-widest text-[10px] text-[#00FF41]">System_Ready</span>
 </div>
-<button class="material-symbols-outlined text-[#00FF41] hover:bg-[#1a1a1a] p-2 rounded active:scale-95 transition-all" data-icon="sync" onclick="window.location.reload()">sync</button>
+<button class="material-symbols-outlined text-[#00FF41] hover:bg-[#1a1a1a] p-2 rounded active:scale-95 transition-all" onclick="window.location.reload()">sync</button>
 </div>
 </header>
 <main class="flex-1 grid-pattern flex flex-col items-center justify-between px-4 pt-6 pb-24 overflow-hidden relative">
-<!-- Confirmation Header (Show ID & PIN) -->
+<!-- Configuration Header (Show ID & PIN) -->
 <div class="w-full max-w-md flex flex-col gap-3 shrink-0">
 <div class="bg-[#111] border-l-4 border-[#00FF41] p-5 flex justify-between items-center tactical-border">
 <div>
-<p class="font-label text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Generated Show ID</p>
-<h2 class="font-headline text-4xl font-bold text-[#00FF41] tracking-tighter"><span id="display-show-id">----</span></h2>
+<p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Generated Show ID</p>
+<h2 class="text-4xl font-bold text-[#00FF41] tracking-tighter"><span id="display-show-id">----</span></h2>
 </div>
-<span class="material-symbols-outlined text-zinc-800 text-4xl" data-icon="qr_code_2">qr_code_2</span>
+<span class="material-symbols-outlined text-zinc-800 text-4xl">qr_code_2</span>
 </div>
 <div class="bg-[#111] border-l-4 border-[#00FF41] p-5 flex justify-between items-center tactical-border">
 <div>
-<p class="font-label text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Access PIN</p>
-<h2 class="font-headline text-4xl font-bold text-[#00FF41] tracking-widest"><span id="display-access-pin">----</span></h2>
+<p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Access PIN</p>
+<h2 class="text-4xl font-bold text-[#00FF41] tracking-widest"><span id="display-access-pin">----</span></h2>
 </div>
-<span class="material-symbols-outlined text-zinc-800 text-4xl" data-icon="lock">lock</span>
+<span class="material-symbols-outlined text-zinc-800 text-4xl">lock</span>
 </div>
 </div>
 <!-- Configuration Content -->
 <div class="w-full max-w-md flex flex-col gap-4 flex-1 justify-center py-4">
 <!-- Channel Count Input -->
 <div class="bg-[#111] p-4 flex flex-col gap-3 border-t-2 border-[#00FF41] tactical-border">
-<label class="font-label text-[10px] uppercase tracking-widest text-[#00FF41]">01_CHANNEL_ALLOCATION</label>
+<label class="text-[10px] uppercase tracking-widest text-[#00FF41]">01_CHANNEL_ALLOCATION</label>
 <div class="flex items-center gap-4 w-full">
 <button class="bg-[#222] text-white hover:bg-[#333] w-14 h-14 flex items-center justify-center transition-all active:scale-90 border border-zinc-800" id="decrement-channels">
 <span class="material-symbols-outlined">remove</span>
 </button>
 <div class="flex-1 bg-[#000] p-4 text-center border-b-2 border-[#00FF41]">
-<span class="font-headline text-5xl font-bold text-[#00FF41]" id="channel-count">12</span>
-<span class="font-label text-[10px] text-gray-500 block uppercase tracking-widest mt-1">Units</span>
+<span class="text-5xl font-bold text-[#00FF41]" id="channel-count">12</span>
+<span class="text-[10px] text-gray-500 block uppercase tracking-widest mt-1">Units</span>
 </div>
 <button class="bg-[#222] text-white hover:bg-[#333] w-14 h-14 flex items-center justify-center transition-all active:scale-90 border border-zinc-800" id="increment-channels">
 <span class="material-symbols-outlined">add</span>
@@ -97,55 +103,55 @@
 </div>
 <!-- Role Selection -->
 <div class="bg-[#111] p-4 flex flex-col gap-4 tactical-border">
-<label class="font-label text-[10px] uppercase tracking-widest text-[#00FF41]">02_OPERATIONAL_ROLE</label>
+<label class="text-[10px] uppercase tracking-widest text-[#00FF41]">02_OPERATIONAL_ROLE</label>
 <div class="grid grid-cols-4 gap-2" id="role-grid">
-<button class="role-btn role-active flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="FOH">
-<span class="material-symbols-outlined text-3xl mb-1" data-icon="settings_input_component">settings_input_component</span>
-<span class="font-label font-bold text-[9px] tracking-widest">FOH</span>
+<button class="role-btn role-active flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="FOH">
+<span class="material-symbols-outlined text-2xl mb-1">settings_input_component</span>
+<span class="font-bold text-[9px] tracking-widest">FOH</span>
 </button>
-<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="BOH">
-<span class="material-symbols-outlined text-3xl mb-1" data-icon="terminal">terminal</span>
-<span class="font-label font-bold text-[9px] tracking-widest">BOH</span>
+<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="BOH">
+<span class="material-symbols-outlined text-2xl mb-1">terminal</span>
+<span class="font-bold text-[9px] tracking-widest">BOH</span>
 </button>
-<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="MICS">
-<span class="material-symbols-outlined text-3xl mb-1" data-icon="mic">mic</span>
-<span class="font-label font-bold text-[9px] tracking-widest">MICS</span>
+<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="MICS">
+<span class="material-symbols-outlined text-2xl mb-1">mic</span>
+<span class="font-bold text-[9px] tracking-widest">MICS</span>
 </button>
-<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="CUSTOM">
-<span class="material-symbols-outlined text-3xl mb-1" data-icon="dashboard_customize">dashboard_customize</span>
-<span class="font-label font-bold text-[9px] tracking-widest">CUSTOM</span>
+<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="CUSTOM">
+<span class="material-symbols-outlined text-2xl mb-1">dashboard_customize</span>
+<span class="font-bold text-[9px] tracking-widest">CUSTOM</span>
 </button>
 </div>
 <!-- Custom Role Input (Hidden by default) -->
-<div class="hidden mt-2" id="custom-role-container">
-<input class="w-full bg-[#000] border border-[#333] border-b-[#00FF41] text-[#00FF41] font-headline p-3 uppercase tracking-widest focus:ring-0 focus:outline-none placeholder:text-zinc-800" id="custom-role-input" placeholder="SPECIFY ROLE..." type="text"/>
+<div class="hidden" id="custom-role-container">
+<input class="w-full bg-[#000] border border-[#333] border-b-[#00FF41] text-[#00FF41] font-bold p-3 uppercase tracking-widest focus:ring-0 focus:outline-none placeholder:text-zinc-800 rounded-sm" id="custom-role-input" placeholder="SPECIFY ROLE..." type="text"/>
 </div>
 </div>
 </div>
 <!-- Start Session Button -->
 <div class="w-full max-w-md shrink-0">
-<button class="w-full py-7 bg-[#00FF41] text-black font-headline font-black text-xl tracking-[0.25em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_15px_50px_rgba(0,255,65,0.3)]" id="launch-cta">
-<span class="material-symbols-outlined text-3xl font-bold" data-icon="bolt">bolt</span>
+<button class="w-full py-7 bg-[#00FF41] text-black font-black text-xl tracking-[0.25em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_15px_50px_rgba(0,255,65,0.3)] rounded" id="launch-cta">
+<span class="material-symbols-outlined text-3xl font-bold">bolt</span>
                 INITIALIZE UPLINK
             </button>
 <div class="flex justify-between mt-3 px-1">
-<p class="font-label text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Protocol: AES-GCM Tactical</p>
-<p class="font-label text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Server: AV-PROD-RAIL</p>
+<p class="text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Protocol: AES-GCM Tactical</p>
+<p class="text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Server: AV-PROD-RAIL</p>
 </div>
 </div>
 </main>
 <!-- Bottom Navigation Shell -->
 <nav class="fixed bottom-0 left-0 w-full h-20 z-50 flex justify-around items-center px-4 pb-2 bg-[#000] border-t border-zinc-900 shrink-0">
 <a class="flex flex-col items-center justify-center bg-[#00FF41] text-black rounded px-6 py-2 shadow-[0_0_20px_rgba(0,255,65,0.2)]" href="#">
-<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="material-symbols-outlined">settings_input_component</span>
 <span class="font-bold uppercase text-[9px] tracking-widest mt-1">CONFIG</span>
 </a>
 <a class="flex flex-col items-center justify-center text-zinc-700 px-6 py-2 transition-all" href="#">
-<span class="material-symbols-outlined" data-icon="mic">mic</span>
+<span class="material-symbols-outlined">mic</span>
 <span class="font-bold uppercase text-[9px] tracking-widest mt-1">PTT</span>
 </a>
 <a class="flex flex-col items-center justify-center text-zinc-700 px-6 py-2 transition-all" href="#">
-<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined">terminal</span>
 <span class="font-bold uppercase text-[9px] tracking-widest mt-1">MSGS</span>
 </a>
 </nav>
@@ -170,34 +176,28 @@
         let currentShowId = '';
         let currentPin = '';
 
-        // 1. Generation Logic on Load
+        // 1. Generation Logic on Load (Strictly 4-digit numeric)
         window.addEventListener('DOMContentLoaded', () => {
-            // Generate strictly numeric 4-digit ID and PIN
             currentShowId = Math.floor(1000 + Math.random() * 9000).toString();
             currentPin = Math.floor(1000 + Math.random() * 9000).toString();
 
-            // Update UI
             showIdDisplay.textContent = currentShowId;
             pinDisplay.textContent = currentPin;
             countDisplay.textContent = channels;
         });
 
-        // 2. Channel Allocation Counter Logic
-        const updateDisplay = () => {
-            countDisplay.textContent = channels;
-        };
-
+        // 2. Channel Allocation Logic
         decrementBtn.addEventListener('click', () => {
             if (channels > 1) {
                 channels--;
-                updateDisplay();
+                countDisplay.textContent = channels;
             }
         });
 
         incrementBtn.addEventListener('click', () => {
             if (channels < 24) {
                 channels++;
-                updateDisplay();
+                countDisplay.textContent = channels;
             }
         });
 
@@ -208,7 +208,6 @@
                 btn.classList.add('role-active');
                 selectedRole = btn.getAttribute('data-role');
 
-                // Show/Hide Custom Input
                 if (selectedRole === 'CUSTOM') {
                     customRoleContainer.classList.remove('hidden');
                     customRoleInput.focus();
@@ -218,7 +217,7 @@
             });
         });
 
-        // 4. Initialize Uplink Socket Logic
+        // 4. Initialize Uplink
         launchCta.addEventListener('click', () => {
             let finalRole = selectedRole;
             if (selectedRole === 'CUSTOM') {
@@ -234,21 +233,20 @@
             socket = io(SOCKET_URL);
 
             socket.on('connect', () => {
-                console.log('Tactical Uplink Established');
-                // Emit show creation
+                console.log('Uplink established');
                 socket.emit('create_show', {
-                    name: `SHOW_${currentShowId}`,
+                    showId: currentShowId,
+                    pin: currentPin,
                     channels: channels,
                     role: finalRole,
-                    showId: currentShowId,
-                    pin: currentPin
+                    name: `SHOW_${currentShowId}`
                 });
             });
 
             socket.on('show_created', (data) => {
-                console.log('Remote Show Instance Synchronized');
+                console.log('Server synchronized');
                 
-                // Save ALL data to localStorage
+                // Save to localStorage
                 localStorage.setItem('stage_tech_show_id', currentShowId);
                 localStorage.setItem('stage_tech_pin', currentPin);
                 localStorage.setItem('stage_tech_channels', channels);
