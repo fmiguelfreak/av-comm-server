@@ -32,6 +32,17 @@
         .authenticating-glow {
             animation: pulse-glow 1s infinite ease-in-out;
         }
+        
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300FF41' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
     </style>
 </head>
 <body class="selection:bg-[#00FF41] selection:text-black min-h-screen flex flex-col">
@@ -56,7 +67,7 @@
 </div>
 <h2 class="font-headline font-black text-5xl md:text-7xl text-white tracking-tighter leading-none">CREATE<br/>NEW SHOW</h2>
 </div>
-<div class="space-y-8 max-w-md w-full">
+<div class="space-y-6 max-w-md w-full">
 <div class="space-y-2">
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">ASSIGN SHOW NAME</label>
 <input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg" id="create-show-name" placeholder="E.G. NEON_SUMMIT_2024" type="text"/>
@@ -79,7 +90,7 @@
 </div>
 <h2 class="font-headline font-black text-5xl md:text-7xl text-white tracking-tighter leading-none">JOIN<br/>EXISTING</h2>
 </div>
-<div class="space-y-8 max-w-md w-full">
+<div class="space-y-6 max-w-md w-full">
 <div class="grid grid-cols-2 gap-4">
 <div class="space-y-2">
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">SHOW ID</label>
@@ -89,6 +100,21 @@
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">ACCESS PIN</label>
 <input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-[#333]" id="join-show-pin" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="****" type="password"/>
 </div>
+</div>
+<div class="space-y-2">
+<label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">SELECT ROLE</label>
+<select class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-bold h-16 px-4 uppercase text-lg cursor-pointer" id="join-role">
+<option value="A1">A1 - Lead Audio</option>
+<option value="A2">A2 - Audio Assistant</option>
+<option value="FOH">FOH - Front of House</option>
+<option value="MON">MON - Monitors</option>
+<option value="TECH">TECH - Systems Tech</option>
+<option value="CUSTOM">CUSTOM ROLE...</option>
+</select>
+</div>
+<div class="space-y-2 hidden" id="custom-role-container">
+<label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">CUSTOM ROLE NAME</label>
+<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg" id="join-custom-role" placeholder="E.G. STAGE_HAND" type="text"/>
 </div>
 <div class="hidden text-xs font-black tracking-widest text-center uppercase py-2" id="auth-status">
 <span class="text-[#00FF41]" id="status-text">AUTHENTICATING...</span>
@@ -118,105 +144,132 @@
 </div>
 </nav>
 <script>
-        // Socket.io initialization
-        const socket = io('https://av-comm-server-production.up.railway.app');
+    // Socket.io initialization
+    const socket = io('https://av-comm-server-production.up.railway.app');
 
-        // DOM Elements
-        const btnCreate = document.getElementById('btn-create-show');
-        const btnJoin = document.getElementById('btn-join-show');
-        const btnJoinText = document.getElementById('btn-join-text');
-        const createNameInput = document.getElementById('create-show-name');
-        const joinIdInput = document.getElementById('join-show-id');
-        const joinPinInput = document.getElementById('join-show-pin');
-        const authStatus = document.getElementById('auth-status');
-        const statusText = document.getElementById('status-text');
+    // DOM Elements
+    const btnCreate = document.getElementById('btn-create-show');
+    const btnJoin = document.getElementById('btn-join-show');
+    const btnJoinText = document.getElementById('btn-join-text');
+    const createNameInput = document.getElementById('create-show-name');
+    const joinIdInput = document.getElementById('join-show-id');
+    const joinPinInput = document.getElementById('join-show-pin');
+    const joinRoleSelect = document.getElementById('join-role');
+    const customRoleContainer = document.getElementById('custom-role-container');
+    const customRoleInput = document.getElementById('join-custom-role');
+    const authStatus = document.getElementById('auth-status');
+    const statusText = document.getElementById('status-text');
 
-        // Action: Create Show
-        btnCreate.addEventListener('click', () => {
-            const name = createNameInput.value.trim() || 'UNNAMED_SHOW';
-            localStorage.setItem('av_comm_name', name);
-            // Redirect immediately as requested
-            window.location.href = 'config.html';
-        });
+    // Handle Custom Role Toggle
+    joinRoleSelect.addEventListener('change', (e) => {
+        if (e.target.value === 'CUSTOM') {
+            customRoleContainer.classList.remove('hidden');
+        } else {
+            customRoleContainer.classList.add('hidden');
+        }
+    });
 
-        // Action: Join Show
-        btnJoin.addEventListener('click', () => {
-            const showId = joinIdInput.value.trim();
-            const pin = joinPinInput.value.trim();
+    // Action: Create Show
+    btnCreate.addEventListener('click', () => {
+        const name = createNameInput.value.trim() || 'UNNAMED_SHOW';
+        
+        // Strictly numeric 4-digit generation
+        const generatedId = Math.floor(1000 + Math.random() * 9000).toString();
+        const generatedPin = Math.floor(1000 + Math.random() * 9000).toString();
 
-            if (showId.length === 4 && pin.length === 4) {
-                // UI Authenticating State
-                setLoading(true);
-                
-                // Emit join event
-                socket.emit('join_show', { showId, pin });
-            } else {
-                showError('PROTOCOL ERROR: 4-DIGIT INPUT REQUIRED');
-            }
-        });
+        localStorage.setItem('av_comm_name', name);
+        localStorage.setItem('av_comm_id', generatedId);
+        localStorage.setItem('av_comm_pin', generatedPin);
+        localStorage.setItem('av_comm_role', 'ADMIN');
+        localStorage.setItem('av_comm_channels', '12');
 
-        // Socket Events
-        socket.on('join_success', (data) => {
-            const showId = joinIdInput.value.trim();
-            const pin = joinPinInput.value.trim();
+        // Redirect to configuration or dashboard
+        window.location.href = 'config.html';
+    });
+
+    // Action: Join Show
+    btnJoin.addEventListener('click', () => {
+        const showId = joinIdInput.value.trim();
+        const pin = joinPinInput.value.trim();
+        
+        let role = joinRoleSelect.value;
+        if (role === 'CUSTOM') {
+            role = customRoleInput.value.trim().toUpperCase() || 'CUSTOM_TECH';
+        }
+
+        if (showId.length === 4 && pin.length === 4) {
+            setLoading(true);
             
-            // Save to localStorage
+            // Save data for immediate use upon successful join simulation
             localStorage.setItem('av_comm_id', showId);
             localStorage.setItem('av_comm_pin', pin);
-            localStorage.setItem('av_comm_pending_role', 'true');
+            localStorage.setItem('av_comm_role', role);
+            localStorage.setItem('av_comm_channels', '12');
+            
+            // Emit join event
+            socket.emit('join_show', { showId, pin, role });
+        } else {
+            showError('PROTOCOL ERROR: 4-DIGIT INPUT REQUIRED');
+        }
+    });
 
-            // Redirect to grid
-            window.location.href = 'grid.html';
-        });
+    // Socket Events
+    socket.on('join_success', (data) => {
+        // Data already partially saved in Join click, but ensure role from server if any
+        if (data && data.role) localStorage.setItem('av_comm_role', data.role);
+        
+        window.location.href = 'grid.html';
+    });
 
-        socket.on('error', (message) => {
-            setLoading(false);
-            showError(message.toUpperCase() || 'INVALID ID/PIN');
-        });
+    // Fallback for demo/development if socket is unreachable
+    socket.on('error', (message) => {
+        setLoading(false);
+        showError(message.toUpperCase() || 'INVALID ID/PIN');
+    });
 
-        socket.on('connect_error', () => {
-            setLoading(false);
-            showError('UPLINK CONNECTION FAILED');
-        });
+    socket.on('connect_error', () => {
+        setLoading(false);
+        // In local/demo mode we might want to allow transition anyway for testing
+        // For production, we show the error.
+        showError('UPLINK CONNECTION FAILED');
+    });
 
-        // UI Helpers
-        function setLoading(isLoading) {
-            if (isLoading) {
-                btnJoin.disabled = true;
-                btnJoinText.innerText = 'INITIALIZING...';
-                authStatus.classList.remove('hidden');
-                statusText.innerText = 'AUTHENTICATING...';
-                statusText.className = 'text-[#00FF41] authenticating-glow';
-            } else {
-                btnJoin.disabled = false;
-                btnJoinText.innerText = 'INITIALIZE UPLINK';
+    // UI Helpers
+    function setLoading(isLoading) {
+        if (isLoading) {
+            btnJoin.disabled = true;
+            btnJoinText.innerText = 'INITIALIZING...';
+            authStatus.classList.remove('hidden');
+            statusText.innerText = 'AUTHENTICATING...';
+            statusText.className = 'text-[#00FF41] authenticating-glow';
+        } else {
+            btnJoin.disabled = false;
+            btnJoinText.innerText = 'INITIALIZE UPLINK';
+            authStatus.classList.add('hidden');
+        }
+    }
+
+    function showError(msg) {
+        authStatus.classList.remove('hidden');
+        statusText.innerText = msg;
+        statusText.className = 'text-red-500 font-black';
+        
+        setTimeout(() => {
+            if (!btnJoin.disabled) {
                 authStatus.classList.add('hidden');
             }
-        }
+        }, 3000);
+    }
 
-        function showError(msg) {
-            authStatus.classList.remove('hidden');
-            statusText.innerText = msg;
-            statusText.className = 'text-red-500 font-black';
-            
-            // Reset after 3 seconds
-            setTimeout(() => {
-                if (!btnJoin.disabled) {
-                    authStatus.classList.add('hidden');
-                }
-            }, 3000);
-        }
-
-        // Input Sanitization
-        [joinIdInput, joinPinInput].forEach(input => {
-            input.addEventListener('input', (e) => {
-                e.target.value = e.target.value.replace(/[^0-9]/g, '');
-            });
+    // Input Sanitization
+    [joinIdInput, joinPinInput].forEach(input => {
+        input.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
         });
+    });
 
-        // Basic connection logging
-        socket.on('connect', () => {
-            console.log('Uplink synchronized:', socket.id);
-        });
-    </script>
+    socket.on('connect', () => {
+        console.log('Uplink synchronized:', socket.id);
+    });
+</script>
 </body></html>
