@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><title>grid.html</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#131313",
+              "primary-fixed-dim": "#00e639",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "outline-variant": "#3b4b37",
+              "tertiary-container": "#ffd3c8",
+              "tertiary-fixed": "#ffdad2",
+              "surface-container-lowest": "#0e0e0e",
+              "inverse-on-surface": "#313030",
+              "surface-dim": "#131313",
+              "on-primary": "#003907",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "surface-tint": "#00e639",
+              "primary": "#ebffe2",
+              "secondary-container": "#fd9000",
+              "secondary": "#ffb778",
+              "primary-fixed": "#72ff70",
+              "on-primary-fixed": "#002203",
+              "surface-bright": "#393939",
+              "on-surface-variant": "#b9ccb2",
+              "on-surface": "#e5e2e1",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-highest": "#353534",
+              "secondary-fixed": "#ffdcc1",
+              "error": "#ffb4ab",
+              "on-tertiary-fixed": "#3c0700",
+              "tertiary": "#fff8f6",
+              "surface-container": "#201f1f",
+              "on-error": "#690005",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "background": "#131313",
+              "on-tertiary-container": "#b82a00",
+              "on-secondary": "#4c2700",
+              "on-primary-container": "#007117",
+              "secondary-fixed-dim": "#ffb778",
+              "on-tertiary": "#621100",
+              "on-background": "#e5e2e1",
+              "surface-container-low": "#1c1b1b",
+              "outline": "#84967e",
+              "on-secondary-container": "#613400",
+              "on-error-container": "#ffdad6",
+              "primary-container": "#00ff41",
+              "on-secondary-fixed": "#2e1500",
+              "on-primary-fixed-variant": "#00530e",
+              "error-container": "#93000a",
+              "surface-variant": "#353534",
+              "surface-container-high": "#2a2a2a",
+              "inverse-primary": "#006e16"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pulse-border {
+            box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7);
+            animation: pulse-border-key 1.5s infinite;
+        }
+        @keyframes pulse-border-key {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 65, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); }
+        }
+        .hidden-popup {
+            transform: translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .visible-popup {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="font-body">
+<!-- TopAppBar -->
+<header class="bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-widest text-sm docked full-width top-0 border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-6 h-16 w-full fixed top-0 z-40">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-xl">sync</span>
+<span class="font-bold tracking-tighter">SESSION: 882-TACOMA</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-[#00FF41] animate-pulse" id="sync-indicator"></div>
+<span class="font-bold" id="sync-status">SYNC_OK</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-2 pb-2 h-[calc(100vh-144px)] mt-16 mb-20 w-full bg-surface grid grid-cols-2 grid-rows-6 gap-2 p-2 overflow-hidden" id="channel-grid">
+<!-- Channel 01 -->
+<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="1">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">01</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">MAIN_L_ARRAY</div>
+</div>
+<!-- Channel 02 -->
+<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="2">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">02</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">MAIN_R_ARRAY</div>
+</div>
+<!-- Channel 03 -->
+<div class="channel-btn bg-error-container text-on-error-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="3">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">03</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">ALERT</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">SUB_LOW_FREQ</div>
+</div>
+<!-- Channel 04 -->
+<div class="channel-btn bg-surface-container-high border-2 border-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="4">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl text-primary-container">04</span>
+<span class="status-label text-[10px] font-bold uppercase text-primary-container px-1">SYNC</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight text-on-surface">DRUM_MON_1</div>
+</div>
+<!-- Channel 05 -->
+<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="5">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">05</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">VOCAL_LEAD</div>
+</div>
+<!-- Channel 06 -->
+<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="6">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">06</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">VOCAL_BACK_1</div>
+</div>
+<!-- Channel 07 -->
+<div class="channel-btn bg-surface-container-low text-on-surface/40 flex flex-col justify-between p-3 rounded-sm border-l-4 border-surface-container-highest transition-colors duration-200 h-full" data-channel="7">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">07</span>
+<span class="status-label text-[10px] font-bold uppercase">OFFLINE</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">GUITAR_SLOT_A</div>
+</div>
+<!-- Channel 08 -->
+<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="8">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">08</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">GUITAR_SLOT_B</div>
+</div>
+<!-- Channel 09 -->
+<div class="channel-btn bg-error-container text-on-error-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="9">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">09</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">ALERT</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">COMMS_RACK_01</div>
+</div>
+<!-- Channel 10 -->
+<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="10">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">10</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">STAGE_LIGHT_L</div>
+</div>
+<!-- Channel 11 -->
+<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="11">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl">11</span>
+<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight">STAGE_LIGHT_R</div>
+</div>
+<!-- Channel 12 -->
+<div class="channel-btn bg-surface-container-high border-2 border-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="12">
+<div class="flex justify-between items-start">
+<span class="font-headline font-bold text-2xl text-primary-container">12</span>
+<span class="status-label text-[10px] font-bold uppercase text-primary-container px-1">SYNC</span>
+</div>
+<div class="font-headline font-medium text-lg leading-tight text-on-surface">PYRO_SEQ_MASTER</div>
+</div>
+</main>
+<!-- MESSAGE POPUP OVERLAY -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center p-6 pointer-events-none" id="message-overlay">
+<div class="hidden-popup bg-surface-container-highest border-l-[6px] border-[#00FF41] shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-6 max-w-sm w-full transition-all duration-500" id="message-container">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="bg-[#00FF41] p-2 rounded-full text-[#131313] animate-pulse">
+<span class="material-symbols-outlined block font-bold">chat_bubble</span>
+</div>
+<span class="font-headline font-bold uppercase tracking-widest text-[#00FF41]">NEW MESSAGE</span>
+</div>
+<span class="text-[10px] font-label text-on-surface/40 uppercase tracking-tighter" id="msg-source">DIRECT: SYSTEM</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-sm border-l-2 border-primary-fixed-dim">
+<p class="font-body text-on-surface text-sm leading-relaxed italic" id="msg-content">
+                    "NO INCOMING DATA"
+                </p>
+</div>
+<div class="mt-4 flex justify-end">
+<span class="text-[10px] font-label text-primary-container font-bold uppercase tracking-widest">TRANSCRIBED VIA AI-VOX</span>
+</div>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="bg-[#0e0e0e] text-[#00FF41] font-['Inter'] font-bold text-[10px] uppercase tracking-tighter fixed bottom-0 left-0 w-full h-20 z-50 flex justify-around items-center px-4 pb-2 shadow-[0_-4px_24px_rgba(0,0,0,0.8)]">
+<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm p-2 scale-110 shadow-[0_0_15px_rgba(0,255,65,0.4)]">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span>Channels</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#4a4a4a] p-2 hover:text-[#00FF41] transition-all">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span>Messages</span>
+</div>
+<!-- PTT Button Anchor -->
+<div class="relative -top-4">
+<div class="bg-[#0e0e0e] p-2 rounded-full shadow-[0_-8px_20px_rgba(0,255,65,0.2)]">
+<button class="bg-[#00FF41] text-[#131313] w-14 h-14 rounded-full flex flex-col items-center justify-center shadow-[0_0_20px_#00FF41] active:scale-90 transition-transform" id="ptt-button">
+<span class="material-symbols-outlined text-3xl font-bold" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="text-[8px] font-extrabold mt-[-4px]">TALK</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center text-[#4a4a4a] p-2 hover:text-[#00FF41] transition-all relative">
+<span class="material-symbols-outlined mb-1">notifications</span>
+<span>Alerts</span>
+<span class="absolute top-1 right-2 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#4a4a4a] p-2 hover:text-[#00FF41] transition-all">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span>Config</span>
+</div>
+</nav>
+<script>
+        // 1. & 2. Socket.io Connection
+        const socket = io('https://tacomamultimedia-production.up.railway.app/');
+        const syncStatus = document.getElementById('sync-status');
+        const syncIndicator = document.getElementById('sync-indicator');
+
+        socket.on('connect', () => {
+            syncStatus.innerText = 'SYNC_OK';
+            syncIndicator.classList.remove('bg-error');
+            syncIndicator.classList.add('bg-[#00FF41]');
+        });
+
+        socket.on('disconnect', () => {
+            syncStatus.innerText = 'SYNC_ERR';
+            syncIndicator.classList.remove('bg-[#00FF41]');
+            syncIndicator.classList.add('bg-error');
+        });
+
+        // 3. Channel Button Interaction (Single vs Double Tap)
+        const channelBtns = document.querySelectorAll('.channel-btn');
+        channelBtns.forEach(btn => {
+            let lastTap = 0;
+            const channelId = btn.getAttribute('data-channel');
+
+            btn.addEventListener('touchstart', (e) => {
+                const now = Date.now();
+                const diff = now - lastTap;
+                
+                if (diff < 300) {
+                    // Double Tap -> ALERT
+                    socket.emit('update_channel', { id: channelId, status: 'ALERT' });
+                    lastTap = 0; // Reset
+                } else {
+                    // Single Tap -> READY
+                    setTimeout(() => {
+                        // Check if it was actually a single tap (no second tap followed)
+                        if (Date.now() - lastTap >= 300) {
+                            socket.emit('update_channel', { id: channelId, status: 'READY' });
+                        }
+                    }, 310);
+                }
+                lastTap = now;
+            });
+
+            // Prevent scroll on quick tap
+            btn.addEventListener('touchend', (e) => e.preventDefault());
+        });
+
+        // 4. Update Button State Globally
+        socket.on('state_changed', (channels) => {
+            channels.forEach(ch => {
+                const btn = document.querySelector(`.channel-btn[data-channel="${ch.id}"]`);
+                if (!btn) return;
+                
+                const label = btn.querySelector('.status-label');
+                const title = btn.querySelector('.font-headline.text-2xl');
+
+                if (ch.status === 'READY') {
+                    btn.className = 'channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200';
+                    label.innerText = 'READY';
+                    label.className = 'status-label text-[10px] font-bold uppercase bg-black/10 px-1';
+                    if(title) title.classList.remove('text-primary-container');
+                } else if (ch.status === 'ALERT') {
+                    btn.className = 'channel-btn bg-error-container text-on-error-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200';
+                    label.innerText = 'ALERT';
+                    label.className = 'status-label text-[10px] font-bold uppercase bg-black/10 px-1';
+                    if(title) title.classList.remove('text-primary-container');
+                }
+            });
+        });
+
+        // 5. PTT with Web Speech API
+        const pttBtn = document.getElementById('ptt-button');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                socket.emit('new_message', { 
+                    content: transcript.toUpperCase(),
+                    source: 'TAC_COMMS_LOCAL'
+                });
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                pttBtn.classList.remove('scale-125');
+            };
+
+            recognition.onend = () => {
+                pttBtn.classList.remove('scale-125');
+            };
+
+            pttBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                pttBtn.classList.add('scale-125');
+                recognition.start();
+            });
+
+            pttBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                // Recognition usually stops on its own when silence is detected or we call stop
+                // recognition.stop(); // Optional, let onresult handle it for better transcription
+            });
+        }
+
+        // 6. Broadcast Message Listener (3-second popup)
+        const container = document.getElementById('message-container');
+        const sourceEl = document.getElementById('msg-source');
+        const contentEl = document.getElementById('msg-content');
+        let popupTimer;
+
+        socket.on('broadcast_message', (data) => {
+            sourceEl.innerText = `DIRECT: ${data.source || 'REMOTE_OPS'}`;
+            contentEl.innerText = `"${data.content}"`;
+            
+            container.classList.remove('hidden-popup');
+            container.classList.add('visible-popup');
+
+            if (popupTimer) clearTimeout(popupTimer);
+            
+            popupTimer = setTimeout(() => {
+                container.classList.remove('visible-popup');
+                container.classList.add('hidden-popup');
+            }, 3000);
+        });
+
+    </script>
+</body></html>
