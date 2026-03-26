@@ -1,7 +1,8 @@
-web application/stitch/projects/4562373654591413909/screens/49c982146f324f8da6ce51230d26585b
+web application/stitch/projects/4562373654591413909/screens/3be6e9123a934255a47e5494eaa109a7
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -9,12 +10,14 @@ const io = new Server(server, {
     cors: { origin: "*" }
 });
 
-const rooms = {};
+app.use(express.static(path.join(__dirname, 'public')));
+
+const rooms = {}; 
 
 io.on('connection', (socket) => {
-    console.log('Operator connected:', socket.id);
+    console.log('User connected:', socket.id);
 
-    // CREATE ROOM (Strict 4-Digit ID)
+    // CREATE ROOM (Strictly 4-Digit Numeric ID)
     socket.on('create_room', (data) => {
         let roomID;
         do {
@@ -25,6 +28,7 @@ io.on('connection', (socket) => {
         
         rooms[roomID] = {
             pin: pin,
+            host: socket.id,
             channels: data.channels || 12,
             showName: data.showName || 'Unnamed Show',
             states: {}
@@ -32,48 +36,53 @@ io.on('connection', (socket) => {
 
         socket.join(roomID);
         socket.emit('room_created', { roomID, pin, channels: rooms[roomID].channels });
-        console.log(`[CREATE] Room: ${roomID} | PIN: ${pin}`);
+        console.log(`[CREATE] Room: ${roomID} | PIN: ${pin} | Name: ${rooms[roomID].showName}`);
     });
 
     // JOIN ROOM
     socket.on('join_room', (data) => {
         const { roomID, pin, role } = data;
-        if (rooms[roomID] && rooms[roomID].pin === pin) {
-            socket.join(roomID);
+        const rid = roomID?.toString();
+        
+        if (rooms[rid] && rooms[rid].pin === pin) {
+            socket.join(rid);
             socket.emit('joined_success', { 
-                roomID, 
-                channels: rooms[roomID].channels,
-                showName: rooms[roomID].showName,
-                states: rooms[roomID].states 
+                roomID: rid, 
+                channels: rooms[rid].channels,
+                showName: rooms[rid].showName,
+                states: rooms[rid].states 
             });
-            console.log(`[JOIN] User ${socket.id} (${role}) joined ${roomID}`);
+            console.log(`[JOIN] User ${socket.id} (${role}) joined ${rid}`);
         } else {
-            socket.emit('error_msg', 'ID ou PIN Inválido');
+            socket.emit('error_msg', 'Invalid Show ID or PIN');
         }
     });
 
-    // UPDATE CHANNEL (The Core Sync)
+    // UPDATE CHANNEL (Real-time Broadcast)
     socket.on('update_channel', (data) => {
         const { roomID, chID, status, role } = data;
-        if (rooms[roomID]) {
-            rooms[roomID].states[chID] = status;
-            // BROADCAST TO EVERYONE IN THE ROOM
-            io.to(roomID).emit('channel_updated', { chID, status, role });
-            console.log(`[UPDATE] Room: ${roomID} | Ch: ${chID} | Status: ${status} | By: ${role}`);
+        const rid = roomID?.toString();
+        
+        if (rooms[rid]) {
+            rooms[rid].states[chID] = status;
+            // Broadcast to everyone in the room
+            io.to(rid).emit('channel_updated', { chID, status, role });
+            console.log(`[UPDATE] Room: ${rid} | Ch: ${chID} | Status: ${status} | By: ${role}`);
         }
     });
 
+    // VOICE MESSAGE
     socket.on('voice_msg', (data) => {
         const { roomID, message, sender } = data;
         io.to(roomID).emit('receive_voice', { message, sender });
     });
 
     socket.on('disconnect', () => {
-        console.log('Operator disconnected');
+        console.log('User disconnected');
     });
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Event Mics Signaling Bridge v2.2 Active on port ${PORT}`);
+    console.log(`Event Mics Signaling Bridge v2.3 Active on port ${PORT}`);
 });
