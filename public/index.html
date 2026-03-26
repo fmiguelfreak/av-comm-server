@@ -2,292 +2,197 @@
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AV-COMM: Stage Tech Auth</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ST-04 // OPS-9 COMMAND</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#b9ccb2",
+              "on-primary-fixed-variant": "#00530e",
+              "on-primary": "#003907",
+              "secondary-fixed": "#ffdcc1",
+              "on-error-container": "#ffdad6",
+              "secondary-fixed-dim": "#ffb778",
+              "on-secondary-fixed": "#2e1500",
+              "error-container": "#93000a",
+              "tertiary-fixed": "#ffdad2",
+              "on-primary-fixed": "#002203",
+              "tertiary": "#fff8f6",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "surface-variant": "#353534",
+              "on-error": "#690005",
+              "outline": "#84967e",
+              "tertiary-container": "#ffd3c8",
+              "on-primary-container": "#007117",
+              "secondary": "#ffb778",
+              "primary-fixed-dim": "#00e639",
+              "on-tertiary-fixed": "#3c0700",
+              "inverse-primary": "#006e16",
+              "surface-container-high": "#2a2a2a",
+              "inverse-on-surface": "#313030",
+              "primary-container": "#00ff41",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "surface-container-lowest": "#0e0e0e",
+              "background": "#131313",
+              "surface-bright": "#393939",
+              "secondary-container": "#fd9000",
+              "primary-fixed": "#72ff70",
+              "surface-dim": "#131313",
+              "on-secondary-container": "#613400",
+              "on-tertiary-container": "#b82a00",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "outline-variant": "#3b4b37",
+              "surface-container-highest": "#353534",
+              "on-background": "#e5e2e1",
+              "surface-container-low": "#1c1b1b",
+              "primary": "#ebffe2",
+              "on-tertiary": "#621100",
+              "inverse-surface": "#e5e2e1",
+              "surface-tint": "#00e639",
+              "surface-container": "#201f1f",
+              "surface": "#131313",
+              "error": "#ffb4ab",
+              "on-surface": "#e5e2e1",
+              "on-secondary": "#4c2700"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
 <style>
-        :root {
-            --brand-primary: #00FF41;
-            --brand-dark: #131313;
-            --brand-surface: #1c1b1b;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            background-color: var(--brand-dark);
-            color: #e5e2e1;
-            overflow-x: hidden;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        .glitch-bg {
-            background-image: linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .font-headline { font-family: 'Inter', sans-serif; }
-        .font-label { font-family: 'Space Grotesk', sans-serif; }
-        
-        @keyframes pulse-glow {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-        .authenticating-glow {
-            animation: pulse-glow 1s infinite ease-in-out;
-        }
-        
-        select {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300FF41' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-repeat: no-repeat;
-            background-size: 1.5em 1.5em;
-            padding-right: 2.5rem;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        .rounded-four { border-radius: 4px; }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+      }
+      .tactical-glow {
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.15);
+      }
+      .input-focus-accent:focus-within {
+        border-left: 4px solid #72ff70;
+      }
     </style>
-</head>
-<body class="selection:bg-[#00FF41] selection:text-black min-h-screen flex flex-col">
-<!-- Header -->
-<header class="flex justify-between items-center px-6 h-16 w-full z-50 bg-[#131313] border-b-2 border-[#00FF41]/30 shadow-[0_0_20px_rgba(0,255,65,0.05)]">
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body select-none">
+<!-- TopAppBar -->
+<header class="bg-[#131313] dark:bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-widest text-sm docked full-width top-0 border-b-4 border-[#1c1b1b] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-4 h-16 w-full fixed z-50">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#00FF41]" data-icon="sensors">sensors</span>
-<span class="text-[#00FF41] font-bold tracking-tighter font-headline uppercase text-sm">STAGE_TECH_AUTH</span>
+<span class="material-symbols-outlined text-[#00FF41]" data-icon="terminal">terminal</span>
+<span class="text-[#00FF41] font-bold tracking-tighter text-xl">ST-04 // OPS-9</span>
 </div>
-<div class="flex items-center gap-6">
-<span class="material-symbols-outlined text-[#00FF41] active:rotate-180 transition-transform duration-500 cursor-pointer" data-icon="sync" onclick="location.reload()">sync</span>
-</div>
+<button class="bg-primary-container text-on-primary-container px-3 py-1 font-bold rounded-sm hover:bg-[#2a2a2a] transition-all active:scale-95 duration-75">
+            LEAD
+        </button>
 </header>
-<!-- Main Content -->
-<main class="flex-1 w-full flex flex-col md:flex-row items-stretch overflow-hidden glitch-bg" id="app-root">
-<!-- CREATE NEW SHOW SECTION -->
-<section class="flex-1 flex flex-col justify-center px-8 md:px-16 border-b-2 md:border-b-0 md:border-r-2 border-[#1c1b1b] relative py-12">
-<div class="mb-10">
-<div class="flex items-center gap-2 mb-2">
-<div class="w-2 h-2 bg-[#00FF41]"></div>
-<span class="font-label text-xs font-black uppercase tracking-[0.2em] text-[#666]">PROTOCOL_01</span>
+<!-- Main Content Canvas -->
+<main class="h-screen w-full flex flex-col items-center justify-center p-6 pt-20 pb-24">
+<!-- Tactical Interface Module -->
+<div class="w-full max-w-sm flex flex-col gap-6">
+<!-- Branding/Status Header -->
+<div class="space-y-1 border-l-2 border-primary-container pl-4">
+<h1 class="font-headline text-2xl font-bold tracking-tight text-primary-fixed-dim">SYSTEM_ACCESS</h1>
+<p class="font-label text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Authentication Required // encrypted_link</p>
 </div>
-<h2 class="font-headline font-black text-5xl md:text-7xl text-white tracking-tighter leading-none">CREATE<br/>NEW SHOW</h2>
+<!-- Input Form -->
+<div class="space-y-4">
+<!-- Numeric ID Field -->
+<div class="group relative">
+<label class="font-label text-[10px] uppercase font-bold text-on-surface-variant mb-1 block">Terminal ID</label>
+<div class="bg-surface-container-highest flex items-center p-4 input-focus-accent transition-all">
+<span class="material-symbols-outlined text-outline mr-3" data-icon="dns">dns</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-2xl font-headline tracking-[0.5em] text-primary-container placeholder:text-surface-variant uppercase" maxlength="4" placeholder="0000" type="text"/>
 </div>
-<div class="space-y-6 max-w-md w-full">
-<div class="space-y-2">
-<label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">ASSIGN SHOW NAME</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg rounded-four" id="create-show-name" placeholder="E.G. NEON_SUMMIT_2024" type="text"/>
 </div>
-<button class="group/btn relative w-full h-20 bg-[#00FF41] text-[#004d13] flex items-center justify-between px-6 rounded-four active:scale-[0.98] transition-all hover:shadow-[0_0_30px_rgba(0,255,65,0.3)]" id="btn-create-show">
-<span class="font-headline font-black text-2xl tracking-tighter">GENERATE SHOW ID</span>
-<span class="material-symbols-outlined text-3xl group-hover/btn:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+<!-- PIN Field -->
+<div class="group relative">
+<label class="font-label text-[10px] uppercase font-bold text-on-surface-variant mb-1 block">Access Key</label>
+<div class="bg-surface-container-highest flex items-center p-4 input-focus-accent transition-all">
+<span class="material-symbols-outlined text-outline mr-3" data-icon="lock">lock</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-2xl font-headline tracking-[0.5em] text-primary-container placeholder:text-surface-variant" maxlength="4" placeholder="****" type="password"/>
+</div>
+</div>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-col gap-3">
+<!-- Join Button -->
+<button class="w-full bg-primary-container text-on-primary-container font-headline font-black text-lg py-4 rounded-sm tactical-glow active:scale-95 transition-transform flex items-center justify-center gap-2 group">
+                    JOIN EXISTING
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="login">login</span>
 </button>
+<div class="flex items-center gap-4 py-2">
+<div class="h-[1px] bg-surface-container-highest flex-grow"></div>
+<span class="font-label text-[10px] text-surface-variant">OR</span>
+<div class="h-[1px] bg-surface-container-highest flex-grow"></div>
 </div>
-<div class="absolute bottom-10 right-10 opacity-5 pointer-events-none select-none">
-<span class="font-headline font-black text-[12rem] leading-none text-white">01</span>
-</div>
-</section>
-<!-- JOIN EXISTING SHOW SECTION -->
-<section class="flex-1 flex flex-col justify-center px-8 md:px-16 bg-[#0e0e0e] relative py-12">
-<div class="mb-10">
-<div class="flex items-center gap-2 mb-2">
-<div class="w-2 h-2 bg-[#00FF41]"></div>
-<span class="font-label text-xs font-black uppercase tracking-[0.2em] text-[#666]">PROTOCOL_02</span>
-</div>
-<h2 class="font-headline font-black text-5xl md:text-7xl text-white tracking-tighter leading-none">JOIN<br/>EXISTING</h2>
-</div>
-<div class="space-y-6 max-w-md w-full">
-<div class="grid grid-cols-2 gap-4">
-<div class="space-y-2">
-<label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">SHOW ID</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-[#333] rounded-four" id="join-show-id" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="0000" type="text"/>
-</div>
-<div class="space-y-2">
-<label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">ACCESS PIN</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-[#333] rounded-four" id="join-show-pin" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="****" type="password"/>
+<!-- Create Button -->
+<a class="w-full bg-surface-container-high text-on-surface font-headline font-bold text-sm py-4 rounded-sm border-b-2 border-outline-variant hover:bg-surface-variant active:scale-95 transition-all flex items-center justify-center gap-2" href="config.html">
+<span class="material-symbols-outlined text-sm" data-icon="add_box">add_box</span>
+                    CREATE NEW SHOW
+                </a>
 </div>
 </div>
-<div class="space-y-2">
-<label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">SELECT ROLE</label>
-<select class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-bold h-16 px-4 uppercase text-lg cursor-pointer rounded-four" id="join-role">
-<option value="UNASSIGNED">SELECT ROLE...</option>
-<option value="A1">A1 - Lead Audio</option>
-<option value="A2">A2 - Audio Assistant</option>
-<option value="FOH">FOH - Front of House</option>
-<option value="MON">MON - Monitors</option>
-<option value="TECH">TECH - Systems Tech</option>
-<option value="CUSTOM">CUSTOM ROLE...</option>
-</select>
+<!-- Environment Background Deco -->
+<div class="fixed inset-0 pointer-events-none z-[-1] opacity-5">
+<div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary-container/20 via-transparent to-transparent"></div>
+<div class="grid grid-cols-12 h-full w-full gap-4">
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
+<div class="border-r border-primary-container/20 h-full"></div>
 </div>
-<div class="space-y-2 hidden" id="custom-role-container">
-<label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">CUSTOM ROLE NAME</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg rounded-four" id="join-custom-role" placeholder="E.G. STAGE_HAND" type="text"/>
 </div>
-<div class="hidden text-xs font-black tracking-widest text-center uppercase py-2" id="auth-status">
-<span class="text-[#00FF41]" id="status-text">AUTHENTICATING...</span>
-</div>
-<button class="w-full h-20 bg-transparent text-white border-2 border-[#1c1b1b] hover:border-[#00FF41] flex items-center justify-center px-6 rounded-four active:scale-[0.98] transition-all group/join disabled:opacity-50 disabled:pointer-events-none" id="btn-join-show">
-<span class="font-headline font-black text-2xl tracking-tighter uppercase group-hover:text-[#00FF41] transition-colors" id="btn-join-text">INITIALIZE UPLINK</span>
-</button>
-</div>
-<div class="absolute bottom-10 right-10 opacity-5 pointer-events-none select-none">
-<span class="font-headline font-black text-[12rem] leading-none text-white">02</span>
-</div>
-</section>
 </main>
-<!-- Mobile Nav Bar (Fixed Bottom) -->
-<nav class="md:hidden sticky bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe bg-[#0e0e0e] h-20 border-t-2 border-[#1c1b1b]">
-<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#004d13] rounded-four px-6 py-2 shadow-[0_0_15px_rgba(0,255,65,0.4)] scale-90 transition-all">
+<!-- BottomNavBar -->
+<nav class="bg-[#0e0e0e] dark:bg-[#0e0e0e] fixed bottom-0 left-0 w-full flex justify-around items-center px-2 pb-2 h-20 z-50 border-t-2 border-[#1c1b1b]">
+<div class="flex flex-col items-center justify-center bg-[#00ff41] text-[#007117] rounded-sm p-3 scale-110 shadow-[0_0_15px_#00ff41]">
+<span class="material-symbols-outlined" data-icon="dns">dns</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#353534] p-3 hover:text-[#00FF41] transition-all">
 <span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
-<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter">CHANNELS</span>
 </div>
-<div class="flex flex-col items-center justify-center text-[#3b4b37] px-6 py-2 opacity-50">
+<div class="flex flex-col items-center justify-center text-[#353534] p-3 hover:text-[#00FF41] transition-all">
 <span class="material-symbols-outlined" data-icon="mic">mic</span>
-<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter">PTT</span>
 </div>
-<div class="flex flex-col items-center justify-center text-[#3b4b37] px-6 py-2 opacity-50">
-<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
-<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter">MSGS</span>
+<div class="flex flex-col items-center justify-center text-[#353534] p-3 hover:text-[#00FF41] transition-all">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#353534] p-3 hover:text-[#00FF41] transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
 </div>
 </nav>
-<script>
-    // Socket.io initialization
-    const socket = io('https://av-comm-server-production.up.railway.app');
-
-    // DOM Elements
-    const btnCreate = document.getElementById('btn-create-show');
-    const btnJoin = document.getElementById('btn-join-show');
-    const btnJoinText = document.getElementById('btn-join-text');
-    const createNameInput = document.getElementById('create-show-name');
-    const joinIdInput = document.getElementById('join-show-id');
-    const joinPinInput = document.getElementById('join-show-pin');
-    const joinRoleSelect = document.getElementById('join-role');
-    const customRoleContainer = document.getElementById('custom-role-container');
-    const customRoleInput = document.getElementById('join-custom-role');
-    const authStatus = document.getElementById('auth-status');
-    const statusText = document.getElementById('status-text');
-
-    // Handle Custom Role Toggle
-    joinRoleSelect.addEventListener('change', (e) => {
-        if (e.target.value === 'CUSTOM') {
-            customRoleContainer.classList.remove('hidden');
-        } else {
-            customRoleContainer.classList.add('hidden');
-        }
-    });
-
-    // Action: Create Show
-    btnCreate.addEventListener('click', () => {
-        const name = createNameInput.value.trim() || 'UNNAMED_SHOW';
-        
-        // Strictly numeric 4-digit generation
-        const generatedId = Math.floor(1000 + Math.random() * 9000).toString();
-        const generatedPin = Math.floor(1000 + Math.random() * 9000).toString();
-
-        localStorage.setItem('av_comm_name', name);
-        localStorage.setItem('av_comm_id', generatedId);
-        localStorage.setItem('av_comm_pin', generatedPin);
-        localStorage.setItem('av_comm_role', 'ADMIN');
-        localStorage.setItem('av_comm_channels', '12');
-
-        // Redirect to configuration or dashboard
-        window.location.href = 'config.html';
-    });
-
-    // Action: Join Show
-    btnJoin.addEventListener('click', () => {
-        const showId = joinIdInput.value.trim();
-        const pin = joinPinInput.value.trim();
-        
-        let role = joinRoleSelect.value;
-        if (role === 'CUSTOM') {
-            role = customRoleInput.value.trim().toUpperCase() || 'CUSTOM_TECH';
-        } else if (role === 'UNASSIGNED') {
-            role = 'UNASSIGNED';
-        }
-
-        if (showId.length === 4 && pin.length === 4) {
-            setLoading(true);
-            
-            // Temporary storage pending success
-            sessionStorage.setItem('pending_join_id', showId);
-            sessionStorage.setItem('pending_join_pin', pin);
-            sessionStorage.setItem('pending_join_role', role);
-            
-            // Emit join event to server
-            socket.emit('join_show', { showId, pin, role });
-        } else {
-            showError('PROTOCOL ERROR: 4-DIGIT INPUT REQUIRED');
-        }
-    });
-
-    // Socket Events
-    socket.on('join_success', (data) => {
-        // Retrieve values from temporary storage or response
-        const showId = sessionStorage.getItem('pending_join_id') || data.showId;
-        const pin = sessionStorage.getItem('pending_join_pin') || data.pin;
-        const role = sessionStorage.getItem('pending_join_role') || data.role;
-        
-        // Save to persistent localStorage
-        localStorage.setItem('av_comm_id', showId);
-        localStorage.setItem('av_comm_pin', pin);
-        localStorage.setItem('av_comm_role', role);
-        localStorage.setItem('av_comm_channels', data.channels || '12');
-        
-        // Clear temp storage
-        sessionStorage.removeItem('pending_join_id');
-        sessionStorage.removeItem('pending_join_pin');
-        sessionStorage.removeItem('pending_join_role');
-
-        window.location.href = 'grid.html';
-    });
-
-    socket.on('error', (message) => {
-        setLoading(false);
-        showError(message.toUpperCase() || 'INVALID ID/PIN');
-    });
-
-    socket.on('connect_error', () => {
-        setLoading(false);
-        showError('UPLINK CONNECTION FAILED');
-    });
-
-    // UI Helpers
-    function setLoading(isLoading) {
-        if (isLoading) {
-            btnJoin.disabled = true;
-            btnJoinText.innerText = 'INITIALIZING...';
-            authStatus.classList.remove('hidden');
-            statusText.innerText = 'AUTHENTICATING...';
-            statusText.className = 'text-[#00FF41] authenticating-glow';
-        } else {
-            btnJoin.disabled = false;
-            btnJoinText.innerText = 'INITIALIZE UPLINK';
-            authStatus.classList.add('hidden');
-        }
-    }
-
-    function showError(msg) {
-        authStatus.classList.remove('hidden');
-        statusText.innerText = msg;
-        statusText.className = 'text-red-500 font-black';
-        
-        setTimeout(() => {
-            if (!btnJoin.disabled) {
-                authStatus.classList.add('hidden');
-            }
-        }, 3000);
-    }
-
-    // Input Sanitization
-    [joinIdInput, joinPinInput].forEach(input => {
-        input.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
-        });
-    });
-
-    socket.on('connect', () => {
-        console.log('Uplink synchronized:', socket.id);
-    });
-</script>
+<!-- System Metadata Overlay -->
+<div class="fixed bottom-24 right-4 flex flex-col items-end pointer-events-none opacity-40">
+<span class="font-headline text-[8px] text-primary-container tracking-tighter">PROTO_ST4</span>
+<span class="font-headline text-[8px] text-primary-container tracking-tighter">LATENCY: 12ms</span>
+<span class="font-headline text-[8px] text-primary-container tracking-tighter">OS: VER_9.4.2</span>
+</div>
 </body></html>
