@@ -110,8 +110,8 @@
 <div class="w-full max-w-4xl shrink-0">
 <button class="w-full py-6 bg-[#00FF41] text-[#003907] font-headline font-black text-xl tracking-[0.2em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_10px_40px_rgba(0,255,65,0.2)]" id="launch-cta">
 <span class="material-symbols-outlined text-3xl" data-icon="bolt">bolt</span>
-                INITIALIZE UPLINK
-            </button>
+            INITIALIZE UPLINK
+        </button>
 <div class="flex justify-between mt-2">
 <p class="font-label text-[8px] text-gray-600 tracking-widest uppercase">Encryption: 256-bit AES Tactical</p>
 <p class="font-label text-[8px] text-gray-600 tracking-widest uppercase">Node: US-EAST-01</p>
@@ -134,80 +134,79 @@
 </a>
 </nav>
 <script>
-        // DOM Elements
-        const countDisplay = document.getElementById('channel-count');
-        const decrementBtn = document.getElementById('decrement-channels');
-        const incrementBtn = document.getElementById('increment-channels');
-        const showIdDisplay = document.getElementById('display-show-id');
-        const pinDisplay = document.getElementById('display-access-pin');
-        const roleButtons = document.querySelectorAll('.role-btn');
-        const launchCta = document.getElementById('launch-cta');
+    // DOM Elements
+    const countDisplay = document.getElementById('channel-count');
+    const decrementBtn = document.getElementById('decrement-channels');
+    const incrementBtn = document.getElementById('increment-channels');
+    const showIdDisplay = document.getElementById('display-show-id');
+    const pinDisplay = document.getElementById('display-access-pin');
+    const roleButtons = document.querySelectorAll('.role-btn');
+    const launchCta = document.getElementById('launch-cta');
 
-        // Initial State
-        let channels = 12; // Default per request
-        let selectedRole = 'FOH'; // Default per request
-        let currentShowId = '';
-        let currentPin = '';
+    // Initial State
+    let channels = 12; // Default per request
+    let selectedRole = 'FOH'; // Default per request
+    let currentShowId = '';
+    let currentPin = '';
 
-        // 1. Generation Logic on Load
-        window.addEventListener('DOMContentLoaded', () => {
-            // Generate random 4-digit ID suffix
-            const randomNum = Math.floor(1000 + Math.random() * 9000);
-            currentShowId = `XC-${randomNum}`;
-            
-            // Generate random 4-digit PIN
-            currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+    // 1. Generation Logic on Load
+    window.addEventListener('DOMContentLoaded', () => {
+        // Generate random 4-digit ID (strictly numbers, no letters)
+        currentShowId = Math.floor(1000 + Math.random() * 9000).toString();
+        
+        // Generate random 4-digit PIN (strictly numbers, no letters)
+        currentPin = Math.floor(1000 + Math.random() * 9000).toString();
 
-            // Update UI
-            showIdDisplay.textContent = currentShowId;
-            pinDisplay.textContent = currentPin;
-            countDisplay.textContent = channels;
+        // Update UI
+        showIdDisplay.textContent = currentShowId;
+        pinDisplay.textContent = currentPin;
+        countDisplay.textContent = channels;
+    });
+
+    // 2. Channel Allocation Counter Logic
+    const updateDisplay = () => {
+        countDisplay.textContent = channels;
+    };
+
+    decrementBtn.addEventListener('click', () => {
+        if (channels > 1) {
+            channels--;
+            updateDisplay();
+        }
+    });
+
+    incrementBtn.addEventListener('click', () => {
+        if (channels < 24) {
+            channels++;
+            updateDisplay();
+        }
+    });
+
+    // 3. Role Selection Logic
+    roleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            roleButtons.forEach(b => b.classList.remove('role-active'));
+            btn.classList.add('role-active');
+            selectedRole = btn.getAttribute('data-role');
         });
+    });
 
-        // 2. Channel Allocation Counter Logic
-        const updateDisplay = () => {
-            countDisplay.textContent = channels;
-        };
+    // 4. Initialize Uplink (Save to localStorage and Redirect)
+    launchCta.addEventListener('click', () => {
+        // Save configuration to localStorage
+        localStorage.setItem('stage_tech_show_id', currentShowId);
+        localStorage.setItem('stage_tech_pin', currentPin);
+        localStorage.setItem('stage_tech_channels', channels);
+        localStorage.setItem('stage_tech_role', selectedRole);
+        
+        // Navigate to grid screen (simulated)
+        console.log('Session Initialized:', { currentShowId, currentPin, channels, selectedRole });
+        window.location.href = 'grid.html';
+    });
 
-        decrementBtn.addEventListener('click', () => {
-            if (channels > 1) {
-                channels--;
-                updateDisplay();
-            }
-        });
-
-        incrementBtn.addEventListener('click', () => {
-            if (channels < 24) {
-                channels++;
-                updateDisplay();
-            }
-        });
-
-        // 3. Role Selection Logic
-        roleButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                roleButtons.forEach(b => b.classList.remove('role-active'));
-                btn.classList.add('role-active');
-                selectedRole = btn.getAttribute('data-role');
-            });
-        });
-
-        // 4. Initialize Uplink (Save to localStorage and Redirect)
-        launchCta.addEventListener('click', () => {
-            // Save configuration to localStorage for grid.html visibility
-            localStorage.setItem('stage_tech_show_id', currentShowId);
-            localStorage.setItem('stage_tech_pin', currentPin);
-            localStorage.setItem('stage_tech_channels', channels);
-            localStorage.setItem('stage_tech_role', selectedRole);
-            
-            // Navigate to grid screen (simulated with alert or redirect)
-            console.log('Session Initialized:', { currentShowId, currentPin, channels, selectedRole });
-            window.location.href = 'grid.html';
-        });
-
-        // Visual Pulse Effect
-        setInterval(() => {
-            launchCta.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
-        }, 1000);
-    </script>
+    // Visual Pulse Effect
+    setInterval(() => {
+        launchCta.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
+    }, 1000);
+</script>
 </body></html>
