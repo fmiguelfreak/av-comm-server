@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <title>AV-COMM | Show Setup Configuration</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -12,210 +13,240 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         body {
-            background-color: #131313;
+            background-color: #0a0a0a;
             color: #e5e2e1;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
         }
         .grid-pattern {
-            background-image: linear-gradient(#1c1b1b 1px, transparent 1px), linear-gradient(90deg, #1c1b1b 1px, transparent 1px);
+            background-image: linear-gradient(#151515 1px, transparent 1px), linear-gradient(90deg, #151515 1px, transparent 1px);
             background-size: 40px 40px;
         }
         .role-active {
             background-color: #00ff41 !important;
-            color: #003907 !important;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+            color: #000000 !important;
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.5);
+            border: 2px solid #00ff41;
         }
         .role-active .material-symbols-outlined {
             color: inherit;
         }
-        /* Custom scrollbar just in case, though we aim for no-scroll */
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
+        .tactical-border {
+            border: 1px solid #333;
         }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
-<body class="font-body selection:bg-primary-container selection:text-on-primary-container flex flex-col">
+<body class="font-body flex flex-col">
 <!-- Top Navigation Anchor -->
-<header class="flex justify-between items-center px-6 h-16 w-full z-50 bg-[#131313] border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] shrink-0">
+<header class="flex justify-between items-center px-6 h-16 w-full z-50 bg-[#000] border-b-2 border-[#00FF41] shrink-0">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#00FF41]" data-icon="sensors">sensors</span>
+<span class="material-symbols-outlined text-[#00FF41] status-pulse" data-icon="sensors">sensors</span>
 <span class="font-headline font-bold tracking-tighter text-[#00FF41] text-lg uppercase">Stage_Tech_Auth</span>
 </div>
 <div class="flex items-center gap-6">
 <div class="flex gap-4">
-<span class="font-headline uppercase tracking-widest text-sm text-[#00FF41]">System_Active</span>
+<span class="font-headline uppercase tracking-widest text-[10px] text-[#00FF41]">System_Ready</span>
 </div>
-<button class="material-symbols-outlined text-[#00FF41] hover:bg-[#2a2a2a] transition-colors p-2 rounded active:scale-95 duration-75" data-icon="sync" onclick="window.location.reload()">sync</button>
+<button class="material-symbols-outlined text-[#00FF41] hover:bg-[#1a1a1a] p-2 rounded active:scale-95 transition-all" data-icon="sync" onclick="window.location.reload()">sync</button>
 </div>
 </header>
-<main class="flex-1 grid-pattern flex flex-col items-center justify-between px-4 pt-6 pb-24 overflow-hidden">
+<main class="flex-1 grid-pattern flex flex-col items-center justify-between px-4 pt-6 pb-24 overflow-hidden relative">
 <!-- Confirmation Header (Show ID & PIN) -->
-<div class="w-full max-w-4xl flex flex-col gap-2 shrink-0">
-<div class="flex-1 bg-[#1a1a1a] border-l-4 border-[#00FF41] p-4 flex justify-between items-center shadow-[0_0_15px_rgba(0,255,65,0.05)]">
+<div class="w-full max-w-md flex flex-col gap-3 shrink-0">
+<div class="bg-[#111] border-l-4 border-[#00FF41] p-5 flex justify-between items-center tactical-border">
 <div>
 <p class="font-label text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Generated Show ID</p>
-<h2 class="font-headline text-3xl font-bold text-[#00FF41] tracking-tighter"><span id="display-show-id">----</span></h2>
+<h2 class="font-headline text-4xl font-bold text-[#00FF41] tracking-tighter"><span id="display-show-id">----</span></h2>
 </div>
-<span class="material-symbols-outlined text-gray-700 text-3xl" data-icon="qr_code_2">qr_code_2</span>
+<span class="material-symbols-outlined text-zinc-800 text-4xl" data-icon="qr_code_2">qr_code_2</span>
 </div>
-<div class="flex-1 bg-[#1a1a1a] border-l-4 border-[#00FF41] p-4 flex justify-between items-center shadow-[0_0_15px_rgba(0,255,65,0.05)]">
+<div class="bg-[#111] border-l-4 border-[#00FF41] p-5 flex justify-between items-center tactical-border">
 <div>
 <p class="font-label text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Access PIN</p>
-<h2 class="font-headline text-3xl font-bold text-[#00FF41] tracking-widest"><span id="display-access-pin">----</span></h2>
+<h2 class="font-headline text-4xl font-bold text-[#00FF41] tracking-widest"><span id="display-access-pin">----</span></h2>
 </div>
-<span class="material-symbols-outlined text-gray-700 text-3xl" data-icon="lock">lock</span>
+<span class="material-symbols-outlined text-zinc-800 text-4xl" data-icon="lock">lock</span>
 </div>
 </div>
 <!-- Configuration Content -->
-<div class="w-full max-w-4xl flex flex-col gap-2 flex-1 justify-center py-4 overflow-hidden">
+<div class="w-full max-w-md flex flex-col gap-4 flex-1 justify-center py-4">
 <!-- Channel Count Input -->
-<div class="bg-[#1a1a1a] p-4 flex flex-col justify-center gap-3 border-t-2 border-[#00FF41]">
+<div class="bg-[#111] p-4 flex flex-col gap-3 border-t-2 border-[#00FF41] tactical-border">
 <label class="font-label text-[10px] uppercase tracking-widest text-[#00FF41]">01_CHANNEL_ALLOCATION</label>
 <div class="flex items-center gap-4 w-full">
-<button class="bg-[#2a2a2a] text-white hover:bg-[#00FF41] hover:text-[#003907] w-12 h-12 flex items-center justify-center transition-all active:scale-90" id="decrement-channels">-</button>
-<div class="flex-1 bg-[#222] p-4 text-center border-b-2 border-[#00FF41]">
-<span class="font-headline text-4xl font-bold text-[#00FF41]" id="channel-count">12</span>
-<span class="font-label text-[10px] text-gray-500 block uppercase tracking-widest">Units</span>
+<button class="bg-[#222] text-white hover:bg-[#333] w-14 h-14 flex items-center justify-center transition-all active:scale-90 border border-zinc-800" id="decrement-channels">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<div class="flex-1 bg-[#000] p-4 text-center border-b-2 border-[#00FF41]">
+<span class="font-headline text-5xl font-bold text-[#00FF41]" id="channel-count">12</span>
+<span class="font-label text-[10px] text-gray-500 block uppercase tracking-widest mt-1">Units</span>
 </div>
-<button class="bg-[#2a2a2a] text-white hover:bg-[#00FF41] hover:text-[#003907] w-12 h-12 flex items-center justify-center transition-all active:scale-90" id="increment-channels">+</button>
+<button class="bg-[#222] text-white hover:bg-[#333] w-14 h-14 flex items-center justify-center transition-all active:scale-90 border border-zinc-800" id="increment-channels">
+<span class="material-symbols-outlined">add</span>
+</button>
 </div>
 </div>
 <!-- Role Selection -->
-<div class="bg-[#1a1a1a] p-4 flex flex-col gap-4">
+<div class="bg-[#111] p-4 flex flex-col gap-4 tactical-border">
 <label class="font-label text-[10px] uppercase tracking-widest text-[#00FF41]">02_OPERATIONAL_ROLE</label>
 <div class="grid grid-cols-4 gap-2" id="role-grid">
-<button class="role-btn role-active group flex flex-col items-center justify-center p-3 bg-[#2a2a2a] text-gray-500 hover:text-[#00FF41] transition-all" data-role="FOH">
-<span class="material-symbols-outlined text-2xl mb-1" data-icon="settings_input_component">settings_input_component</span>
-<span class="font-label font-black text-[9px] tracking-tighter">FOH</span>
+<button class="role-btn role-active flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="FOH">
+<span class="material-symbols-outlined text-3xl mb-1" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-label font-bold text-[9px] tracking-widest">FOH</span>
 </button>
-<button class="role-btn group flex flex-col items-center justify-center p-3 bg-[#2a2a2a] text-gray-500 hover:text-[#00FF41] transition-all" data-role="BOH">
-<span class="material-symbols-outlined text-2xl mb-1" data-icon="terminal">terminal</span>
-<span class="font-label font-black text-[9px] tracking-tighter">BOH</span>
+<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="BOH">
+<span class="material-symbols-outlined text-3xl mb-1" data-icon="terminal">terminal</span>
+<span class="font-label font-bold text-[9px] tracking-widest">BOH</span>
 </button>
-<button class="role-btn group flex flex-col items-center justify-center p-3 bg-[#2a2a2a] text-gray-500 hover:text-[#00FF41] transition-all" data-role="MICS">
-<span class="material-symbols-outlined text-2xl mb-1" data-icon="mic">mic</span>
-<span class="font-label font-black text-[9px] tracking-tighter">MICS</span>
+<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="MICS">
+<span class="material-symbols-outlined text-3xl mb-1" data-icon="mic">mic</span>
+<span class="font-label font-bold text-[9px] tracking-widest">MICS</span>
 </button>
-<button class="role-btn group flex flex-col items-center justify-center p-3 bg-[#2a2a2a] text-gray-500 hover:text-[#00FF41] transition-all" data-role="CUSTOM">
-<span class="material-symbols-outlined text-2xl mb-1" data-icon="dashboard_customize">dashboard_customize</span>
-<span class="font-label font-black text-[9px] tracking-tighter">CUSTOM</span>
+<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent" data-role="CUSTOM">
+<span class="material-symbols-outlined text-3xl mb-1" data-icon="dashboard_customize">dashboard_customize</span>
+<span class="font-label font-bold text-[9px] tracking-widest">CUSTOM</span>
 </button>
 </div>
 </div>
 </div>
 <!-- Start Session Button -->
-<div class="w-full max-w-4xl shrink-0">
-<button class="w-full py-6 bg-[#00FF41] text-[#003907] font-headline font-black text-xl tracking-[0.2em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_10px_40px_rgba(0,255,65,0.2)]" id="launch-cta">
-<span class="material-symbols-outlined text-3xl" data-icon="bolt">bolt</span>
-            INITIALIZE UPLINK
-        </button>
-<div class="flex justify-between mt-2">
-<p class="font-label text-[8px] text-gray-600 tracking-widest uppercase">Encryption: 256-bit AES Tactical</p>
-<p class="font-label text-[8px] text-gray-600 tracking-widest uppercase">Node: US-EAST-01</p>
+<div class="w-full max-w-md shrink-0">
+<button class="w-full py-7 bg-[#00FF41] text-black font-headline font-black text-xl tracking-[0.25em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_15px_50px_rgba(0,255,65,0.3)]" id="launch-cta">
+<span class="material-symbols-outlined text-3xl font-bold" data-icon="bolt">bolt</span>
+                INITIALIZE UPLINK
+            </button>
+<div class="flex justify-between mt-3 px-1">
+<p class="font-label text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Protocol: AES-GCM Tactical</p>
+<p class="font-label text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Server: AV-PROD-RAIL</p>
 </div>
 </div>
 </main>
 <!-- Bottom Navigation Shell -->
-<nav class="fixed bottom-0 left-0 w-full h-20 z-50 flex justify-around items-center px-4 pb-2 bg-[#0e0e0e] border-t-2 border-[#1c1b1b] shrink-0">
-<a class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 shadow-[0_0_15px_rgba(0,255,65,0.4)] transition-all" href="#">
+<nav class="fixed bottom-0 left-0 w-full h-20 z-50 flex justify-around items-center px-4 pb-2 bg-[#000] border-t border-zinc-900 shrink-0">
+<a class="flex flex-col items-center justify-center bg-[#00FF41] text-black rounded px-6 py-2 shadow-[0_0_20px_rgba(0,255,65,0.2)]" href="#">
 <span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
-<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter mt-1">CONFIG</span>
+<span class="font-bold uppercase text-[9px] tracking-widest mt-1">CONFIG</span>
 </a>
-<a class="flex flex-col items-center justify-center text-[#2a2a2a] hover:text-[#00FF41] px-6 py-2 hover:bg-[#1c1b1b] transition-all" href="#">
+<a class="flex flex-col items-center justify-center text-zinc-700 px-6 py-2 transition-all" href="#">
 <span class="material-symbols-outlined" data-icon="mic">mic</span>
-<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter mt-1">PTT</span>
+<span class="font-bold uppercase text-[9px] tracking-widest mt-1">PTT</span>
 </a>
-<a class="flex flex-col items-center justify-center text-[#2a2a2a] hover:text-[#00FF41] px-6 py-2 hover:bg-[#1c1b1b] transition-all" href="#">
+<a class="flex flex-col items-center justify-center text-zinc-700 px-6 py-2 transition-all" href="#">
 <span class="material-symbols-outlined" data-icon="terminal">terminal</span>
-<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter mt-1">MSGS</span>
+<span class="font-bold uppercase text-[9px] tracking-widest mt-1">MSGS</span>
 </a>
 </nav>
 <script>
-    // Configuration Variables
-    let currentId = "";
-    let currentPin = "";
-    let currentChannels = 12;
-    let selectedRole = "FOH";
+        const SOCKET_URL = 'https://av-comm-server-production.up.railway.app';
+        let socket;
 
-    // DOM Elements
-    const idDisplay = document.getElementById('display-show-id');
-    const pinDisplay = document.getElementById('display-access-pin');
-    const channelDisplay = document.getElementById('channel-count');
-    const roleBtns = document.querySelectorAll('.role-btn');
-    const decBtn = document.getElementById('decrement-channels');
-    const incBtn = document.getElementById('increment-channels');
-    const launchBtn = document.getElementById('launch-cta');
+        // DOM Elements
+        const countDisplay = document.getElementById('channel-count');
+        const decrementBtn = document.getElementById('decrement-channels');
+        const incrementBtn = document.getElementById('increment-channels');
+        const showIdDisplay = document.getElementById('display-show-id');
+        const pinDisplay = document.getElementById('display-access-pin');
+        const roleButtons = document.querySelectorAll('.role-btn');
+        const launchCta = document.getElementById('launch-cta');
 
-    // 1. Generate random 4-digit codes on load
-    const generateCode = () => Math.floor(1000 + Math.random() * 9000).toString();
+        // Initial State
+        let channels = 12; 
+        let selectedRole = 'FOH'; 
+        let currentShowId = '';
+        let currentPin = '';
 
-    const initializePage = () => {
-        currentId = generateCode();
-        currentPin = generateCode();
-        
-        idDisplay.textContent = currentId;
-        pinDisplay.textContent = currentPin;
-        channelDisplay.textContent = currentChannels;
-        
-        // Ensure default role visual state
-        roleBtns.forEach(btn => {
-            if(btn.dataset.role === selectedRole) {
-                btn.classList.add('role-active');
-            } else {
-                btn.classList.remove('role-active');
+        // 1. Generation Logic on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Generate random 4-digit ID and PIN
+            currentShowId = Math.floor(1000 + Math.random() * 9000).toString();
+            currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+
+            // Update UI
+            showIdDisplay.textContent = currentShowId;
+            pinDisplay.textContent = currentPin;
+            countDisplay.textContent = channels;
+        });
+
+        // 2. Channel Allocation Counter Logic
+        const updateDisplay = () => {
+            countDisplay.textContent = channels;
+        };
+
+        decrementBtn.addEventListener('click', () => {
+            if (channels > 1) {
+                channels--;
+                updateDisplay();
             }
         });
-    };
 
-    // 2. Channel Adjustment Logic
-    const updateChannelUI = () => {
-        channelDisplay.textContent = currentChannels;
-    };
-
-    decBtn.addEventListener('click', () => {
-        if (currentChannels > 1) {
-            currentChannels--;
-            updateChannelUI();
-        }
-    });
-
-    incBtn.addEventListener('click', () => {
-        if (currentChannels < 99) {
-            currentChannels++;
-            updateChannelUI();
-        }
-    });
-
-    // 3. Role Selection Logic
-    roleBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            roleBtns.forEach(b => b.classList.remove('role-active'));
-            btn.classList.add('role-active');
-            selectedRole = btn.dataset.role;
+        incrementBtn.addEventListener('click', () => {
+            if (channels < 24) {
+                channels++;
+                updateDisplay();
+            }
         });
-    });
 
-    // 4. Initialize Uplink (Save & Redirect)
-    launchBtn.addEventListener('click', () => {
-        // Save to localStorage with requested keys
-        localStorage.setItem('av_comm_id', currentId);
-        localStorage.setItem('av_comm_pin', currentPin);
-        localStorage.setItem('av_comm_role', selectedRole);
-        localStorage.setItem('av_comm_channels', currentChannels.toString());
-        
-        // 5. Redirect to grid.html
-        window.location.href = 'grid.html';
-    });
+        // 3. Role Selection Logic
+        roleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                roleButtons.forEach(b => b.classList.remove('role-active'));
+                btn.classList.add('role-active');
+                selectedRole = btn.getAttribute('data-role');
+            });
+        });
 
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', initializePage);
+        // 4. Initialize Uplink Socket Logic
+        launchCta.addEventListener('click', () => {
+            launchCta.disabled = true;
+            launchCta.textContent = 'CONNECTING...';
+            launchCta.classList.remove('bg-[#00FF41]');
+            launchCta.classList.add('bg-zinc-800', 'text-[#00FF41]');
 
-    // Visual Pulse Effect
-    setInterval(() => {
-        launchBtn.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
-    }, 1000);
-</script>
+            // Initialize Socket Connection
+            socket = io(SOCKET_URL);
+
+            socket.on('connect', () => {
+                console.log('Tactical Uplink Established');
+                // Emit show creation
+                socket.emit('create_show', {
+                    name: `SHOW_${currentShowId}`,
+                    channels: channels,
+                    role: selectedRole,
+                    showId: currentShowId,
+                    pin: currentPin
+                });
+            });
+
+            socket.on('show_created', (data) => {
+                console.log('Remote Show Instance Synchronized');
+                
+                // Save ALL data to localStorage
+                localStorage.setItem('stage_tech_show_id', currentShowId);
+                localStorage.setItem('stage_tech_pin', currentPin);
+                localStorage.setItem('stage_tech_channels', channels);
+                localStorage.setItem('stage_tech_role', selectedRole);
+                localStorage.setItem('stage_tech_server_id', data.id || '');
+                
+                // Redirect
+                window.location.href = 'grid.html';
+            });
+
+            socket.on('connect_error', (err) => {
+                console.error('Uplink Failure:', err);
+                launchCta.disabled = false;
+                launchCta.textContent = 'RETRY UPLINK';
+                launchCta.classList.add('bg-[#00FF41]', 'text-black');
+                alert('Connection to tactical server failed. Check network.');
+            });
+        });
+    </script>
 </body></html>
