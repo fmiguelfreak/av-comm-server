@@ -93,8 +93,8 @@
 <!-- TopAppBar - Tactical Header -->
 <header class="bg-surface text-primary font-headline uppercase tracking-tighter border-b-2 border-primary/30 flex justify-between items-center px-4 h-14 w-full fixed top-0 z-40">
 <div class="flex flex-col leading-none">
-<div class="text-[14px] font-black"><span class="text-primary/60">ID:</span> <span id="header-id">0000</span></div>
-<div class="text-[14px] font-black"><span class="text-primary/60">PIN:</span> <span id="header-pin">0000</span></div>
+<div class="text-[14px] font-black" id="header-id">0000</div>
+<div class="text-[14px] font-black" id="header-pin">0000</div>
 </div>
 <div class="flex flex-col items-center">
 <span class="text-sm font-black tracking-widest border-2 border-primary px-4 py-1 bg-primary/10" id="header-role">UNASSIGNED</span>
@@ -157,14 +157,14 @@
 </div>
 </nav>
 <script>
-        let config = {
-            showId: '0000',
-            pin: '0000',
-            channels: 12,
-            role: 'UNASSIGNED'
+        const config = {
+            showId: localStorage.getItem('av_comm_id') || '0000',
+            pin: localStorage.getItem('av_comm_pin') || '0000',
+            role: localStorage.getItem('av_comm_role') || 'UNASSIGNED',
+            channels: parseInt(localStorage.getItem('av_comm_channels')) || 12
         };
 
-        const socket = io('https://tacomamultimedia-production.up.railway.app/');
+        const socket = io('https://av-comm-server-production.up.railway.app');
         const gridContainer = document.getElementById('channel-grid');
         const syncStatus = document.getElementById('sync-status');
         const syncIndicator = document.getElementById('sync-indicator');
@@ -240,12 +240,6 @@
         }
 
         window.onload = () => {
-            // Strictly read from localStorage
-            config.showId = localStorage.getItem('av_comm_showId') || '0000';
-            config.pin = localStorage.getItem('av_comm_pin') || '0000';
-            config.role = localStorage.getItem('av_comm_role') || 'UNASSIGNED';
-            config.channels = parseInt(localStorage.getItem('av_comm_channels')) || 12;
-
             // Update header immediately
             document.getElementById('header-id').innerText = config.showId;
             document.getElementById('header-pin').innerText = config.pin;
@@ -254,7 +248,7 @@
             // Render exact number of channels
             renderGrid(config.channels);
 
-            // Join the room via socket
+            // Join the room via socket if already connected
             if (socket.connected) {
                 socket.emit('join_show', { showId: config.showId, pin: config.pin });
             }
@@ -263,7 +257,7 @@
         socket.on('connect', () => {
             syncStatus.innerText = 'STABLE';
             syncIndicator.className = 'w-3.5 h-3.5 rounded-full bg-primary animate-pulse shadow-[0_0_15px_#00ff41]';
-            // Ensure room join on reconnection
+            // Join show on connection/reconnection
             socket.emit('join_show', { showId: config.showId, pin: config.pin });
         });
 
