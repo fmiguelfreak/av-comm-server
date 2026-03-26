@@ -4,10 +4,169 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AV-COMM: Stage Tech Auth</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+        // Socket.io initialization
+        const socket = io('https://av-comm-server-production.up.railway.app');
+
+        // DOM Elements
+        const btnCreate = document.getElementById('btn-create-show');
+        const btnJoin = document.getElementById('btn-join-show');
+        const createNameInput = document.getElementById('create-show-name');
+        const joinIdInput = document.getElementById('join-show-id');
+        const joinPinInput = document.getElementById('join-show-pin');
+        const appRoot = document.getElementById('app-root');
+
+        // Socket connection log
+        socket.on('connect', () => {
+            console.log('Uplink synchronized:', socket.id);
+        });
+
+        // Event Handlers for UI Transitions
+        function transitionToConfig(showData) {
+            console.log('Redirecting to configuration view:', showData);
+            // Save show data to localStorage for retrieval on the next page
+            localStorage.setItem('av_comm_show_id', showData.showId);
+            localStorage.setItem('av_comm_pin', showData.pin);
+            localStorage.setItem('av_comm_show_name', showData.name);
+            
+            // Redirect to config.html
+            window.location.href = 'config.html';
+        }
+
+        // Action: Create Show
+        btnCreate.addEventListener('click', () => {
+            const name = createNameInput.value.trim() || 'UNNAMED_SHOW';
+            btnCreate.disabled = true;
+            btnCreate.innerText = 'INITIALIZING...';
+
+            socket.emit('create_show', { name: name });
+        });
+
+        // Action: Join Show
+        btnJoin.addEventListener('click', () => {
+            const showId = joinIdInput.value.trim();
+            const pin = joinPinInput.value.trim();
+
+            if (showId.length !== 4 || pin.length !== 4) {
+                alert('PROTOCOL ERROR: Show ID and PIN must be 4 digits.');
+                return;
+            }
+
+            btnJoin.disabled = true;
+            btnJoin.innerText = 'AUTHENTICATING...';
+            
+            socket.emit('join_show', { showId, pin });
+        });
+
+        // Socket Listeners
+        socket.on('show_created', (data) => {
+            // Data expected: { showId, pin, name }
+            transitionToConfig(data);
+        });
+
+        socket.on('join_success', (data) => {
+            // Data expected: { showId, pin, name }
+            alert('UPLINK ESTABLISHED. ACCESS GRANTED.');
+            transitionToConfig(data);
+        });
+
+        socket.on('error', (err) => {
+            alert(`UPLINK FAILED: ${err.message || 'Unknown protocol error'}`);
+            btnCreate.disabled = false;
+            btnJoin.disabled = false;
+            btnCreate.innerHTML = '<span class="font-headline font-black text-2xl tracking-tighter">GENERATE SHOW ID</span><span class="material-symbols-outlined text-3xl group-hover/btn:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>';
+            btnJoin.innerText = 'INITIALIZE UPLINK';
+        });
+
+        // Input Sanitization
+        [joinIdInput, joinPinInput].forEach(input => {
+            input.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js">
+        // Socket.io initialization
+        const socket = io('https://av-comm-server-production.up.railway.app');
+
+        // DOM Elements
+        const btnCreate = document.getElementById('btn-create-show');
+        const btnJoin = document.getElementById('btn-join-show');
+        const createNameInput = document.getElementById('create-show-name');
+        const joinIdInput = document.getElementById('join-show-id');
+        const joinPinInput = document.getElementById('join-show-pin');
+        const appRoot = document.getElementById('app-root');
+
+        // Socket connection log
+        socket.on('connect', () => {
+            console.log('Uplink synchronized:', socket.id);
+        });
+
+        // Event Handlers for UI Transitions
+        function transitionToConfig(showData) {
+            console.log('Redirecting to configuration view:', showData);
+            // Save show data to localStorage for retrieval on the next page
+            localStorage.setItem('av_comm_show_id', showData.showId);
+            localStorage.setItem('av_comm_pin', showData.pin);
+            localStorage.setItem('av_comm_show_name', showData.name);
+            
+            // Redirect to config.html
+            window.location.href = 'config.html';
+        }
+
+        // Action: Create Show
+        btnCreate.addEventListener('click', () => {
+            const name = createNameInput.value.trim() || 'UNNAMED_SHOW';
+            btnCreate.disabled = true;
+            btnCreate.innerText = 'INITIALIZING...';
+
+            socket.emit('create_show', { name: name });
+        });
+
+        // Action: Join Show
+        btnJoin.addEventListener('click', () => {
+            const showId = joinIdInput.value.trim();
+            const pin = joinPinInput.value.trim();
+
+            if (showId.length !== 4 || pin.length !== 4) {
+                alert('PROTOCOL ERROR: Show ID and PIN must be 4 digits.');
+                return;
+            }
+
+            btnJoin.disabled = true;
+            btnJoin.innerText = 'AUTHENTICATING...';
+            
+            socket.emit('join_show', { showId, pin });
+        });
+
+        // Socket Listeners
+        socket.on('show_created', (data) => {
+            // Data expected: { showId, pin, name }
+            transitionToConfig(data);
+        });
+
+        socket.on('join_success', (data) => {
+            // Data expected: { showId, pin, name }
+            alert('UPLINK ESTABLISHED. ACCESS GRANTED.');
+            transitionToConfig(data);
+        });
+
+        socket.on('error', (err) => {
+            alert(`UPLINK FAILED: ${err.message || 'Unknown protocol error'}`);
+            btnCreate.disabled = false;
+            btnJoin.disabled = false;
+            btnCreate.innerHTML = '<span class="font-headline font-black text-2xl tracking-tighter">GENERATE SHOW ID</span><span class="material-symbols-outlined text-3xl group-hover/btn:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>';
+            btnJoin.innerText = 'INITIALIZE UPLINK';
+        });
+
+        // Input Sanitization
+        [joinIdInput, joinPinInput].forEach(input => {
+            input.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -117,7 +276,7 @@
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">ASSIGN SHOW NAME</label>
 <input class="w-full bg-surface-container-highest border-none focus:ring-0 focus:border-l-4 focus:border-primary-fixed text-primary-container font-headline font-medium tracking-tight h-16 px-4 placeholder:text-outline-variant/30 uppercase text-lg" id="create-show-name" placeholder="E.G. NEON_SUMMIT_2024" type="text"/>
 </div>
-<button class="group/btn relative w-full h-20 bg-primary-container text-on-primary-container flex items-center justify-between px-6 rounded-sm active:scale-[0.98] transition-all hover:shadow-[0_0_30px_rgba(0,255,65,0.3)]" id="btn-create-show">
+<button class="group/btn relative w-full h-20 bg-primary-container text-on-primary-container flex items-center justify-between px-6 rounded-sm active:scale-[0.98] transition-all hover:shadow-[0_0_30px_rgba(0,255,65,0.3)] disabled:opacity-50" id="btn-create-show">
 <span class="font-headline font-black text-2xl tracking-tighter">GENERATE SHOW ID</span>
 <span class="material-symbols-outlined text-3xl group-hover/btn:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
 </button>
@@ -146,7 +305,7 @@
 <input class="w-full bg-surface-container-high border-none focus:ring-0 focus:border-l-4 focus:border-secondary-fixed text-secondary text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-outline-variant/20" id="join-show-pin" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="****" type="password"/>
 </div>
 </div>
-<button class="w-full h-20 bg-surface-container-high text-on-surface border-2 border-transparent hover:border-secondary-container flex items-center justify-center px-6 rounded-sm active:scale-[0.98] transition-all group/join" id="btn-join-show">
+<button class="w-full h-20 bg-surface-container-high text-on-surface border-2 border-transparent hover:border-secondary-container flex items-center justify-center px-6 rounded-sm active:scale-[0.98] transition-all group/join disabled:opacity-50" id="btn-join-show">
 <span class="font-headline font-black text-2xl tracking-tighter uppercase group-hover/join:text-secondary transition-colors">INITIALIZE UPLINK</span>
 </button>
 </div>
@@ -174,11 +333,6 @@
         // Socket.io initialization
         const socket = io('https://av-comm-server-production.up.railway.app');
 
-        // Socket connection log
-        socket.on('connect', () => {
-            console.log('Connected to server:', socket.id);
-        });
-
         // DOM Elements
         const btnCreate = document.getElementById('btn-create-show');
         const btnJoin = document.getElementById('btn-join-show');
@@ -187,63 +341,73 @@
         const joinPinInput = document.getElementById('join-show-pin');
         const appRoot = document.getElementById('app-root');
 
-        // Logic for view transition (SPA style)
-        function transitionToConfig(showData) {
-            console.log('Transitioning to configuration view for show:', showData);
-            // Replace innerHTML with a configuration shell for demo purposes
-            appRoot.innerHTML = `
-                <div class="flex-1 flex flex-col items-center justify-center p-8 bg-surface text-center">
-                    <div class="w-16 h-16 border-4 border-primary-container border-t-transparent animate-spin rounded-full mb-8"></div>
-                    <h2 class="font-headline font-bold text-4xl mb-2 text-primary-container uppercase">Configuration Link Active</h2>
-                    <p class="font-body text-outline max-w-sm mb-8">SYNCING PARAMETERS FOR: <span class="text-on-surface font-bold">${showData.name || 'NEW_SHOW'}</span></p>
-                    <button onclick="location.reload()" class="px-8 py-4 bg-surface-container-highest border border-outline-variant text-on-surface uppercase font-black text-xs tracking-widest">Abort & Reset</button>
-                </div>
-            `;
-        }
-
-        // Event Handlers
-        btnCreate.addEventListener('click', () => {
-            const showName = createNameInput.value.trim() || 'UNNAMED_SHOW';
-            
-            console.log('Creating show:', showName);
-            socket.emit('create_show', { name: showName }, (response) => {
-                if (response && response.success) {
-                    transitionToConfig({ name: showName, id: response.id });
-                } else {
-                    console.error('Failed to create show');
-                }
-            });
-            
-            // Immediate transition for UX feel (can be adjusted for server response)
-            transitionToConfig({ name: showName });
+        // Socket connection log
+        socket.on('connect', () => {
+            console.log('Uplink synchronized:', socket.id);
         });
 
+        // Event Handlers for UI Transitions
+        function transitionToConfig(showData) {
+            console.log('Redirecting to configuration view:', showData);
+            // Save show data to localStorage for retrieval on the next page
+            localStorage.setItem('av_comm_show_id', showData.showId);
+            localStorage.setItem('av_comm_pin', showData.pin);
+            localStorage.setItem('av_comm_show_name', showData.name);
+            
+            // Redirect to config.html
+            window.location.href = 'config.html';
+        }
+
+        // Action: Create Show
+        btnCreate.addEventListener('click', () => {
+            const name = createNameInput.value.trim() || 'UNNAMED_SHOW';
+            btnCreate.disabled = true;
+            btnCreate.innerText = 'INITIALIZING...';
+
+            socket.emit('create_show', { name: name });
+        });
+
+        // Action: Join Show
         btnJoin.addEventListener('click', () => {
             const showId = joinIdInput.value.trim();
             const pin = joinPinInput.value.trim();
 
             if (showId.length !== 4 || pin.length !== 4) {
-                alert('CRITICAL ERROR: VALIDATION FAILED. SHOW ID AND PIN MUST BE 4 DIGITS.');
+                alert('PROTOCOL ERROR: Show ID and PIN must be 4 digits.');
                 return;
             }
 
-            console.log('Joining show:', showId);
-            socket.emit('join_show', { showId, pin }, (response) => {
-                if (response && response.success) {
-                    alert('UPLINK ESTABLISHED. ACCESS GRANTED.');
-                    // In a real app, transition to main dash
-                } else {
-                    alert('UPLINK FAILED: INVALID CREDENTIALS.');
-                }
-            });
+            btnJoin.disabled = true;
+            btnJoin.innerText = 'AUTHENTICATING...';
+            
+            socket.emit('join_show', { showId, pin });
         });
 
-        // Simple input formatting for numeric inputs
+        // Socket Listeners
+        socket.on('show_created', (data) => {
+            // Data expected: { showId, pin, name }
+            transitionToConfig(data);
+        });
+
+        socket.on('join_success', (data) => {
+            // Data expected: { showId, pin, name }
+            alert('UPLINK ESTABLISHED. ACCESS GRANTED.');
+            transitionToConfig(data);
+        });
+
+        socket.on('error', (err) => {
+            alert(`UPLINK FAILED: ${err.message || 'Unknown protocol error'}`);
+            btnCreate.disabled = false;
+            btnJoin.disabled = false;
+            btnCreate.innerHTML = '<span class="font-headline font-black text-2xl tracking-tighter">GENERATE SHOW ID</span><span class="material-symbols-outlined text-3xl group-hover/btn:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>';
+            btnJoin.innerText = 'INITIALIZE UPLINK';
+        });
+
+        // Input Sanitization
         [joinIdInput, joinPinInput].forEach(input => {
             input.addEventListener('input', (e) => {
                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
             });
         });
-
     </script>
 </body></html>
