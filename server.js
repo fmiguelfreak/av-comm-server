@@ -10,6 +10,7 @@ const io = new Server(server, {
     cors: { origin: "*" }
 });
 
+// Serve frontend automaticamente
 app.use(express.static(path.join(__dirname, 'public')));
 
 const rooms = {};
@@ -59,15 +60,6 @@ io.on('connection', (socket) => {
                 channelID,
                 status
             });
-        }
-    });
-
-    socket.on('voice_msg', (data) => {
-        const { roomID, message, sender } = data;
-        const rid = roomID?.toUpperCase();
-
-        if (rooms[rid]) {
-            io.to(rid).emit('receive_voice', { message, sender });
         }
     });
 
