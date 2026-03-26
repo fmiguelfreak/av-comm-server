@@ -57,14 +57,14 @@
 <div class="flex-1 bg-[#1a1a1a] border-l-4 border-[#00FF41] p-4 flex justify-between items-center shadow-[0_0_15px_rgba(0,255,65,0.05)]">
 <div>
 <p class="font-label text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Generated Show ID</p>
-<h2 class="font-headline text-3xl font-bold text-[#00FF41] tracking-tighter"><span id="display-show-id">0000</span></h2>
+<h2 class="font-headline text-3xl font-bold text-[#00FF41] tracking-tighter"><span id="display-show-id">----</span></h2>
 </div>
 <span class="material-symbols-outlined text-gray-700 text-3xl" data-icon="qr_code_2">qr_code_2</span>
 </div>
 <div class="flex-1 bg-[#1a1a1a] border-l-4 border-[#00FF41] p-4 flex justify-between items-center shadow-[0_0_15px_rgba(0,255,65,0.05)]">
 <div>
 <p class="font-label text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Access PIN</p>
-<h2 class="font-headline text-3xl font-bold text-[#00FF41] tracking-widest"><span id="display-access-pin">0000</span></h2>
+<h2 class="font-headline text-3xl font-bold text-[#00FF41] tracking-widest"><span id="display-access-pin">----</span></h2>
 </div>
 <span class="material-symbols-outlined text-gray-700 text-3xl" data-icon="lock">lock</span>
 </div>
@@ -134,84 +134,88 @@
 </a>
 </nav>
 <script>
+    // Configuration Variables
+    let currentId = "";
+    let currentPin = "";
+    let currentChannels = 12;
+    let selectedRole = "FOH";
+
     // DOM Elements
-    const countDisplay = document.getElementById('channel-count');
-    const decrementBtn = document.getElementById('decrement-channels');
-    const incrementBtn = document.getElementById('increment-channels');
-    const showIdDisplay = document.getElementById('display-show-id');
+    const idDisplay = document.getElementById('display-show-id');
     const pinDisplay = document.getElementById('display-access-pin');
-    const roleButtons = document.querySelectorAll('.role-btn');
-    const launchCta = document.getElementById('launch-cta');
+    const channelDisplay = document.getElementById('channel-count');
+    const roleBtns = document.querySelectorAll('.role-btn');
+    const decBtn = document.getElementById('decrement-channels');
+    const incBtn = document.getElementById('increment-channels');
+    const launchBtn = document.getElementById('launch-cta');
 
-    // Initial State
-    let channels = 12; // Default per request
-    let selectedRole = 'FOH'; // Default per request
-    let currentShowId = '';
-    let currentPin = '';
+    // 1. Generate random 4-digit codes on load
+    const generateCode = () => Math.floor(1000 + Math.random() * 9000).toString();
 
-    // Function to generate random 4-digit number
-    const generate4DigitCode = () => {
-        return Math.floor(1000 + Math.random() * 9000).toString();
-    };
-
-    // 1. Generation Logic on Load
-    window.addEventListener('DOMContentLoaded', () => {
-        // Generate strictly numeric IDs
-        currentShowId = generate4DigitCode();
-        currentPin = generate4DigitCode();
-
-        // Update UI
-        showIdDisplay.textContent = currentShowId;
+    const initializePage = () => {
+        currentId = generateCode();
+        currentPin = generateCode();
+        
+        idDisplay.textContent = currentId;
         pinDisplay.textContent = currentPin;
-        countDisplay.textContent = channels;
-    });
-
-    // 2. Channel Allocation Counter Logic
-    const updateDisplay = () => {
-        countDisplay.textContent = channels;
+        channelDisplay.textContent = currentChannels;
+        
+        // Ensure default role visual state
+        roleBtns.forEach(btn => {
+            if(btn.dataset.role === selectedRole) {
+                btn.classList.add('role-active');
+            } else {
+                btn.classList.remove('role-active');
+            }
+        });
     };
 
-    decrementBtn.addEventListener('click', () => {
-        if (channels > 1) {
-            channels--;
-            updateDisplay();
+    // 2. Channel Adjustment Logic
+    const updateChannelUI = () => {
+        channelDisplay.textContent = currentChannels;
+    };
+
+    decBtn.addEventListener('click', () => {
+        if (currentChannels > 1) {
+            currentChannels--;
+            updateChannelUI();
         }
     });
 
-    incrementBtn.addEventListener('click', () => {
-        if (channels < 24) {
-            channels++;
-            updateDisplay();
+    incBtn.addEventListener('click', () => {
+        if (currentChannels < 99) {
+            currentChannels++;
+            updateChannelUI();
         }
     });
 
     // 3. Role Selection Logic
-    roleButtons.forEach(btn => {
+    roleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Visual Update
-            roleButtons.forEach(b => b.classList.remove('role-active'));
+            roleBtns.forEach(b => b.classList.remove('role-active'));
             btn.classList.add('role-active');
-            
-            // State Update
-            selectedRole = btn.getAttribute('data-role');
+            selectedRole = btn.dataset.role;
         });
     });
 
-    // 4. Initialize Uplink (Save to localStorage and Redirect)
-    launchCta.addEventListener('click', () => {
-        // Save configuration to localStorage
-        localStorage.setItem('stage_tech_show_id', currentShowId);
-        localStorage.setItem('stage_tech_pin', currentPin);
-        localStorage.setItem('stage_tech_channels', channels);
-        localStorage.setItem('stage_tech_role', selectedRole);
+    // 4. Initialize Uplink (Save & Redirect)
+    launchBtn.addEventListener('click', () => {
+        // Save to localStorage with requested keys
+        localStorage.setItem('av_comm_id', currentId);
+        localStorage.setItem('av_comm_pin', currentPin);
+        localStorage.setItem('av_comm_role', selectedRole);
+        localStorage.setItem('av_comm_channels', currentChannels.toString());
         
-        // Navigate to grid screen
+        // 5. Redirect to grid.html
         window.location.href = 'grid.html';
     });
 
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', initializePage);
+
     // Visual Pulse Effect
     setInterval(() => {
-        launchCta.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
+        launchBtn.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
     }, 1000);
 </script>
 </body></html>
