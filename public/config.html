@@ -7,7 +7,6 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -79,20 +78,23 @@
       body {
         background-color: #131313;
         color: #e5e2e1;
-        overflow: hidden;
+        overflow-x: hidden;
       }
       .grid-pattern {
         background-image: linear-gradient(#1c1b1b 1px, transparent 1px), linear-gradient(90deg, #1c1b1b 1px, transparent 1px);
         background-size: 40px 40px;
       }
+      .role-active {
+        background-color: #00ff41 !important;
+        color: #003907 !important;
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+      }
+      .role-active .material-symbols-outlined {
+        color: inherit;
+      }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
 </head>
-<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container min-h-screen">
 <!-- Top Navigation Anchor -->
 <header class="flex justify-between items-center px-6 h-16 w-full z-50 bg-[#131313] top-0 left-0 border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] fixed">
 <div class="flex items-center gap-3">
@@ -106,7 +108,7 @@
 <button class="material-symbols-outlined text-[#00FF41] hover:bg-[#2a2a2a] transition-colors p-2 rounded active:scale-95 duration-75" data-icon="sync">sync</button>
 </div>
 </header>
-<main class="h-screen pt-20 pb-20 grid-pattern flex flex-col items-center justify-center px-4">
+<main class="min-h-screen pt-24 pb-32 grid-pattern flex flex-col items-center justify-start px-4 overflow-y-auto">
 <!-- Confirmation Header (Show ID & PIN) -->
 <div class="w-full max-w-4xl mb-8 flex flex-col md:flex-row gap-4 items-stretch">
 <div class="flex-1 bg-surface-container border-l-4 border-primary-container p-6 flex justify-between items-center shadow-[0_0_15px_rgba(0,255,65,0.05)]">
@@ -128,45 +130,46 @@
 <div class="w-full max-w-4xl bg-surface-container-low p-1 relative">
 <div class="absolute top-0 left-0 w-full h-1 bg-primary-container"></div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 bg-surface-container-highest">
-<!-- Show Name Input -->
+<!-- Show Name Read-only Display -->
 <div class="bg-surface-container p-8 flex flex-col justify-center gap-4">
-<label class="font-label text-[10px] uppercase tracking-widest text-primary-fixed">01_CONFIGURATION_NAME</label>
-<div class="relative">
-<input class="w-full bg-surface-container-highest border-none border-l-4 border-transparent focus:border-primary-fixed text-primary-container font-headline font-medium text-xl p-4 focus:ring-0 placeholder:text-outline-variant uppercase" placeholder="ENTER SHOW IDENTIFIER..." type="text"/>
-<div class="absolute right-4 top-1/2 -translate-y-1/2">
-<span class="material-symbols-outlined text-outline-variant" data-icon="edit_note">edit_note</span>
+<label class="font-label text-[10px] uppercase tracking-widest text-primary-fixed">01_ACTIVE_CONFIGURATION</label>
+<div class="bg-surface-container-highest border-l-4 border-primary-fixed p-4 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label text-[9px] text-outline uppercase tracking-tighter">CURRENT_SESSION</span>
+<span class="font-headline font-bold text-xl text-primary-container uppercase">NEON_SUMMIT</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="database">database</span>
 </div>
 </div>
-</div>
-<!-- Channel Count Input -->
+<!-- Channel Count Input (Interactive) -->
 <div class="bg-surface-container p-8 flex flex-col justify-center gap-4">
 <label class="font-label text-[10px] uppercase tracking-widest text-primary-fixed">02_CHANNEL_ALLOCATION</label>
 <div class="flex items-center gap-4">
-<button class="bg-surface-container-highest text-on-surface hover:bg-primary-container hover:text-on-primary-container w-14 h-14 flex items-center justify-center transition-all active:scale-90">-</button>
+<button class="bg-surface-container-highest text-on-surface hover:bg-primary-container hover:text-on-primary-container w-14 h-14 flex items-center justify-center transition-all active:scale-90" id="decrement-channels">-</button>
 <div class="flex-1 bg-surface-container-highest p-4 text-center">
-<span class="font-headline text-3xl font-bold text-primary-container">16</span>
-<span class="font-label text-xs text-outline block">UNITS</span>
+<span class="font-headline text-3xl font-bold text-primary-container" id="channel-count">16</span>
+<span class="font-label text-xs text-outline block uppercase">Units</span>
 </div>
-<button class="bg-surface-container-highest text-on-surface hover:bg-primary-container hover:text-on-primary-container w-14 h-14 flex items-center justify-center transition-all active:scale-90">+</button>
+<button class="bg-surface-container-highest text-on-surface hover:bg-primary-container hover:text-on-primary-container w-14 h-14 flex items-center justify-center transition-all active:scale-90" id="increment-channels">+</button>
 </div>
 </div>
-<!-- Role Selection -->
+<!-- Role Selection (Interactive) -->
 <div class="bg-surface-container p-8 col-span-1 md:col-span-2 flex flex-col gap-6">
 <label class="font-label text-[10px] uppercase tracking-widest text-primary-fixed">03_OPERATIONAL_ROLE</label>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-<button class="group flex flex-col items-center justify-center p-6 bg-primary-container text-on-primary-container rounded-sm shadow-[0_0_15px_rgba(0,255,65,0.4)] transition-all">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="role-grid">
+<button class="role-btn role-active group flex flex-col items-center justify-center p-6 bg-surface-container-highest text-outline hover:text-primary-container hover:bg-[#2a2a2a] transition-all" data-role="FOH">
 <span class="material-symbols-outlined text-3xl mb-2" data-icon="settings_input_component">settings_input_component</span>
 <span class="font-label font-black text-[10px] tracking-tighter">FOH</span>
 </button>
-<button class="group flex flex-col items-center justify-center p-6 bg-surface-container-highest text-outline hover:text-primary-container hover:bg-[#2a2a2a] transition-all">
+<button class="role-btn group flex flex-col items-center justify-center p-6 bg-surface-container-highest text-outline hover:text-primary-container hover:bg-[#2a2a2a] transition-all" data-role="BOH">
 <span class="material-symbols-outlined text-3xl mb-2" data-icon="terminal">terminal</span>
 <span class="font-label font-black text-[10px] tracking-tighter">BOH</span>
 </button>
-<button class="group flex flex-col items-center justify-center p-6 bg-surface-container-highest text-outline hover:text-primary-container hover:bg-[#2a2a2a] transition-all">
+<button class="role-btn group flex flex-col items-center justify-center p-6 bg-surface-container-highest text-outline hover:text-primary-container hover:bg-[#2a2a2a] transition-all" data-role="MICS">
 <span class="material-symbols-outlined text-3xl mb-2" data-icon="mic">mic</span>
 <span class="font-label font-black text-[10px] tracking-tighter">MICS</span>
 </button>
-<button class="group flex flex-col items-center justify-center p-6 bg-surface-container-highest text-outline hover:text-primary-container hover:bg-[#2a2a2a] transition-all">
+<button class="role-btn group flex flex-col items-center justify-center p-6 bg-surface-container-highest text-outline hover:text-primary-container hover:bg-[#2a2a2a] transition-all" data-role="CUSTOM">
 <span class="material-symbols-outlined text-3xl mb-2" data-icon="dashboard_customize">dashboard_customize</span>
 <span class="font-label font-black text-[10px] tracking-tighter">CUSTOM</span>
 </button>
@@ -176,10 +179,10 @@
 </div>
 <!-- Start Session Button -->
 <div class="w-full max-w-4xl mt-8">
-<a class="w-full py-8 bg-primary-container text-on-primary-container font-headline font-black text-2xl tracking-[0.3em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_10px_40px_rgba(0,255,65,0.2)]" href="grid.html">
-<span class="material-symbols-outlined text-4xl" data-icon="play_arrow" data-weight="fill">play_arrow</span>
-                START SESSION
-            </a>
+<a class="w-full py-8 bg-primary-container text-on-primary-container font-headline font-black text-2xl tracking-[0.3em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_10px_40px_rgba(0,255,65,0.2)]" href="grid.html" id="launch-cta">
+<span class="material-symbols-outlined text-4xl" data-icon="bolt" data-weight="fill">bolt</span>
+            INITIALIZE UPLINK
+        </a>
 <div class="flex justify-between mt-4">
 <p class="font-label text-[9px] text-outline-variant tracking-widest uppercase">Encryption: 256-bit AES Tactical</p>
 <p class="font-label text-[9px] text-outline-variant tracking-widest uppercase">Node: US-EAST-01</p>
@@ -188,10 +191,9 @@
 </main>
 <!-- Bottom Navigation Shell -->
 <nav class="fixed bottom-0 left-0 w-full h-20 z-50 flex justify-around items-center px-4 pb-2 bg-[#0e0e0e] border-t-2 border-[#1c1b1b]">
-<!-- Active Tab: CHANNELS as default configuration state -->
 <a class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 shadow-[0_0_15px_rgba(0,255,65,0.4)] transition-all" href="#">
 <span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
-<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter mt-1">CHANNELS</span>
+<span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter mt-1">CONFIG</span>
 </a>
 <a class="flex flex-col items-center justify-center text-[#2a2a2a] hover:text-[#00FF41] px-6 py-2 hover:bg-[#1c1b1b] transition-all active:bg-[#72ff70] active:scale-90" href="#">
 <span class="material-symbols-outlined" data-icon="mic">mic</span>
@@ -218,4 +220,44 @@
 <p class="font-label text-[8px] text-primary-container uppercase mt-2 rotate-90 origin-right">v2.4.0-stable</p>
 </div>
 </div>
+<script>
+    // Channel Allocation Counter Logic
+    const countDisplay = document.getElementById('channel-count');
+    const decrementBtn = document.getElementById('decrement-channels');
+    const incrementBtn = document.getElementById('increment-channels');
+    let channels = 16;
+
+    const updateDisplay = () => {
+        countDisplay.textContent = channels;
+    };
+
+    decrementBtn.addEventListener('click', () => {
+        if (channels > 1) {
+            channels--;
+            updateDisplay();
+        }
+    });
+
+    incrementBtn.addEventListener('click', () => {
+        if (channels < 24) {
+            channels++;
+            updateDisplay();
+        }
+    });
+
+    // Role Selection Logic
+    const roleButtons = document.querySelectorAll('.role-btn');
+    roleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            roleButtons.forEach(b => b.classList.remove('role-active'));
+            btn.classList.add('role-active');
+        });
+    });
+
+    // Pulse Effect for Launch CTA
+    const launchCta = document.getElementById('launch-cta');
+    setInterval(() => {
+        launchCta.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
+    }, 1000);
+</script>
 </body></html>
