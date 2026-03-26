@@ -8,11 +8,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <style>
+        :root {
+            --brand-primary: #00FF41;
+            --brand-dark: #131313;
+            --brand-surface: #1c1b1b;
+        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         body {
-            background-color: #131313;
+            background-color: var(--brand-dark);
             color: #e5e2e1;
             overflow-x: hidden;
             font-family: 'Space Grotesk', sans-serif;
@@ -43,6 +48,7 @@
             -moz-appearance: none;
             appearance: none;
         }
+        .rounded-four { border-radius: 4px; }
     </style>
 </head>
 <body class="selection:bg-[#00FF41] selection:text-black min-h-screen flex flex-col">
@@ -70,9 +76,9 @@
 <div class="space-y-6 max-w-md w-full">
 <div class="space-y-2">
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">ASSIGN SHOW NAME</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg" id="create-show-name" placeholder="E.G. NEON_SUMMIT_2024" type="text"/>
+<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg rounded-four" id="create-show-name" placeholder="E.G. NEON_SUMMIT_2024" type="text"/>
 </div>
-<button class="group/btn relative w-full h-20 bg-[#00FF41] text-[#004d13] flex items-center justify-between px-6 rounded-sm active:scale-[0.98] transition-all hover:shadow-[0_0_30px_rgba(0,255,65,0.3)]" id="btn-create-show">
+<button class="group/btn relative w-full h-20 bg-[#00FF41] text-[#004d13] flex items-center justify-between px-6 rounded-four active:scale-[0.98] transition-all hover:shadow-[0_0_30px_rgba(0,255,65,0.3)]" id="btn-create-show">
 <span class="font-headline font-black text-2xl tracking-tighter">GENERATE SHOW ID</span>
 <span class="material-symbols-outlined text-3xl group-hover/btn:translate-x-2 transition-transform" data-icon="arrow_forward">arrow_forward</span>
 </button>
@@ -94,16 +100,17 @@
 <div class="grid grid-cols-2 gap-4">
 <div class="space-y-2">
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">SHOW ID</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-[#333]" id="join-show-id" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="0000" type="text"/>
+<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-[#333] rounded-four" id="join-show-id" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="0000" type="text"/>
 </div>
 <div class="space-y-2">
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">ACCESS PIN</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-[#333]" id="join-show-pin" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="****" type="password"/>
+<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] text-center text-3xl font-headline font-bold h-20 px-2 placeholder:text-[#333] rounded-four" id="join-show-pin" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="****" type="password"/>
 </div>
 </div>
 <div class="space-y-2">
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">SELECT ROLE</label>
-<select class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-bold h-16 px-4 uppercase text-lg cursor-pointer" id="join-role">
+<select class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-bold h-16 px-4 uppercase text-lg cursor-pointer rounded-four" id="join-role">
+<option value="UNASSIGNED">SELECT ROLE...</option>
 <option value="A1">A1 - Lead Audio</option>
 <option value="A2">A2 - Audio Assistant</option>
 <option value="FOH">FOH - Front of House</option>
@@ -114,12 +121,12 @@
 </div>
 <div class="space-y-2 hidden" id="custom-role-container">
 <label class="font-label text-[10px] font-black uppercase tracking-widest text-[#999] ml-1">CUSTOM ROLE NAME</label>
-<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg" id="join-custom-role" placeholder="E.G. STAGE_HAND" type="text"/>
+<input class="w-full bg-[#1c1b1b] border-none focus:ring-1 focus:ring-[#00FF41] text-[#00FF41] font-headline font-medium tracking-tight h-16 px-4 placeholder:text-[#333] uppercase text-lg rounded-four" id="join-custom-role" placeholder="E.G. STAGE_HAND" type="text"/>
 </div>
 <div class="hidden text-xs font-black tracking-widest text-center uppercase py-2" id="auth-status">
 <span class="text-[#00FF41]" id="status-text">AUTHENTICATING...</span>
 </div>
-<button class="w-full h-20 bg-transparent text-white border-2 border-[#1c1b1b] hover:border-[#00FF41] flex items-center justify-center px-6 rounded-sm active:scale-[0.98] transition-all group/join disabled:opacity-50 disabled:pointer-events-none" id="btn-join-show">
+<button class="w-full h-20 bg-transparent text-white border-2 border-[#1c1b1b] hover:border-[#00FF41] flex items-center justify-center px-6 rounded-four active:scale-[0.98] transition-all group/join disabled:opacity-50 disabled:pointer-events-none" id="btn-join-show">
 <span class="font-headline font-black text-2xl tracking-tighter uppercase group-hover:text-[#00FF41] transition-colors" id="btn-join-text">INITIALIZE UPLINK</span>
 </button>
 </div>
@@ -130,7 +137,7 @@
 </main>
 <!-- Mobile Nav Bar (Fixed Bottom) -->
 <nav class="md:hidden sticky bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe bg-[#0e0e0e] h-20 border-t-2 border-[#1c1b1b]">
-<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#004d13] rounded-sm px-6 py-2 shadow-[0_0_15px_rgba(0,255,65,0.4)] scale-90 transition-all">
+<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#004d13] rounded-four px-6 py-2 shadow-[0_0_15px_rgba(0,255,65,0.4)] scale-90 transition-all">
 <span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
 <span class="font-['Inter'] font-black uppercase text-[10px] tracking-tighter">CHANNELS</span>
 </div>
@@ -195,18 +202,19 @@
         let role = joinRoleSelect.value;
         if (role === 'CUSTOM') {
             role = customRoleInput.value.trim().toUpperCase() || 'CUSTOM_TECH';
+        } else if (role === 'UNASSIGNED') {
+            role = 'UNASSIGNED';
         }
 
         if (showId.length === 4 && pin.length === 4) {
             setLoading(true);
             
-            // Save data for immediate use upon successful join simulation
-            localStorage.setItem('av_comm_id', showId);
-            localStorage.setItem('av_comm_pin', pin);
-            localStorage.setItem('av_comm_role', role);
-            localStorage.setItem('av_comm_channels', '12');
+            // Temporary storage pending success
+            sessionStorage.setItem('pending_join_id', showId);
+            sessionStorage.setItem('pending_join_pin', pin);
+            sessionStorage.setItem('pending_join_role', role);
             
-            // Emit join event
+            // Emit join event to server
             socket.emit('join_show', { showId, pin, role });
         } else {
             showError('PROTOCOL ERROR: 4-DIGIT INPUT REQUIRED');
@@ -215,13 +223,25 @@
 
     // Socket Events
     socket.on('join_success', (data) => {
-        // Data already partially saved in Join click, but ensure role from server if any
-        if (data && data.role) localStorage.setItem('av_comm_role', data.role);
+        // Retrieve values from temporary storage or response
+        const showId = sessionStorage.getItem('pending_join_id') || data.showId;
+        const pin = sessionStorage.getItem('pending_join_pin') || data.pin;
+        const role = sessionStorage.getItem('pending_join_role') || data.role;
         
+        // Save to persistent localStorage
+        localStorage.setItem('av_comm_id', showId);
+        localStorage.setItem('av_comm_pin', pin);
+        localStorage.setItem('av_comm_role', role);
+        localStorage.setItem('av_comm_channels', data.channels || '12');
+        
+        // Clear temp storage
+        sessionStorage.removeItem('pending_join_id');
+        sessionStorage.removeItem('pending_join_pin');
+        sessionStorage.removeItem('pending_join_role');
+
         window.location.href = 'grid.html';
     });
 
-    // Fallback for demo/development if socket is unreachable
     socket.on('error', (message) => {
         setLoading(false);
         showError(message.toUpperCase() || 'INVALID ID/PIN');
@@ -229,8 +249,6 @@
 
     socket.on('connect_error', () => {
         setLoading(false);
-        // In local/demo mode we might want to allow transition anyway for testing
-        // For production, we show the error.
         showError('UPLINK CONNECTION FAILED');
     });
 
