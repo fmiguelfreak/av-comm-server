@@ -4,10 +4,260 @@
 <title>Tactical Grid - Signal &amp; Steel</title>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+        // Data management: Prioritize sessionStorage for session-specific tactical data
+        const config = {
+            showId: sessionStorage.getItem('showId') || '----',
+            pin: sessionStorage.getItem('pin') || '----',
+            channels: parseInt(sessionStorage.getItem('channels')) || 12,
+            role: sessionStorage.getItem('role') || 'UNASSIGNED'
+        };
+
+        // Update UI with config values
+        document.getElementById('header-id').innerText = config.showId;
+        document.getElementById('header-pin').innerText = config.pin;
+        document.getElementById('header-role').innerText = config.role;
+
+        const socket = io('https://tacomamultimedia-production.up.railway.app/');
+        const gridContainer = document.getElementById('channel-grid');
+        const syncStatus = document.getElementById('sync-status');
+        const syncIndicator = document.getElementById('sync-indicator');
+
+        const channelNames = [
+            "L_MAIN_ARRAY", "R_MAIN_ARRAY", "SUB_DRIVE", "MON_01_DRUM",
+            "LEAD_VOC_01", "BACK_VOC_01", "GTR_STK_A", "GTR_STK_B",
+            "COMMS_01", "L_WASH_STG", "R_WASH_STG", "PYRO_MSTR"
+        ];
+
+        function renderGrid(count) {
+            gridContainer.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const channelId = i.toString().padStart(2, '0');
+                const name = channelNames[i-1] || `CH_${channelId}`;
+                
+                const btn = document.createElement('div');
+                btn.className = 'channel-btn bg-primary text-black p-2 border border-black/20 relative cursor-pointer';
+                btn.setAttribute('data-channel', i);
+                
+                btn.innerHTML = `
+                    <div class="flex justify-between items-start">
+<span class="font-headline font-black text-xl leading-none">${channelId}</span>
+<span class="status-label text-[8px] font-black border border-black/20 px-1 bg-black/5">READY</span>
+</div>
+<div class="font-headline font-bold text-[11px] leading-tight uppercase truncate mt-auto">${name}</div>
+                `;
+
+                // Handle tap logic
+                let lastTap = 0;
+                btn.addEventListener('touchstart', (e) => {
+                    const now = Date.now();
+                    if (now - lastTap < 300) {
+                        socket.emit('update_channel', { id: i.toString(), status: 'ALERT' });
+                    } else {
+                        socket.emit('update_channel', { id: i.toString(), status: 'READY' });
+                    }
+                    lastTap = now;
+                });
+                btn.addEventListener('touchend', (e) => e.preventDefault());
+
+                gridContainer.appendChild(btn);
+            }
+        }
+
+        renderGrid(config.channels);
+
+        socket.on('connect', () => {
+            syncStatus.innerText = 'STABLE';
+            syncIndicator.className = 'w-3 h-3 rounded-full bg-primary animate-pulse shadow-[0_0_10px_#00ff41]';
+        });
+
+        socket.on('disconnect', () => {
+            syncStatus.innerText = 'OFFLINE';
+            syncIndicator.className = 'w-3 h-3 rounded-full bg-error shadow-[0_0_10px_#ff4d4d]';
+        });
+
+        socket.on('state_changed', (channels) => {
+            channels.forEach(ch => {
+                const btn = document.querySelector(`.channel-btn[data-channel="${ch.id}"]`);
+                if (!btn) return;
+                const label = btn.querySelector('.status-label');
+
+                if (ch.status === 'READY') {
+                    btn.className = 'channel-btn bg-primary text-black p-2 border border-black/20';
+                    label.innerText = 'READY';
+                } else if (ch.status === 'ALERT') {
+                    btn.className = 'channel-btn bg-error text-white p-2 border border-black/20 animate-pulse';
+                    label.innerText = 'ALERT';
+                } else if (ch.status === 'SYNC') {
+                    btn.className = 'channel-btn bg-surface border-2 border-primary text-primary p-2';
+                    label.innerText = 'SYNC';
+                }
+            });
+        });
+
+        const pttBtn = document.getElementById('ptt-button');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                socket.emit('new_message', { content: transcript.toUpperCase(), source: config.role });
+            };
+            pttBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                pttBtn.classList.add('bg-white');
+                recognition.start();
+            });
+            pttBtn.addEventListener('touchend', () => {
+                pttBtn.classList.remove('bg-white');
+                recognition.stop();
+            });
+        }
+
+        const container = document.getElementById('message-container');
+        const contentEl = document.getElementById('msg-content');
+        let popupTimer;
+
+        socket.on('broadcast_message', (data) => {
+            contentEl.innerText = `"${data.content}"`;
+            container.classList.remove('hidden-popup');
+            container.classList.add('visible-popup');
+            if (popupTimer) clearTimeout(popupTimer);
+            popupTimer = setTimeout(() => {
+                container.classList.remove('visible-popup');
+                container.classList.add('hidden-popup');
+            }, 3500);
+        });
+    </script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js">
+        // Data management: Prioritize sessionStorage for session-specific tactical data
+        const config = {
+            showId: sessionStorage.getItem('showId') || '----',
+            pin: sessionStorage.getItem('pin') || '----',
+            channels: parseInt(sessionStorage.getItem('channels')) || 12,
+            role: sessionStorage.getItem('role') || 'UNASSIGNED'
+        };
+
+        // Update UI with config values
+        document.getElementById('header-id').innerText = config.showId;
+        document.getElementById('header-pin').innerText = config.pin;
+        document.getElementById('header-role').innerText = config.role;
+
+        const socket = io('https://tacomamultimedia-production.up.railway.app/');
+        const gridContainer = document.getElementById('channel-grid');
+        const syncStatus = document.getElementById('sync-status');
+        const syncIndicator = document.getElementById('sync-indicator');
+
+        const channelNames = [
+            "L_MAIN_ARRAY", "R_MAIN_ARRAY", "SUB_DRIVE", "MON_01_DRUM",
+            "LEAD_VOC_01", "BACK_VOC_01", "GTR_STK_A", "GTR_STK_B",
+            "COMMS_01", "L_WASH_STG", "R_WASH_STG", "PYRO_MSTR"
+        ];
+
+        function renderGrid(count) {
+            gridContainer.innerHTML = '';
+            for (let i = 1; i <= count; i++) {
+                const channelId = i.toString().padStart(2, '0');
+                const name = channelNames[i-1] || `CH_${channelId}`;
+                
+                const btn = document.createElement('div');
+                btn.className = 'channel-btn bg-primary text-black p-2 border border-black/20 relative cursor-pointer';
+                btn.setAttribute('data-channel', i);
+                
+                btn.innerHTML = `
+                    <div class="flex justify-between items-start">
+<span class="font-headline font-black text-xl leading-none">${channelId}</span>
+<span class="status-label text-[8px] font-black border border-black/20 px-1 bg-black/5">READY</span>
+</div>
+<div class="font-headline font-bold text-[11px] leading-tight uppercase truncate mt-auto">${name}</div>
+                `;
+
+                // Handle tap logic
+                let lastTap = 0;
+                btn.addEventListener('touchstart', (e) => {
+                    const now = Date.now();
+                    if (now - lastTap < 300) {
+                        socket.emit('update_channel', { id: i.toString(), status: 'ALERT' });
+                    } else {
+                        socket.emit('update_channel', { id: i.toString(), status: 'READY' });
+                    }
+                    lastTap = now;
+                });
+                btn.addEventListener('touchend', (e) => e.preventDefault());
+
+                gridContainer.appendChild(btn);
+            }
+        }
+
+        renderGrid(config.channels);
+
+        socket.on('connect', () => {
+            syncStatus.innerText = 'STABLE';
+            syncIndicator.className = 'w-3 h-3 rounded-full bg-primary animate-pulse shadow-[0_0_10px_#00ff41]';
+        });
+
+        socket.on('disconnect', () => {
+            syncStatus.innerText = 'OFFLINE';
+            syncIndicator.className = 'w-3 h-3 rounded-full bg-error shadow-[0_0_10px_#ff4d4d]';
+        });
+
+        socket.on('state_changed', (channels) => {
+            channels.forEach(ch => {
+                const btn = document.querySelector(`.channel-btn[data-channel="${ch.id}"]`);
+                if (!btn) return;
+                const label = btn.querySelector('.status-label');
+
+                if (ch.status === 'READY') {
+                    btn.className = 'channel-btn bg-primary text-black p-2 border border-black/20';
+                    label.innerText = 'READY';
+                } else if (ch.status === 'ALERT') {
+                    btn.className = 'channel-btn bg-error text-white p-2 border border-black/20 animate-pulse';
+                    label.innerText = 'ALERT';
+                } else if (ch.status === 'SYNC') {
+                    btn.className = 'channel-btn bg-surface border-2 border-primary text-primary p-2';
+                    label.innerText = 'SYNC';
+                }
+            });
+        });
+
+        const pttBtn = document.getElementById('ptt-button');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                socket.emit('new_message', { content: transcript.toUpperCase(), source: config.role });
+            };
+            pttBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                pttBtn.classList.add('bg-white');
+                recognition.start();
+            });
+            pttBtn.addEventListener('touchend', () => {
+                pttBtn.classList.remove('bg-white');
+                recognition.stop();
+            });
+        }
+
+        const container = document.getElementById('message-container');
+        const contentEl = document.getElementById('msg-content');
+        let popupTimer;
+
+        socket.on('broadcast_message', (data) => {
+            contentEl.innerText = `"${data.content}"`;
+            container.classList.remove('hidden-popup');
+            container.classList.add('visible-popup');
+            if (popupTimer) clearTimeout(popupTimer);
+            popupTimer = setTimeout(() => {
+                container.classList.remove('visible-popup');
+                container.classList.add('hidden-popup');
+            }, 3500);
+        });
+    </script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -147,14 +397,12 @@
 </div>
 </nav>
 <script>
-        // Data management: Check URL params first, then fallback to localStorage
-        const urlParams = new URLSearchParams(window.location.search);
-        
+        // Data management: Prioritize sessionStorage for session-specific tactical data
         const config = {
-            showId: urlParams.get('showId') || localStorage.getItem('showId') || '8842',
-            pin: urlParams.get('pin') || localStorage.getItem('pin') || '0921',
-            channels: parseInt(urlParams.get('channels')) || parseInt(localStorage.getItem('channels')) || 12,
-            role: urlParams.get('role') || localStorage.getItem('role') || 'FOH_LEAD'
+            showId: sessionStorage.getItem('showId') || '----',
+            pin: sessionStorage.getItem('pin') || '----',
+            channels: parseInt(sessionStorage.getItem('channels')) || 12,
+            role: sessionStorage.getItem('role') || 'UNASSIGNED'
         };
 
         // Update UI with config values
@@ -185,10 +433,10 @@
                 
                 btn.innerHTML = `
                     <div class="flex justify-between items-start">
-                        <span class="font-headline font-black text-xl leading-none">${channelId}</span>
-                        <span class="status-label text-[8px] font-black border border-black/20 px-1 bg-black/5">READY</span>
-                    </div>
-                    <div class="font-headline font-bold text-[11px] leading-tight uppercase truncate mt-auto">${name}</div>
+<span class="font-headline font-black text-xl leading-none">${channelId}</span>
+<span class="status-label text-[8px] font-black border border-black/20 px-1 bg-black/5">READY</span>
+</div>
+<div class="font-headline font-bold text-[11px] leading-tight uppercase truncate mt-auto">${name}</div>
                 `;
 
                 // Handle tap logic
