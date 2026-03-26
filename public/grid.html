@@ -129,11 +129,11 @@
 </div>
 <!-- BottomNavBar -->
 <nav class="bg-surface border-t border-white/5 text-primary/40 font-bold text-[9px] uppercase tracking-tighter fixed bottom-0 left-0 w-full h-[72px] z-50 flex justify-around items-center px-4 pb-1">
-<div class="flex flex-col items-center justify-center text-primary">
+<div class="flex flex-col items-center justify-center text-primary cursor-pointer">
 <span class="material-symbols-outlined mb-1 text-xl">grid_view</span>
 <span>Grid</span>
 </div>
-<div class="flex flex-col items-center justify-center">
+<div class="flex flex-col items-center justify-center cursor-pointer">
 <span class="material-symbols-outlined mb-1 text-xl">analytics</span>
 <span>Meters</span>
 </div>
@@ -146,12 +146,12 @@
 </button>
 </div>
 </div>
-<div class="flex flex-col items-center justify-center relative">
+<div class="flex flex-col items-center justify-center relative cursor-pointer">
 <span class="material-symbols-outlined mb-1 text-xl">notifications</span>
 <span>Alerts</span>
 <span class="absolute top-0 right-1 w-1.5 h-1.5 bg-error rounded-full"></span>
 </div>
-<div class="flex flex-col items-center justify-center" onclick="window.location.href='config.html'">
+<div class="flex flex-col items-center justify-center cursor-pointer" onclick="window.location.href='config.html'">
 <span class="material-symbols-outlined mb-1 text-xl">settings</span>
 <span>Config</span>
 </div>
@@ -207,7 +207,12 @@
                     }
                     
                     updateElementState(btn, newState);
-                    socket.emit('update_channel', { id: i.toString(), status: newState });
+                    socket.emit('update_channel', { 
+                        showId: config.showId,
+                        pin: config.pin,
+                        id: i.toString(), 
+                        status: newState 
+                    });
                     lastTap = now;
                 });
                 btn.addEventListener('touchend', (e) => e.preventDefault());
@@ -235,21 +240,31 @@
         }
 
         window.onload = () => {
+            // Strictly read from localStorage
             config.showId = localStorage.getItem('av_comm_showId') || '0000';
             config.pin = localStorage.getItem('av_comm_pin') || '0000';
             config.role = localStorage.getItem('av_comm_role') || 'UNASSIGNED';
             config.channels = parseInt(localStorage.getItem('av_comm_channels')) || 12;
 
+            // Update header immediately
             document.getElementById('header-id').innerText = config.showId;
             document.getElementById('header-pin').innerText = config.pin;
             document.getElementById('header-role').innerText = config.role;
 
+            // Render exact number of channels
             renderGrid(config.channels);
+
+            // Join the room via socket
+            if (socket.connected) {
+                socket.emit('join_show', { showId: config.showId, pin: config.pin });
+            }
         };
 
         socket.on('connect', () => {
             syncStatus.innerText = 'STABLE';
             syncIndicator.className = 'w-3.5 h-3.5 rounded-full bg-primary animate-pulse shadow-[0_0_15px_#00ff41]';
+            // Ensure room join on reconnection
+            socket.emit('join_show', { showId: config.showId, pin: config.pin });
         });
 
         socket.on('disconnect', () => {
@@ -274,7 +289,12 @@
 
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
-                socket.emit('new_message', { content: transcript.toUpperCase(), source: config.role });
+                socket.emit('new_message', { 
+                    showId: config.showId,
+                    pin: config.pin,
+                    content: transcript.toUpperCase(), 
+                    source: config.role 
+                });
             };
 
             pttBtn.addEventListener('touchstart', (e) => {
