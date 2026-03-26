@@ -1,4 +1,3 @@
-web application/stitch/projects/4562373654591413909/screens/73b525b7575543b4983538cde7e4e92c
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
