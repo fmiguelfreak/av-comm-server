@@ -1,6 +1,7 @@
+web application/stitch/projects/4562373654591413909/screens/0af6b6cefab847adaea2ba736bcc3a7c
 {
-  "name": "av-comm-server-production",
-  "version": "1.8.0",
+  "name": "av-comm-server-v2-1",
+  "version": "2.1.0",
   "description": "Event Mics Signaling Bridge - Real-time Sync Engine",
   "main": "server.js",
   "engines": {
