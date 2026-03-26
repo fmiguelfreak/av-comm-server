@@ -76,7 +76,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.2s ease;
+            transition: all 0.1s ease;
         }
         .state-ready { background-color: #00ff41; color: #000000; }
         .state-alert { background-color: #ff4d4d; color: #ffffff; animation: pulse-red 1s infinite; }
@@ -176,27 +176,43 @@
         ];
 
         function editRole() {
-            const currentRole = config.role;
-            const newRole = prompt("Enter Role Name (e.g., FOH, MICS, STAGE):", currentRole === 'UNASSIGNED' ? '' : currentRole);
+            const roles = ["FOH", "MON", "STAGE", "MIC TECH", "SYSTEM", "UNASSIGNED"];
+            let currentIndex = roles.indexOf(config.role);
             
-            if (newRole !== null) {
-                const updatedRole = newRole.trim().toUpperCase() || 'UNASSIGNED';
-                config.role = updatedRole;
-                localStorage.setItem('av_comm_role', updatedRole);
-                document.getElementById('header-role').innerText = updatedRole;
-                
-                if (socket.connected) {
-                    socket.emit('join_show', { 
-                        showId: config.showId, 
-                        pin: config.pin, 
-                        role: updatedRole 
-                    });
+            // If it's a custom role not in the predefined list, prompt for new or reset to FOH
+            if (currentIndex === -1) {
+                const newRole = prompt("Enter Custom Role:", config.role);
+                if (newRole !== null) {
+                    updateRole(newRole.trim().toUpperCase() || 'UNASSIGNED');
                 }
+                return;
+            }
+
+            // Cycle through
+            currentIndex = (currentIndex + 1) % roles.length;
+            updateRole(roles[currentIndex]);
+        }
+
+        function updateRole(newRole) {
+            config.role = newRole;
+            localStorage.setItem('av_comm_role', newRole);
+            document.getElementById('header-role').innerText = newRole;
+            
+            if (socket.connected) {
+                socket.emit('join_show', { 
+                    showId: config.showId, 
+                    pin: config.pin, 
+                    role: newRole 
+                });
             }
         }
 
         function renderGrid(count) {
             gridContainer.innerHTML = '';
+            // Adjust grid layout based on count to ensure zero-scroll visibility if possible
+            // 2-column is requested.
+            gridContainer.style.gridTemplateRows = `repeat(${Math.ceil(count / 2)}, 1fr)`;
+
             for (let i = 1; i <= count; i++) {
                 const channelId = i.toString().padStart(2, '0');
                 const name = channelNames[i-1] || `CH_${channelId}`;
@@ -207,15 +223,16 @@
                 btn.setAttribute('data-state', 'READY');
                 
                 btn.innerHTML = `
-                    <div class="flex justify-between items-start">
+                    <div class="flex justify-between items-start pointer-events-none">
                         <span class="font-headline font-black text-2xl leading-none">${channelId}</span>
                         <span class="status-label text-[10px] font-black border border-black/20 px-1.5 py-0.5 bg-black/5">READY</span>
                     </div>
-                    <div class="font-headline font-bold text-[12px] leading-tight uppercase truncate mt-auto">${name}</div>
+                    <div class="font-headline font-bold text-[12px] leading-tight uppercase truncate mt-auto pointer-events-none">${name}</div>
                 `;
 
                 let lastTap = 0;
                 btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
                     const now = Date.now();
                     const currentState = btn.getAttribute('data-state');
                     let newState = 'READY';
@@ -235,7 +252,6 @@
                     });
                     lastTap = now;
                 });
-                btn.addEventListener('touchend', (e) => e.preventDefault());
 
                 gridContainer.appendChild(btn);
             }
@@ -261,14 +277,14 @@
         }
 
         window.onload = () => {
-            // Immediately retrieve and display values
+            // Immediate UI update from localStorage
             document.getElementById('header-id').innerText = config.showId;
             document.getElementById('header-pin').innerText = config.pin;
             document.getElementById('header-role').innerText = config.role;
 
             renderGrid(config.channels);
 
-            // Socket connection with session values
+            // Establish Connection
             socket.on('connect', () => {
                 syncStatus.innerText = 'STABLE';
                 syncIndicator.className = 'w-3.5 h-3.5 rounded-full bg-primary animate-pulse shadow-[0_0_15px_#00ff41]';
