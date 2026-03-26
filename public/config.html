@@ -7,70 +7,81 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary-container": "#00ff41",
-              "on-surface": "#e5e2e1",
-              "on-primary-fixed-variant": "#00530e",
-              "on-tertiary": "#621100",
-              "outline-variant": "#3b4b37",
-              "surface-container-highest": "#353534",
-              "on-background": "#e5e2e1",
-              "on-secondary-container": "#613400",
-              "surface-variant": "#353534",
-              "secondary-container": "#fd9000",
-              "on-secondary-fixed": "#2e1500",
-              "tertiary-fixed": "#ffdad2",
-              "on-primary": "#003907",
-              "on-secondary": "#4c2700",
-              "tertiary-container": "#ffd3c8",
-              "surface-tint": "#00e639",
-              "on-error-container": "#ffdad6",
-              "tertiary-fixed-dim": "#ffb4a2",
-              "surface-bright": "#393939",
-              "on-tertiary-fixed-variant": "#8a1d00",
-              "error": "#ffb4ab",
-              "on-tertiary-container": "#b82a00",
-              "primary-fixed-dim": "#00e639",
-              "on-primary-fixed": "#002203",
-              "tertiary": "#fff8f6",
-              "inverse-on-surface": "#313030",
-              "surface-container-low": "#1c1b1b",
-              "surface": "#131313",
-              "secondary-fixed-dim": "#ffb778",
-              "primary-fixed": "#72ff70",
-              "outline": "#84967e",
-              "secondary": "#ffb778",
-              "inverse-primary": "#006e16",
-              "on-primary-container": "#007117",
-              "on-tertiary-fixed": "#3c0700",
-              "on-error": "#690005",
-              "primary": "#ebffe2",
-              "surface-container": "#201f1f",
-              "background": "#131313",
-              "surface-container-lowest": "#0e0e0e",
-              "surface-container-high": "#2a2a2a",
-              "on-surface-variant": "#b9ccb2",
-              "surface-dim": "#131313",
-              "inverse-surface": "#e5e2e1",
-              "error-container": "#93000a",
-              "secondary-fixed": "#ffdcc1",
-              "on-secondary-fixed-variant": "#6c3a00"
-            },
-            fontFamily: {
-              "headline": ["Space Grotesk"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
+<script>
+    // DOM Elements
+    const countDisplay = document.getElementById('channel-count');
+    const decrementBtn = document.getElementById('decrement-channels');
+    const incrementBtn = document.getElementById('increment-channels');
+    const showIdDisplay = document.getElementById('display-show-id');
+    const pinDisplay = document.getElementById('display-access-pin');
+    const roleButtons = document.querySelectorAll('.role-btn');
+    const launchCta = document.getElementById('launch-cta');
+
+    // Initial State
+    let channels = 16;
+    let selectedRole = 'FOH';
+
+    // 1. Generation Logic on Load
+    window.addEventListener('DOMContentLoaded', () => {
+        // Generate random 4-digit ID suffix
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const showId = `XC-${randomNum}`;
+        
+        // Generate random 4-digit PIN
+        const pin = Math.floor(1000 + Math.random() * 9000).toString();
+
+        // Store in sessionStorage
+        sessionStorage.setItem('stage_tech_show_id', showId);
+        sessionStorage.setItem('stage_tech_pin', pin);
+
+        // Update UI
+        showIdDisplay.textContent = showId;
+        pinDisplay.textContent = pin;
+    });
+
+    // 2. Channel Allocation Counter Logic
+    const updateDisplay = () => {
+        countDisplay.textContent = channels;
+    };
+
+    decrementBtn.addEventListener('click', () => {
+        if (channels > 1) {
+            channels--;
+            updateDisplay();
+        }
+    });
+
+    incrementBtn.addEventListener('click', () => {
+        if (channels < 24) {
+            channels++;
+            updateDisplay();
+        }
+    });
+
+    // 3. Role Selection Logic
+    roleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            roleButtons.forEach(b => b.classList.remove('role-active'));
+            btn.classList.add('role-active');
+            selectedRole = btn.getAttribute('data-role');
+        });
+    });
+
+    // 4. Initialize Uplink (Save and Redirect)
+    launchCta.addEventListener('click', () => {
+        // Save configuration to sessionStorage
+        sessionStorage.setItem('stage_tech_channels', channels);
+        sessionStorage.setItem('stage_tech_role', selectedRole);
+        
+        // Navigate to grid screen
+        window.location.href = `grid.html`;
+    });
+
+    // Visual Pulse Effect
+    setInterval(() => {
+        launchCta.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
+    }, 1000);
+</script>
 <style>
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -114,14 +125,14 @@
 <div class="flex-1 bg-surface-container border-l-4 border-primary-container p-6 flex justify-between items-center shadow-[0_0_15px_rgba(0,255,65,0.05)]">
 <div>
 <p class="font-label text-[10px] uppercase tracking-[0.2em] text-outline mb-1">Generated Show ID</p>
-<h2 class="font-headline text-4xl font-bold text-primary-container tracking-tighter">9921</h2>
+<h2 class="font-headline text-4xl font-bold text-primary-container tracking-tighter"><span id="display-show-id">----</span></h2>
 </div>
 <span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="qr_code_2">qr_code_2</span>
 </div>
 <div class="flex-1 bg-surface-container border-l-4 border-primary-container p-6 flex justify-between items-center shadow-[0_0_15px_rgba(0,255,65,0.05)]">
 <div>
 <p class="font-label text-[10px] uppercase tracking-[0.2em] text-outline mb-1">Access PIN</p>
-<h2 class="font-headline text-4xl font-bold text-primary-container tracking-widest">4401</h2>
+<h2 class="font-headline text-4xl font-bold text-primary-container tracking-widest"><span id="display-access-pin">----</span></h2>
 </div>
 <span class="material-symbols-outlined text-outline-variant text-4xl" data-icon="lock">lock</span>
 </div>
@@ -210,13 +221,38 @@
 </div>
 </div>
 <script>
-    // Channel Allocation Counter Logic
+    // DOM Elements
     const countDisplay = document.getElementById('channel-count');
     const decrementBtn = document.getElementById('decrement-channels');
     const incrementBtn = document.getElementById('increment-channels');
+    const showIdDisplay = document.getElementById('display-show-id');
+    const pinDisplay = document.getElementById('display-access-pin');
+    const roleButtons = document.querySelectorAll('.role-btn');
+    const launchCta = document.getElementById('launch-cta');
+
+    // Initial State
     let channels = 16;
     let selectedRole = 'FOH';
 
+    // 1. Generation Logic on Load
+    window.addEventListener('DOMContentLoaded', () => {
+        // Generate random 4-digit ID suffix
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const showId = `XC-${randomNum}`;
+        
+        // Generate random 4-digit PIN
+        const pin = Math.floor(1000 + Math.random() * 9000).toString();
+
+        // Store in sessionStorage
+        sessionStorage.setItem('stage_tech_show_id', showId);
+        sessionStorage.setItem('stage_tech_pin', pin);
+
+        // Update UI
+        showIdDisplay.textContent = showId;
+        pinDisplay.textContent = pin;
+    });
+
+    // 2. Channel Allocation Counter Logic
     const updateDisplay = () => {
         countDisplay.textContent = channels;
     };
@@ -235,8 +271,7 @@
         }
     });
 
-    // Role Selection Logic
-    const roleButtons = document.querySelectorAll('.role-btn');
+    // 3. Role Selection Logic
     roleButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             roleButtons.forEach(b => b.classList.remove('role-active'));
@@ -245,18 +280,17 @@
         });
     });
 
-    // Pulse Effect and Navigation logic for Launch CTA
-    const launchCta = document.getElementById('launch-cta');
-    
+    // 4. Initialize Uplink (Save and Redirect)
     launchCta.addEventListener('click', () => {
-        // Save to localStorage for the grid page to pick up
-        localStorage.setItem('stage_tech_channels', channels);
-        localStorage.setItem('stage_tech_role', selectedRole);
+        // Save configuration to sessionStorage
+        sessionStorage.setItem('stage_tech_channels', channels);
+        sessionStorage.setItem('stage_tech_role', selectedRole);
         
-        // Navigate with URL params as fallback
-        window.location.href = `grid.html?channels=${channels}&role=${selectedRole}`;
+        // Navigate to grid screen
+        window.location.href = `grid.html`;
     });
 
+    // Visual Pulse Effect
     setInterval(() => {
         launchCta.style.boxShadow = `0 10px 40px rgba(0,255,65,${0.2 + Math.random() * 0.15})`;
     }, 1000);
