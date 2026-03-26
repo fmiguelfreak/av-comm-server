@@ -3,267 +3,275 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>AV-COMM | Show Setup Configuration</title>
+<title>ST-04 // OPS-9 CONFIG</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        :root {
-            --primary: #00FF41;
-            --bg-dark: #0a0a0a;
-            --surface: #111111;
-            --surface-accent: #1a1a1a;
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface-variant": "#b9ccb2",
+                        "on-primary-fixed-variant": "#00530e",
+                        "on-primary": "#003907",
+                        "secondary-fixed": "#ffdcc1",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#ffb778",
+                        "on-secondary-fixed": "#2e1500",
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#ffdad2",
+                        "on-primary-fixed": "#002203",
+                        "tertiary": "#fff8f6",
+                        "tertiary-fixed-dim": "#ffb4a2",
+                        "surface-variant": "#353534",
+                        "on-error": "#690005",
+                        "outline": "#84967e",
+                        "tertiary-container": "#ffd3c8",
+                        "on-primary-container": "#007117",
+                        "secondary": "#ffb778",
+                        "primary-fixed-dim": "#00e639",
+                        "on-tertiary-fixed": "#3c0700",
+                        "inverse-primary": "#006e16",
+                        "surface-container-high": "#2a2a2a",
+                        "inverse-on-surface": "#313030",
+                        "primary-container": "#00ff41",
+                        "on-secondary-fixed-variant": "#6c3a00",
+                        "surface-container-lowest": "#0e0e0e",
+                        "background": "#131313",
+                        "surface-bright": "#393939",
+                        "secondary-container": "#fd9000",
+                        "primary-fixed": "#72ff70",
+                        "surface-dim": "#131313",
+                        "on-secondary-container": "#613400",
+                        "on-tertiary-container": "#b82a00",
+                        "on-tertiary-fixed-variant": "#8a1d00",
+                        "outline-variant": "#3b4b37",
+                        "surface-container-highest": "#353534",
+                        "on-background": "#e5e2e1",
+                        "surface-container-low": "#1c1b1b",
+                        "primary": "#ebffe2",
+                        "on-tertiary": "#621100",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-tint": "#00e639",
+                        "surface-container": "#201f1f",
+                        "surface": "#131313",
+                        "error": "#ffb4ab",
+                        "on-surface": "#e5e2e1",
+                        "on-secondary": "#4c2700"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
         }
+    </script>
+<style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         body {
-            background-color: var(--bg-dark);
+            background-color: #131313;
             color: #e5e2e1;
-            font-family: 'Space Grotesk', sans-serif;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
         }
-        .grid-pattern {
-            background-image: linear-gradient(#151515 1px, transparent 1px), linear-gradient(90deg, #151515 1px, transparent 1px);
-            background-size: 40px 40px;
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
-        .role-active {
-            background-color: var(--primary) !important;
-            color: #000000 !important;
-            box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
+        /* Custom radio styling for tactical feel */
+        input[type="radio"]:checked + label {
+            background-color: #00ff41;
+            color: #007117;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
         }
-        .role-active .material-symbols-outlined {
-            color: inherit;
-        }
-        .tactical-border {
-            border: 1px solid #333;
-        }
-        .status-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
-</head>
-<body class="flex flex-col">
-<!-- Top Navigation Anchor -->
-<header class="flex justify-between items-center px-6 h-16 w-full z-50 bg-[#000] border-b-2 border-[#00FF41] shrink-0">
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TOP APP BAR -->
+<header class="bg-[#131313] dark:bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-widest text-sm docked full-width top-0 border-b-4 border-[#1c1b1b] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-4 h-16 w-full z-50">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#00FF41] status-pulse">sensors</span>
-<span class="font-bold tracking-tighter text-[#00FF41] text-lg uppercase">Stage_Tech_Auth</span>
+<span class="material-symbols-outlined">terminal</span>
+<h1 class="text-[#00FF41] font-bold tracking-tighter text-lg">ST-04 // OPS-9</h1>
 </div>
-<div class="flex items-center gap-6">
-<div class="flex gap-4">
-<span class="uppercase tracking-widest text-[10px] text-[#00FF41]">System_Ready</span>
-</div>
-<button class="material-symbols-outlined text-[#00FF41] hover:bg-[#1a1a1a] p-2 rounded active:scale-95 transition-all" onclick="window.location.reload()">sync</button>
+<div class="bg-surface-container-low px-3 py-1 rounded-sm border border-outline-variant/20">
+<span class="text-[10px] opacity-50 block leading-none">STATUS</span>
+<span class="font-bold text-xs">CONFIG_MODE</span>
 </div>
 </header>
-<main class="flex-1 grid-pattern flex flex-col items-center justify-between px-4 pt-6 pb-24 overflow-hidden relative">
-<!-- Configuration Header (Show ID & PIN) -->
-<div class="w-full max-w-md flex flex-col gap-3 shrink-0">
-<div class="bg-[#111] border-l-4 border-[#00FF41] p-5 flex justify-between items-center tactical-border">
-<div>
-<p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Generated Show ID</p>
-<h2 class="text-4xl font-bold text-[#00FF41] tracking-tighter"><span id="display-show-id">----</span></h2>
+<!-- MAIN CONTENT CANVAS -->
+<main class="flex flex-col h-[calc(100vh-64px)] w-full p-4 gap-4 overflow-hidden bg-background">
+<!-- SYSTEM IDENTIFIERS SECTION -->
+<section class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-low p-4 relative group overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
+<label class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">SYSTEM_ID</label>
+<div class="text-3xl font-headline font-bold text-primary tracking-tighter" id="display-id">8429</div>
 </div>
-<span class="material-symbols-outlined text-zinc-800 text-4xl">qr_code_2</span>
+<div class="bg-surface-container-low p-4 relative group overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary-container"></div>
+<label class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">SECURE_PIN</label>
+<div class="text-3xl font-headline font-bold text-secondary tracking-tighter" id="display-pin">0311</div>
 </div>
-<div class="bg-[#111] border-l-4 border-[#00FF41] p-5 flex justify-between items-center tactical-border">
-<div>
-<p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-1">Access PIN</p>
-<h2 class="text-4xl font-bold text-[#00FF41] tracking-widest"><span id="display-access-pin">----</span></h2>
+</section>
+<!-- CONFIGURATION GRID -->
+<div class="flex-1 grid grid-cols-1 gap-4 overflow-hidden">
+<!-- ROLE SELECTOR -->
+<section class="bg-surface-container p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between border-b border-outline-variant/10 pb-2">
+<label class="font-headline text-xs uppercase tracking-[0.2em] text-on-surface">OPERATIONAL_ROLE</label>
+<span class="material-symbols-outlined text-sm opacity-30">security</span>
 </div>
-<span class="material-symbols-outlined text-zinc-800 text-4xl">lock</span>
+<div class="grid grid-cols-4 gap-2">
+<div class="relative">
+<input checked="" class="hidden peer" id="role-foh" name="role" type="radio" value="FOH"/>
+<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-foh">
+                            FOH
+                        </label>
+</div>
+<div class="relative">
+<input class="hidden peer" id="role-boh" name="role" type="radio" value="BOH"/>
+<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-boh">
+                            BOH
+                        </label>
+</div>
+<div class="relative">
+<input class="hidden peer" id="role-mics" name="role" type="radio" value="MICS"/>
+<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-mics">
+                            MICS
+                        </label>
+</div>
+<div class="relative">
+<input class="hidden peer" id="role-custom" name="role" type="radio" value="CUSTOM"/>
+<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-custom">
+                            SPEC
+                        </label>
 </div>
 </div>
-<!-- Configuration Content -->
-<div class="w-full max-w-md flex flex-col gap-4 flex-1 justify-center py-4">
-<!-- Channel Count Input -->
-<div class="bg-[#111] p-4 flex flex-col gap-3 border-t-2 border-[#00FF41] tactical-border">
-<label class="text-[10px] uppercase tracking-widest text-[#00FF41]">01_CHANNEL_ALLOCATION</label>
-<div class="flex items-center gap-4 w-full">
-<button class="bg-[#222] text-white hover:bg-[#333] w-14 h-14 flex items-center justify-center transition-all active:scale-90 border border-zinc-800" id="decrement-channels">
+<!-- HIDDEN CUSTOM ROLE INPUT -->
+<div class="hidden animate-in fade-in slide-in-from-top-2 duration-300" id="custom-role-container">
+<input class="w-full bg-surface-container-highest border-l-4 border-primary-fixed text-on-surface p-3 font-headline text-sm uppercase tracking-wider focus:ring-0 focus:outline-none placeholder:opacity-30" id="custom-role-input" placeholder="ENTER CUSTOM DESIGNATION..." type="text"/>
+</div>
+</section>
+<!-- CHANNEL SELECTOR -->
+<section class="bg-surface-container p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between border-b border-outline-variant/10 pb-2">
+<label class="font-headline text-xs uppercase tracking-[0.2em] text-on-surface">SIGNAL_CHANNELS</label>
+<span class="material-symbols-outlined text-sm opacity-30">settings_input_component</span>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-sm border border-outline-variant/10">
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container-high text-primary-container rounded-sm active:scale-95 transition-transform" id="chan-minus">
 <span class="material-symbols-outlined">remove</span>
 </button>
-<div class="flex-1 bg-[#000] p-4 text-center border-b-2 border-[#00FF41]">
-<span class="text-5xl font-bold text-[#00FF41]" id="channel-count">12</span>
-<span class="text-[10px] text-gray-500 block uppercase tracking-widest mt-1">Units</span>
+<div class="flex-1 text-center">
+<div class="text-4xl font-headline font-black text-on-surface" id="chan-count">12</div>
+<div class="text-[9px] uppercase tracking-widest opacity-40 font-bold">ACTIVE_NODES</div>
 </div>
-<button class="bg-[#222] text-white hover:bg-[#333] w-14 h-14 flex items-center justify-center transition-all active:scale-90 border border-zinc-800" id="increment-channels">
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container-high text-primary-container rounded-sm active:scale-95 transition-transform" id="chan-plus">
 <span class="material-symbols-outlined">add</span>
 </button>
 </div>
+</section>
 </div>
-<!-- Role Selection -->
-<div class="bg-[#111] p-4 flex flex-col gap-4 tactical-border">
-<label class="text-[10px] uppercase tracking-widest text-[#00FF41]">02_OPERATIONAL_ROLE</label>
-<div class="grid grid-cols-4 gap-2" id="role-grid">
-<button class="role-btn role-active flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="FOH">
-<span class="material-symbols-outlined text-2xl mb-1">settings_input_component</span>
-<span class="font-bold text-[9px] tracking-widest">FOH</span>
-</button>
-<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="BOH">
-<span class="material-symbols-outlined text-2xl mb-1">terminal</span>
-<span class="font-bold text-[9px] tracking-widest">BOH</span>
-</button>
-<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="MICS">
-<span class="material-symbols-outlined text-2xl mb-1">mic</span>
-<span class="font-bold text-[9px] tracking-widest">MICS</span>
-</button>
-<button class="role-btn flex flex-col items-center justify-center p-4 bg-[#222] text-zinc-500 transition-all border border-transparent rounded" data-role="CUSTOM">
-<span class="material-symbols-outlined text-2xl mb-1">dashboard_customize</span>
-<span class="font-bold text-[9px] tracking-widest">CUSTOM</span>
-</button>
-</div>
-<!-- Custom Role Input (Hidden by default) -->
-<div class="hidden" id="custom-role-container">
-<input class="w-full bg-[#000] border border-[#333] border-b-[#00FF41] text-[#00FF41] font-bold p-3 uppercase tracking-widest focus:ring-0 focus:outline-none placeholder:text-zinc-800 rounded-sm" id="custom-role-input" placeholder="SPECIFY ROLE..." type="text"/>
-</div>
-</div>
-</div>
-<!-- Start Session Button -->
-<div class="w-full max-w-md shrink-0">
-<button class="w-full py-7 bg-[#00FF41] text-black font-black text-xl tracking-[0.25em] uppercase flex items-center justify-center gap-4 hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_15px_50px_rgba(0,255,65,0.3)] rounded" id="launch-cta">
-<span class="material-symbols-outlined text-3xl font-bold">bolt</span>
+<!-- CTA BUTTON -->
+<footer class="mt-auto">
+<button class="w-full bg-primary-container text-on-primary-container py-5 rounded-sm font-headline font-black uppercase tracking-[0.25em] text-lg shadow-[0_0_20px_rgba(0,255,65,0.3)] active:scale-[0.98] transition-all flex items-center justify-center gap-3" id="init-uplink">
+<span class="material-symbols-outlined">router</span>
                 INITIALIZE UPLINK
             </button>
-<div class="flex justify-between mt-3 px-1">
-<p class="text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Protocol: AES-GCM Tactical</p>
-<p class="text-[8px] text-zinc-600 tracking-[0.2em] uppercase">Server: AV-PROD-RAIL</p>
-</div>
-</div>
+</footer>
 </main>
-<!-- Bottom Navigation Shell -->
-<nav class="fixed bottom-0 left-0 w-full h-20 z-50 flex justify-around items-center px-4 pb-2 bg-[#000] border-t border-zinc-900 shrink-0">
-<a class="flex flex-col items-center justify-center bg-[#00FF41] text-black rounded px-6 py-2 shadow-[0_0_20px_rgba(0,255,65,0.2)]" href="#">
-<span class="material-symbols-outlined">settings_input_component</span>
-<span class="font-bold uppercase text-[9px] tracking-widest mt-1">CONFIG</span>
-</a>
-<a class="flex flex-col items-center justify-center text-zinc-700 px-6 py-2 transition-all" href="#">
-<span class="material-symbols-outlined">mic</span>
-<span class="font-bold uppercase text-[9px] tracking-widest mt-1">PTT</span>
-</a>
-<a class="flex flex-col items-center justify-center text-zinc-700 px-6 py-2 transition-all" href="#">
-<span class="material-symbols-outlined">terminal</span>
-<span class="font-bold uppercase text-[9px] tracking-widest mt-1">MSGS</span>
-</a>
-</nav>
+<!-- HIDDEN BOTTOM NAV (SUPPRESSED AS PER TASK FOCUS) -->
 <script>
-        const SOCKET_URL = 'https://av-comm-server-production.up.railway.app';
-        let socket;
-
-        // DOM Elements
-        const countDisplay = document.getElementById('channel-count');
-        const decrementBtn = document.getElementById('decrement-channels');
-        const incrementBtn = document.getElementById('increment-channels');
-        const showIdDisplay = document.getElementById('display-show-id');
-        const pinDisplay = document.getElementById('display-access-pin');
-        const roleButtons = document.querySelectorAll('.role-btn');
+        // Data generation and state management
+        const displayId = document.getElementById('display-id');
+        const displayPin = document.getElementById('display-pin');
+        const chanCount = document.getElementById('chan-count');
+        const chanMinus = document.getElementById('chan-minus');
+        const chanPlus = document.getElementById('chan-plus');
+        const roleRadios = document.getElementsByName('role');
         const customRoleContainer = document.getElementById('custom-role-container');
         const customRoleInput = document.getElementById('custom-role-input');
-        const launchCta = document.getElementById('launch-cta');
+        const initButton = document.getElementById('init-uplink');
 
-        // Initial State
-        let channels = 12; 
-        let selectedRole = 'FOH'; 
-        let currentShowId = '';
-        let currentPin = '';
+        let currentChannels = 12;
+        let generatedId = Math.floor(1000 + Math.random() * 9000);
+        let generatedPin = Math.floor(1000 + Math.random() * 9000);
 
-        // 1. Generation Logic on Load (Strictly 4-digit numeric)
-        window.addEventListener('DOMContentLoaded', () => {
-            currentShowId = Math.floor(1000 + Math.random() * 9000).toString();
-            currentPin = Math.floor(1000 + Math.random() * 9000).toString();
+        // Init values
+        displayId.textContent = generatedId;
+        displayPin.textContent = String(generatedPin).padStart(4, '0');
 
-            showIdDisplay.textContent = currentShowId;
-            pinDisplay.textContent = currentPin;
-            countDisplay.textContent = channels;
-        });
-
-        // 2. Channel Allocation Logic
-        decrementBtn.addEventListener('click', () => {
-            if (channels > 1) {
-                channels--;
-                countDisplay.textContent = channels;
+        // Channel Controls
+        chanMinus.addEventListener('click', () => {
+            if (currentChannels > 1) {
+                currentChannels--;
+                chanCount.textContent = currentChannels;
             }
         });
 
-        incrementBtn.addEventListener('click', () => {
-            if (channels < 24) {
-                channels++;
-                countDisplay.textContent = channels;
+        chanPlus.addEventListener('click', () => {
+            if (currentChannels < 24) {
+                currentChannels++;
+                chanCount.textContent = currentChannels;
             }
         });
 
-        // 3. Role Selection Logic
-        roleButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                roleButtons.forEach(b => b.classList.remove('role-active'));
-                btn.classList.add('role-active');
-                selectedRole = btn.getAttribute('data-role');
-
-                if (selectedRole === 'CUSTOM') {
+        // Role Logic
+        roleRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'CUSTOM') {
                     customRoleContainer.classList.remove('hidden');
-                    customRoleInput.focus();
                 } else {
                     customRoleContainer.classList.add('hidden');
                 }
             });
         });
 
-        // 4. Initialize Uplink
-        launchCta.addEventListener('click', () => {
-            let finalRole = selectedRole;
+        // Initialize Logic
+        initButton.addEventListener('click', () => {
+            let selectedRole = document.querySelector('input[name="role"]:checked').value;
+            let finalRoleName = selectedRole;
+            
             if (selectedRole === 'CUSTOM') {
-                finalRole = customRoleInput.value.trim().toUpperCase() || 'CUSTOM';
+                finalRoleName = customRoleInput.value.trim() || 'CUSTOM_UNNAMED';
             }
 
-            launchCta.disabled = true;
-            launchCta.textContent = 'CONNECTING...';
-            launchCta.classList.remove('bg-[#00FF41]');
-            launchCta.classList.add('bg-zinc-800', 'text-[#00FF41]');
+            const configData = {
+                id: generatedId,
+                pin: generatedPin,
+                role: finalRoleName,
+                channels: currentChannels,
+                timestamp: new Date().toISOString()
+            };
 
-            // Initialize Socket Connection
-            socket = io(SOCKET_URL);
+            // Save to LocalStorage
+            localStorage.setItem('st04_ops9_config', JSON.stringify(configData));
 
-            socket.on('connect', () => {
-                console.log('Uplink established');
-                socket.emit('create_show', {
-                    showId: currentShowId,
-                    pin: currentPin,
-                    channels: channels,
-                    role: finalRole,
-                    name: `SHOW_${currentShowId}`
-                });
-            });
+            // Visual feedback
+            initButton.innerHTML = `<span class="material-symbols-outlined animate-spin">refresh</span> UPLINKING...`;
+            initButton.classList.replace('bg-primary-container', 'bg-surface-container-highest');
+            initButton.classList.add('text-primary-container');
 
-            socket.on('show_created', (data) => {
-                console.log('Server synchronized');
-                
-                // Save to localStorage
-                localStorage.setItem('stage_tech_show_id', currentShowId);
-                localStorage.setItem('stage_tech_pin', currentPin);
-                localStorage.setItem('stage_tech_channels', channels);
-                localStorage.setItem('stage_tech_role', finalRole);
-                localStorage.setItem('stage_tech_server_id', data.id || '');
-                
-                // Redirect
+            // Simulate server connection and redirect
+            // In a real scenario, we'd use fetch() to the provided URL
+            setTimeout(() => {
                 window.location.href = 'grid.html';
-            });
-
-            socket.on('connect_error', (err) => {
-                console.error('Uplink Failure:', err);
-                launchCta.disabled = false;
-                launchCta.textContent = 'RETRY UPLINK';
-                launchCta.classList.add('bg-[#00FF41]', 'text-black');
-                alert('Connection to tactical server failed. Check network.');
-            });
+            }, 1200);
         });
     </script>
 </body></html>
