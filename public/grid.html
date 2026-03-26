@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head><title>grid.html</title>
+<html class="dark" lang="en"><head>
+<title>grid.html</title>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -116,103 +117,9 @@
 </div>
 </header>
 <!-- Main Content Canvas -->
-<main class="pt-2 pb-2 h-[calc(100vh-144px)] mt-16 mb-20 w-full bg-surface grid grid-cols-2 grid-rows-6 gap-2 p-2 overflow-hidden" id="channel-grid">
-<!-- Channel 01 -->
-<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="1">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">01</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">MAIN_L_ARRAY</div>
-</div>
-<!-- Channel 02 -->
-<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="2">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">02</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">MAIN_R_ARRAY</div>
-</div>
-<!-- Channel 03 -->
-<div class="channel-btn bg-error-container text-on-error-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="3">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">03</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">ALERT</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">SUB_LOW_FREQ</div>
-</div>
-<!-- Channel 04 -->
-<div class="channel-btn bg-surface-container-high border-2 border-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="4">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl text-primary-container">04</span>
-<span class="status-label text-[10px] font-bold uppercase text-primary-container px-1">SYNC</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight text-on-surface">DRUM_MON_1</div>
-</div>
-<!-- Channel 05 -->
-<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="5">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">05</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">VOCAL_LEAD</div>
-</div>
-<!-- Channel 06 -->
-<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="6">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">06</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">VOCAL_BACK_1</div>
-</div>
-<!-- Channel 07 -->
-<div class="channel-btn bg-surface-container-low text-on-surface/40 flex flex-col justify-between p-3 rounded-sm border-l-4 border-surface-container-highest transition-colors duration-200 h-full" data-channel="7">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">07</span>
-<span class="status-label text-[10px] font-bold uppercase">OFFLINE</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">GUITAR_SLOT_A</div>
-</div>
-<!-- Channel 08 -->
-<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="8">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">08</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">GUITAR_SLOT_B</div>
-</div>
-<!-- Channel 09 -->
-<div class="channel-btn bg-error-container text-on-error-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="9">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">09</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">ALERT</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">COMMS_RACK_01</div>
-</div>
-<!-- Channel 10 -->
-<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="10">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">10</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">STAGE_LIGHT_L</div>
-</div>
-<!-- Channel 11 -->
-<div class="channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="11">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl">11</span>
-<span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight">STAGE_LIGHT_R</div>
-</div>
-<!-- Channel 12 -->
-<div class="channel-btn bg-surface-container-high border-2 border-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full" data-channel="12">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-2xl text-primary-container">12</span>
-<span class="status-label text-[10px] font-bold uppercase text-primary-container px-1">SYNC</span>
-</div>
-<div class="font-headline font-medium text-lg leading-tight text-on-surface">PYRO_SEQ_MASTER</div>
-</div>
+<!-- h-[calc(100vh-144px)] ensures it fits between header and footer -->
+<main class="pt-2 pb-2 h-[calc(100vh-144px)] mt-16 mb-20 w-full bg-surface grid grid-cols-2 gap-2 p-2 overflow-hidden" id="channel-grid">
+<!-- Channels will be injected here via JavaScript -->
 </main>
 <!-- MESSAGE POPUP OVERLAY -->
 <div class="fixed inset-0 z-[60] flex items-center justify-center p-6 pointer-events-none" id="message-overlay">
@@ -260,17 +167,79 @@
 <span>Alerts</span>
 <span class="absolute top-1 right-2 w-2 h-2 bg-error rounded-full"></span>
 </div>
-<div class="flex flex-col items-center justify-center text-[#4a4a4a] p-2 hover:text-[#00FF41] transition-all">
+<div class="flex flex-col items-center justify-center text-[#4a4a4a] p-2 hover:text-[#00FF41] transition-all" onclick="window.location.reload()">
 <span class="material-symbols-outlined mb-1">settings</span>
 <span>Config</span>
 </div>
 </nav>
 <script>
-        // 1. & 2. Socket.io Connection
         const socket = io('https://tacomamultimedia-production.up.railway.app/');
+        const gridContainer = document.getElementById('channel-grid');
         const syncStatus = document.getElementById('sync-status');
         const syncIndicator = document.getElementById('sync-indicator');
 
+        // Dynamic Channel Names
+        const channelNames = [
+            "MAIN_L_ARRAY", "MAIN_R_ARRAY", "SUB_LOW_FREQ", "DRUM_MON_1",
+            "VOCAL_LEAD", "VOCAL_BACK_1", "GUITAR_SLOT_A", "GUITAR_SLOT_B",
+            "COMMS_RACK_01", "STAGE_LIGHT_L", "STAGE_LIGHT_R", "PYRO_SEQ_MASTER"
+        ];
+
+        // 1. Get channel count from URL or session
+        const urlParams = new URLSearchParams(window.location.search);
+        let channelCount = parseInt(urlParams.get('channels')) || parseInt(sessionStorage.getItem('channelCount')) || 12;
+        channelCount = Math.min(Math.max(channelCount, 1), 12);
+
+        // 2. Render the Grid
+        function renderGrid(count) {
+            gridContainer.innerHTML = '';
+            // Adjust grid rows based on count to ensure fit without scroll
+            const rows = Math.ceil(count / 2);
+            gridContainer.style.gridTemplateRows = `repeat(${rows}, minmax(0, 1fr))`;
+
+            for (let i = 1; i <= count; i++) {
+                const channelId = i.toString().padStart(2, '0');
+                const name = channelNames[i-1] || `CHANNEL_${channelId}`;
+                
+                const btn = document.createElement('div');
+                btn.className = 'channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full cursor-pointer';
+                btn.setAttribute('data-channel', i);
+                
+                btn.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <span class="font-headline font-bold text-2xl">${channelId}</span>
+                        <span class="status-label text-[10px] font-bold uppercase bg-black/10 px-1">READY</span>
+                    </div>
+                    <div class="font-headline font-medium text-lg leading-tight">${name}</div>
+                `;
+
+                // Single/Double Tap Logic
+                let lastTap = 0;
+                btn.addEventListener('touchstart', (e) => {
+                    const now = Date.now();
+                    const diff = now - lastTap;
+                    
+                    if (diff < 300) {
+                        socket.emit('update_channel', { id: i.toString(), status: 'ALERT' });
+                        lastTap = 0;
+                    } else {
+                        setTimeout(() => {
+                            if (Date.now() - lastTap >= 300) {
+                                socket.emit('update_channel', { id: i.toString(), status: 'READY' });
+                            }
+                        }, 310);
+                    }
+                    lastTap = now;
+                });
+                btn.addEventListener('touchend', (e) => e.preventDefault());
+
+                gridContainer.appendChild(btn);
+            }
+        }
+
+        renderGrid(channelCount);
+
+        // Socket IO handlers
         socket.on('connect', () => {
             syncStatus.innerText = 'SYNC_OK';
             syncIndicator.classList.remove('bg-error');
@@ -283,37 +252,6 @@
             syncIndicator.classList.add('bg-error');
         });
 
-        // 3. Channel Button Interaction (Single vs Double Tap)
-        const channelBtns = document.querySelectorAll('.channel-btn');
-        channelBtns.forEach(btn => {
-            let lastTap = 0;
-            const channelId = btn.getAttribute('data-channel');
-
-            btn.addEventListener('touchstart', (e) => {
-                const now = Date.now();
-                const diff = now - lastTap;
-                
-                if (diff < 300) {
-                    // Double Tap -> ALERT
-                    socket.emit('update_channel', { id: channelId, status: 'ALERT' });
-                    lastTap = 0; // Reset
-                } else {
-                    // Single Tap -> READY
-                    setTimeout(() => {
-                        // Check if it was actually a single tap (no second tap followed)
-                        if (Date.now() - lastTap >= 300) {
-                            socket.emit('update_channel', { id: channelId, status: 'READY' });
-                        }
-                    }, 310);
-                }
-                lastTap = now;
-            });
-
-            // Prevent scroll on quick tap
-            btn.addEventListener('touchend', (e) => e.preventDefault());
-        });
-
-        // 4. Update Button State Globally
         socket.on('state_changed', (channels) => {
             channels.forEach(ch => {
                 const btn = document.querySelector(`.channel-btn[data-channel="${ch.id}"]`);
@@ -323,20 +261,25 @@
                 const title = btn.querySelector('.font-headline.text-2xl');
 
                 if (ch.status === 'READY') {
-                    btn.className = 'channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200';
+                    btn.className = 'channel-btn bg-primary-container text-on-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full';
                     label.innerText = 'READY';
                     label.className = 'status-label text-[10px] font-bold uppercase bg-black/10 px-1';
                     if(title) title.classList.remove('text-primary-container');
                 } else if (ch.status === 'ALERT') {
-                    btn.className = 'channel-btn bg-error-container text-on-error-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200';
+                    btn.className = 'channel-btn bg-error-container text-on-error-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full';
                     label.innerText = 'ALERT';
                     label.className = 'status-label text-[10px] font-bold uppercase bg-black/10 px-1';
                     if(title) title.classList.remove('text-primary-container');
+                } else if (ch.status === 'SYNC') {
+                    btn.className = 'channel-btn bg-surface-container-high border-2 border-primary-container flex flex-col justify-between p-3 rounded-sm relative overflow-hidden transition-colors duration-200 h-full';
+                    label.innerText = 'SYNC';
+                    label.className = 'status-label text-[10px] font-bold uppercase text-primary-container px-1';
+                    if(title) title.classList.add('text-primary-container');
                 }
             });
         });
 
-        // 5. PTT with Web Speech API
+        // Speech API and Message Popup (Keep existing logic)
         const pttBtn = document.getElementById('ptt-button');
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -354,29 +297,16 @@
                 });
             };
 
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                pttBtn.classList.remove('scale-125');
-            };
-
-            recognition.onend = () => {
-                pttBtn.classList.remove('scale-125');
-            };
+            recognition.onerror = () => pttBtn.classList.remove('scale-125');
+            recognition.onend = () => pttBtn.classList.remove('scale-125');
 
             pttBtn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 pttBtn.classList.add('scale-125');
                 recognition.start();
             });
-
-            pttBtn.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                // Recognition usually stops on its own when silence is detected or we call stop
-                // recognition.stop(); // Optional, let onresult handle it for better transcription
-            });
         }
 
-        // 6. Broadcast Message Listener (3-second popup)
         const container = document.getElementById('message-container');
         const sourceEl = document.getElementById('msg-source');
         const contentEl = document.getElementById('msg-content');
@@ -385,17 +315,13 @@
         socket.on('broadcast_message', (data) => {
             sourceEl.innerText = `DIRECT: ${data.source || 'REMOTE_OPS'}`;
             contentEl.innerText = `"${data.content}"`;
-            
             container.classList.remove('hidden-popup');
             container.classList.add('visible-popup');
-
             if (popupTimer) clearTimeout(popupTimer);
-            
             popupTimer = setTimeout(() => {
                 container.classList.remove('visible-popup');
                 container.classList.add('hidden-popup');
             }, 3000);
         });
-
     </script>
 </body></html>
