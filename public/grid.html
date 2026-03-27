@@ -87,26 +87,21 @@
             height: 100dvh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
-        /* Calculated height to avoid scrolling for 12 channels in 2 cols (6 rows) */
+        /* Tactical grid ensures 2 columns and exactly enough rows for content without scrolling */
         .tactical-grid {
             flex: 1;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 4px;
             padding: 4px;
-            overflow: hidden;
             background-color: #0e0e0e;
-        }
-        /* Mobile specific adjustments */
-        @media (max-height: 700px) {
-            .tactical-grid {
-                grid-template-rows: repeat(6, 1fr);
-            }
+            overflow: hidden;
         }
     </style>
 </head>
-<body class="bg-background text-on-surface font-body overflow-hidden">
+<body class="bg-background text-on-surface font-body">
 <!-- TopAppBar -->
 <header class="bg-[#131313] text-[#00FF41] font-headline uppercase tracking-widest text-sm border-b-2 border-surface-container-highest flex justify-between items-center px-4 h-16 shrink-0 z-50">
 <div class="flex items-center gap-3">
@@ -114,13 +109,13 @@
 <div class="flex flex-col leading-none">
 <span class="text-[#00FF41] font-bold tracking-tighter text-lg">ST-04 // OPS-9</span>
 <span class="text-[10px] opacity-60 font-body normal-case tracking-normal">
-                    ID: <span id="display-id">8821</span> // PIN: <span id="display-pin">1234</span>
+<span id="display-id">8821</span> // <span id="display-pin">1234</span>
 </span>
 </div>
 </div>
 <div class="flex items-center gap-4">
 <div class="flex flex-col items-end leading-none">
-<span class="text-xs font-bold text-on-surface tracking-normal text-right max-w-[80px] truncate uppercase" id="display-role">A1 - LEAD AUDIO</span>
+<span class="text-xs font-bold text-on-surface tracking-normal text-right max-w-[100px] truncate uppercase" id="display-role">A1 - LEAD AUDIO</span>
 </div>
 <div class="flex items-center gap-2 px-2 py-1 bg-surface-container-low rounded-sm">
 <div class="w-2 h-2 rounded-full bg-primary-container animate-sync-dot"></div>
@@ -164,17 +159,17 @@
                 id: localStorage.getItem('opID') || '8821',
                 pin: localStorage.getItem('opPIN') || '1234',
                 role: localStorage.getItem('opRole') || 'A1 - LEAD AUDIO',
-                channels: parseInt(localStorage.getItem('channelCount')) || 10
+                channels: parseInt(localStorage.getItem('channelCount')) || 12
             };
 
-            // Update Header display
+            // Update Header display with stored session data
             document.getElementById('display-id').textContent = config.id;
             document.getElementById('display-pin').textContent = config.pin;
             document.getElementById('display-role').textContent = config.role;
 
             const grid = document.getElementById('channel-grid');
             
-            // Standard Channel names/icons
+            // Channel definitions
             const channelDefinitions = [
                 { name: "Stage Right", type: "VOX", icon: "signal_cellular_4_bar", color: "border-primary-container" },
                 { name: "FOH Command", type: "LIVE", icon: "radio_button_checked", color: "border-secondary-container" },
@@ -187,14 +182,19 @@
                 { name: "Security 1", type: "VOX", icon: "shield", color: "border-primary-container" },
                 { name: "Utility 01", type: "VOX", icon: "hub", color: "border-primary-container" },
                 { name: "System Eng", type: "VOX", icon: "settings_input_hdmi", color: "border-primary-container" },
-                { name: "Stage Left", type: "VOX", icon: "signal_cellular_alt", color: "border-primary-container" }
+                { name: "Stage Left", type: "VOX", icon: "signal_cellular_alt", color: "border-primary-container" },
+                { name: "Power Distro", type: "IDLE", icon: "bolt", color: "border-primary-container" },
+                { name: "Comm Check", type: "VOX", icon: "headset_mic", color: "border-primary-container" }
             ];
 
-            // Build dynamic grid
+            // Calculate rows needed for exactly 2 columns to fit without scroll
+            const rowCount = Math.ceil(config.channels / 2);
+            grid.style.gridTemplateRows = `repeat(${rowCount}, 1fr)`;
+
+            // Build dynamic grid for the exact number of channels chosen
             for (let i = 0; i < config.channels; i++) {
-                if (i >= channelDefinitions.length) break;
-                
-                const def = channelDefinitions[i];
+                // Wrap around definitions if channels exceeds current definition list length
+                const def = channelDefinitions[i % channelDefinitions.length];
                 const channelNum = (i + 1).toString().padStart(2, '0');
                 
                 const card = document.createElement('div');
@@ -222,23 +222,21 @@
 
             // Simple PTT Interaction
             const ptt = document.getElementById('ptt-button');
-            ptt.addEventListener('mousedown', () => {
+            const activatePTT = (e) => {
+                if(e.cancelable) e.preventDefault();
                 ptt.classList.add('bg-secondary-container');
                 ptt.classList.remove('bg-primary-container');
-            });
-            ptt.addEventListener('mouseup', () => {
+            };
+            const deactivatePTT = () => {
                 ptt.classList.remove('bg-secondary-container');
                 ptt.classList.add('bg-primary-container');
-            });
-            ptt.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                ptt.classList.add('bg-secondary-container');
-                ptt.classList.remove('bg-primary-container');
-            });
-            ptt.addEventListener('touchend', () => {
-                ptt.classList.remove('bg-secondary-container');
-                ptt.classList.add('bg-primary-container');
-            });
+            };
+
+            ptt.addEventListener('mousedown', activatePTT);
+            ptt.addEventListener('mouseup', deactivatePTT);
+            ptt.addEventListener('mouseleave', deactivatePTT);
+            ptt.addEventListener('touchstart', activatePTT);
+            ptt.addEventListener('touchend', deactivatePTT);
         });
     </script>
 </body></html>
