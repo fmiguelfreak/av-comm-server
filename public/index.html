@@ -18,7 +18,8 @@
               "background": "#000000",
               "surface": "#0e0e0e",
               "surface-variant": "#1c1b1b",
-              "outline": "#3b4b37"
+              "outline": "#3b4b37",
+              "error": "#FF3131"
             },
             fontFamily: {
               "headline": ["Space Grotesk"],
@@ -36,9 +37,25 @@
       .neon-border:focus-within { border-color: #00FF41; box-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
       input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
       input[type=number] { -moz-appearance: textfield; }
+      .scanline {
+        width: 100%;
+        height: 100px;
+        z-index: 99;
+        background: linear-gradient(0deg, rgba(0, 255, 65, 0) 0%, rgba(0, 255, 65, 0.05) 50%, rgba(0, 255, 65, 0) 100%);
+        opacity: 0.1;
+        position: fixed;
+        bottom: 100%;
+        animation: scanline 6s linear infinite;
+        pointer-events: none;
+      }
+      @keyframes scanline {
+        0% { bottom: 100%; }
+        100% { bottom: -100px; }
+      }
     </style>
 </head>
 <body class="bg-black text-primary font-body select-none pb-24">
+<div class="scanline"></div>
 <!-- Top Bar -->
 <header class="fixed top-0 left-0 w-full h-16 bg-black border-b-2 border-surface-variant z-50 flex items-center justify-between px-4">
 <div class="flex items-center gap-3">
@@ -52,12 +69,12 @@
 </header>
 <main class="pt-24 px-6 max-w-md mx-auto space-y-8">
 <!-- Protocol 01: Create -->
-<section class="space-y-4">
+<section class="space-y-4" id="section-create">
 <div class="flex items-center gap-2 border-l-2 border-primary pl-3">
 <span class="font-headline font-bold text-xs tracking-tighter opacity-50">PROTOCOL_01</span>
 <h2 class="font-headline font-black text-xl uppercase tracking-tight">Create New Show</h2>
 </div>
-<div class="space-y-3 bg-surface p-4 rounded-sm border border-surface-variant">
+<div class="space-y-3 bg-surface p-4 rounded-sm border border-surface-variant relative overflow-hidden" id="create-container">
 <div class="space-y-1">
 <label class="text-[10px] font-bold uppercase tracking-widest opacity-60">Show Name</label>
 <div class="neon-border bg-black flex items-center p-3">
@@ -75,9 +92,30 @@
 </select>
 </div>
 </div>
-<button class="w-full bg-primary text-on-primary font-headline font-black py-4 mt-2 tactical-glow active:scale-[0.98] transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2" onclick="handleCreate()">
-                Generate Show ID
-                <span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<div class="hidden min-h-[1.5rem] flex items-center gap-2" id="create-status">
+<span class="material-symbols-outlined text-sm" id="create-status-icon"></span>
+<span class="text-[10px] font-bold tracking-widest uppercase" id="create-status-text"></span>
+</div>
+<div class="hidden mt-2 p-3 bg-black border border-primary/20 space-y-2" id="create-output">
+<div class="flex justify-between items-center border-b border-surface-variant pb-2">
+<span class="text-[10px] opacity-60 uppercase font-black">Success: Show Created</span>
+<span class="material-symbols-outlined text-xs animate-pulse" data-icon="check_circle">check_circle</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-[8px] opacity-40 uppercase">Assigned ID</p>
+<p class="text-xl font-headline font-black tracking-widest" id="out-id">0000</p>
+</div>
+<div>
+<p class="text-[8px] opacity-40 uppercase">Secure PIN</p>
+<p class="text-xl font-headline font-black tracking-widest" id="out-pin">****</p>
+</div>
+</div>
+<button class="w-full mt-2 bg-primary/20 hover:bg-primary/30 text-primary py-2 text-[10px] font-black tracking-[0.2em] uppercase transition-colors" onclick="window.location.reload()">System Reset</button>
+</div>
+<button class="w-full bg-primary text-on-primary font-headline font-black py-4 mt-2 tactical-glow active:scale-[0.98] transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2" id="btn-create" onclick="handleCreate()">
+                    Generate Show ID
+                    <span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
 </button>
 </div>
 </section>
@@ -88,12 +126,12 @@
 <div class="flex-grow border-t border-surface-variant"></div>
 </div>
 <!-- Protocol 02: Join -->
-<section class="space-y-4">
+<section class="space-y-4" id="section-join">
 <div class="flex items-center gap-2 border-l-2 border-primary pl-3">
 <span class="font-headline font-bold text-xs tracking-tighter opacity-50">PROTOCOL_02</span>
 <h2 class="font-headline font-black text-xl uppercase tracking-tight">Join Existing</h2>
 </div>
-<div class="space-y-3 bg-surface p-4 rounded-sm border border-surface-variant">
+<div class="space-y-3 bg-surface p-4 rounded-sm border border-surface-variant" id="join-container">
 <div class="grid grid-cols-2 gap-3">
 <div class="space-y-1">
 <label class="text-[10px] font-bold uppercase tracking-widest opacity-60">Show ID</label>
@@ -119,9 +157,13 @@
 </select>
 </div>
 </div>
-<button class="w-full bg-surface-variant text-primary border border-primary/30 font-headline font-black py-4 mt-2 active:scale-[0.98] transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2" onclick="handleJoin()">
-                Authorize Join
-                <span class="material-symbols-outlined" data-icon="login">login</span>
+<div class="hidden min-h-[1.5rem] flex items-center gap-2" id="join-status">
+<span class="material-symbols-outlined text-sm" id="join-status-icon"></span>
+<span class="text-[10px] font-bold tracking-widest uppercase" id="join-status-text"></span>
+</div>
+<button class="w-full bg-surface-variant text-primary border border-primary/30 font-headline font-black py-4 mt-2 active:scale-[0.98] transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2" id="btn-join" onclick="handleJoin()">
+                    Authorize Join
+                    <span class="material-symbols-outlined" data-icon="login">login</span>
 </button>
 </div>
 </section>
@@ -141,51 +183,98 @@
 <span class="material-symbols-outlined" data-icon="settings">settings</span>
 </div>
 </nav>
-<!-- Logic Script -->
-<script>
-    function handleCreate() {
-        const name = document.getElementById('create-name').value;
-        const role = document.getElementById('create-role').value;
-        
-        if (!name) {
-            alert("SPECIFY SHOW NAME");
-            return;
-        }
-
-        // Simulate ID and PIN generation
-        const generatedId = Math.floor(1000 + Math.random() * 9000).toString();
-        const generatedPin = Math.floor(1000 + Math.random() * 9000).toString();
-
-        localStorage.setItem('activeShowID', generatedId);
-        localStorage.setItem('activePIN', generatedPin);
-        localStorage.setItem('activeRole', role);
-        localStorage.setItem('activeShowName', name);
-
-        alert(`SHOW CREATED\nID: ${generatedId}\nPIN: ${generatedPin}\nROLE: ${role}`);
-        // Redirect logic would go here
-    }
-
-    function handleJoin() {
-        const id = document.getElementById('join-id').value;
-        const pin = document.getElementById('join-pin').value;
-        const role = document.getElementById('join-role').value;
-
-        if (id.length !== 4 || pin.length !== 4) {
-            alert("INVALID CREDENTIALS: 4-DIGIT REQUIREMENT NOT MET");
-            return;
-        }
-
-        localStorage.setItem('activeShowID', id);
-        localStorage.setItem('activePIN', pin);
-        localStorage.setItem('activeRole', role);
-
-        alert(`JOINING SHOW ${id} AS ${role}`);
-        // Redirect logic would go here
-    }
-</script>
 <!-- System Metadata -->
 <div class="fixed bottom-24 right-4 flex flex-col items-end pointer-events-none opacity-40 select-none">
 <span class="font-headline text-[8px] tracking-tighter">OS: VER_9.4.2</span>
 <span class="font-headline text-[8px] tracking-tighter">SESSION: ACT_881</span>
 </div>
+<!-- Logic Script -->
+<script>
+        function showStatus(type, message, isError = false) {
+            const statusEl = document.getElementById(`${type}-status`);
+            const iconEl = document.getElementById(`${type}-status-icon`);
+            const textEl = document.getElementById(`${type}-status-text`);
+            
+            statusEl.classList.remove('hidden');
+            textEl.innerText = message;
+            
+            if (isError) {
+                statusEl.classList.add('text-error');
+                statusEl.classList.remove('text-primary');
+                iconEl.innerText = 'warning';
+                iconEl.setAttribute('data-icon', 'warning');
+            } else {
+                statusEl.classList.add('text-primary');
+                statusEl.classList.remove('text-error');
+                iconEl.innerText = 'sync';
+                iconEl.setAttribute('data-icon', 'sync');
+                iconEl.classList.add('animate-spin');
+            }
+        }
+
+        async function handleCreate() {
+            const name = document.getElementById('create-name').value;
+            const role = document.getElementById('create-role').value;
+            
+            if (!name) {
+                showStatus('create', 'SPECIFY SHOW NAME', true);
+                return;
+            }
+
+            const btn = document.getElementById('btn-create');
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+            showStatus('create', 'GENERATING ENCRYPTED KEYS...');
+
+            // Aesthetic delay
+            await new Promise(r => setTimeout(r, 1200));
+
+            const generatedId = Math.floor(1000 + Math.random() * 9000).toString();
+            const generatedPin = Math.floor(1000 + Math.random() * 9000).toString();
+
+            localStorage.setItem('activeShowID', generatedId);
+            localStorage.setItem('activePIN', generatedPin);
+            localStorage.setItem('activeRole', role);
+            localStorage.setItem('activeShowName', name);
+
+            // Display Results in-UI
+            document.getElementById('create-status').classList.add('hidden');
+            document.getElementById('create-output').classList.remove('hidden');
+            document.getElementById('out-id').innerText = generatedId;
+            document.getElementById('out-pin').innerText = generatedPin;
+            btn.classList.add('hidden');
+        }
+
+        async function handleJoin() {
+            const id = document.getElementById('join-id').value;
+            const pin = document.getElementById('join-pin').value;
+            const role = document.getElementById('join-role').value;
+
+            if (id.length !== 4 || pin.length !== 4) {
+                showStatus('join', 'ERR: 4-DIGIT REQUIREMENT FAILED', true);
+                return;
+            }
+
+            const btn = document.getElementById('btn-join');
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+            showStatus('join', 'VALIDATING HANDSHAKE...');
+
+            // Aesthetic delay
+            await new Promise(r => setTimeout(r, 1500));
+
+            localStorage.setItem('activeShowID', id);
+            localStorage.setItem('activePIN', pin);
+            localStorage.setItem('activeRole', role);
+
+            showStatus('join', 'ACCESS GRANTED. INITIALIZING...');
+            
+            setTimeout(() => {
+                // Mock redirect
+                showStatus('join', 'REDIRECTING TO CONSOLE...');
+                document.body.classList.add('opacity-0');
+                document.body.style.transition = 'opacity 1s';
+            }, 800);
+        }
+    </script>
 </body></html>
