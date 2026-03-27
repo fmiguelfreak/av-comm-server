@@ -114,12 +114,12 @@
 <main class="flex flex-col h-[calc(100vh-64px)] w-full p-4 gap-4 overflow-hidden bg-background">
 <!-- SYSTEM IDENTIFIERS SECTION -->
 <section class="grid grid-cols-2 gap-3">
-<div class="bg-surface-container-low p-4 relative group overflow-hidden">
+<div class="bg-surface-container-low p-4 relative group overflow-hidden border border-outline-variant/10">
 <div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
 <label class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">SYSTEM_ID</label>
 <div class="text-3xl font-headline font-bold text-primary tracking-tighter" id="display-id">----</div>
 </div>
-<div class="bg-surface-container-low p-4 relative group overflow-hidden">
+<div class="bg-surface-container-low p-4 relative group overflow-hidden border border-outline-variant/10">
 <div class="absolute top-0 left-0 w-1 h-full bg-secondary-container"></div>
 <label class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">SECURE_PIN</label>
 <div class="text-3xl font-headline font-bold text-secondary tracking-tighter" id="display-pin">----</div>
@@ -207,10 +207,14 @@
         // State initialization from localStorage or defaults
         let config = JSON.parse(localStorage.getItem('st04_ops9_config')) || {};
         
-        // Use default ID/PIN if not found, and ensure they are 4-digit numeric only
-        let currentId = String(config.id || Math.floor(1000 + Math.random() * 9000)).padStart(4, '0').slice(0, 4);
-        let currentPin = String(config.pin || Math.floor(1000 + Math.random() * 9000)).padStart(4, '0').slice(0, 4);
+        // Use ID/PIN from config (if it exists) or generate new ones
+        let currentId = config.id || String(Math.floor(1000 + Math.random() * 9000));
+        let currentPin = config.pin || String(Math.floor(1000 + Math.random() * 9000));
         let currentChannels = parseInt(config.channels) || 12;
+
+        // Ensure 4 digits
+        currentId = String(currentId).padStart(4, '0').slice(0, 4);
+        currentPin = String(currentPin).padStart(4, '0').slice(0, 4);
 
         // Init values on screen
         displayId.textContent = currentId;
@@ -247,7 +251,7 @@
         // Initialize Logic
         initButton.addEventListener('click', () => {
             let selectedRadio = document.querySelector('input[name="role"]:checked');
-            let selectedRole = selectedRadio.value;
+            let selectedRole = selectedRadio ? selectedRadio.value : 'FOH';
             let finalRoleName = selectedRole;
             
             if (selectedRole === 'CUSTOM') {
