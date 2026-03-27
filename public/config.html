@@ -2,74 +2,75 @@
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>ST-04 // OPS-9 CONFIG</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AV-COMM Config | System Operational</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "on-surface-variant": "#b9ccb2",
-                        "on-primary-fixed-variant": "#00530e",
-                        "on-primary": "#003907",
-                        "secondary-fixed": "#ffdcc1",
-                        "on-error-container": "#ffdad6",
-                        "secondary-fixed-dim": "#ffb778",
-                        "on-secondary-fixed": "#2e1500",
-                        "error-container": "#93000a",
-                        "tertiary-fixed": "#ffdad2",
-                        "on-primary-fixed": "#002203",
-                        "tertiary": "#fff8f6",
-                        "tertiary-fixed-dim": "#ffb4a2",
-                        "surface-variant": "#353534",
-                        "on-error": "#690005",
-                        "outline": "#84967e",
-                        "tertiary-container": "#ffd3c8",
-                        "on-primary-container": "#007117",
-                        "secondary": "#ffb778",
-                        "primary-fixed-dim": "#00e639",
-                        "on-tertiary-fixed": "#3c0700",
-                        "inverse-primary": "#006e16",
-                        "surface-container-high": "#2a2a2a",
-                        "inverse-on-surface": "#313030",
-                        "primary-container": "#00ff41",
-                        "on-secondary-fixed-variant": "#6c3a00",
-                        "surface-container-lowest": "#0e0e0e",
-                        "background": "#131313",
-                        "surface-bright": "#393939",
-                        "secondary-container": "#fd9000",
-                        "primary-fixed": "#72ff70",
-                        "surface-dim": "#131313",
-                        "on-secondary-container": "#613400",
-                        "on-tertiary-container": "#b82a00",
-                        "on-tertiary-fixed-variant": "#8a1d00",
-                        "outline-variant": "#3b4b37",
-                        "surface-container-highest": "#353534",
-                        "on-background": "#e5e2e1",
-                        "surface-container-low": "#1c1b1b",
-                        "primary": "#ebffe2",
-                        "on-tertiary": "#621100",
-                        "inverse-surface": "#e5e2e1",
-                        "surface-tint": "#00e639",
-                        "surface-container": "#201f1f",
-                        "surface": "#131313",
-                        "error": "#ffb4ab",
-                        "on-surface": "#e5e2e1",
-                        "on-secondary": "#4c2700"
-                    },
-                    fontFamily: {
-                        "headline": ["Space Grotesk"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-                },
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed": "#72ff70",
+              "on-secondary-container": "#613400",
+              "outline": "#84967e",
+              "on-primary-fixed-variant": "#00530e",
+              "outline-variant": "#3b4b37",
+              "on-surface": "#e5e2e1",
+              "error-container": "#93000a",
+              "on-primary-fixed": "#002203",
+              "on-tertiary": "#621100",
+              "surface": "#131313",
+              "tertiary-fixed": "#ffdad2",
+              "secondary-container": "#fd9000",
+              "on-tertiary-container": "#b82a00",
+              "on-secondary": "#4c2700",
+              "secondary-fixed": "#ffdcc1",
+              "on-tertiary-fixed": "#3c0700",
+              "surface-tint": "#00e639",
+              "on-error": "#690005",
+              "on-secondary-fixed": "#2e1500",
+              "inverse-surface": "#e5e2e1",
+              "secondary-fixed-dim": "#ffb778",
+              "tertiary": "#fff8f6",
+              "surface-variant": "#353534",
+              "surface-dim": "#131313",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "surface-bright": "#393939",
+              "secondary": "#ffb778",
+              "inverse-on-surface": "#313030",
+              "surface-container": "#201f1f",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "surface-container-high": "#2a2a2a",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "primary-container": "#00ff41",
+              "error": "#ffb4ab",
+              "tertiary-container": "#ffd3c8",
+              "surface-container-lowest": "#0e0e0e",
+              "surface-container-low": "#1c1b1b",
+              "on-error-container": "#ffdad6",
+              "inverse-primary": "#006e16",
+              "on-primary-container": "#007117",
+              "on-background": "#e5e2e1",
+              "background": "#131313",
+              "surface-container-highest": "#353534",
+              "primary": "#ebffe2",
+              "primary-fixed-dim": "#00e639",
+              "on-surface-variant": "#b9ccb2",
+              "on-primary": "#003907"
             },
-        }
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
     </script>
 <style>
         .material-symbols-outlined {
@@ -78,206 +79,204 @@
         body {
             background-color: #131313;
             color: #e5e2e1;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
+            font-family: 'Inter', sans-serif;
         }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        .tactical-glow {
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.15);
         }
-        /* Custom radio styling for tactical feel */
-        input[type="radio"]:checked + label {
-            background-color: #00ff41;
-            color: #007117;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+        input:focus {
+            outline: none;
+            border-left: 4px solid #72ff70 !important;
         }
-        body {
-          min-height: max(884px, 100dvh);
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
         }
     </style>
-</head>
-<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
-<!-- TOP APP BAR -->
-<header class="bg-[#131313] dark:bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-widest text-sm docked full-width top-0 border-b-4 border-[#1c1b1b] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-4 h-16 w-full z-50">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined">terminal</span>
-<h1 class="text-[#00FF41] font-bold tracking-tighter text-lg">ST-04 // OPS-9</h1>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col items-center selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Anchor -->
+<header class="bg-[#131313] dark:bg-neutral-950 flex justify-between items-center w-full px-6 py-4 docked full-width top-0 border-b-4 border-[#00FF41] tactical-glow z-50">
+<div class="flex flex-col">
+<span class="text-[#00FF41] font-black tracking-widest text-lg font-['Space_Grotesk'] uppercase">AV-COMM</span>
+<span class="text-[#00FF41] dark:text-green-400 font-['Space_Grotesk'] tracking-tighter uppercase font-bold text-sm">SYSTEM OPERATIONAL</span>
 </div>
-<div class="bg-surface-container-low px-3 py-1 rounded-sm border border-outline-variant/20">
-<span class="text-[10px] opacity-50 block leading-none">STATUS</span>
-<span class="font-bold text-xs">CONFIG_MODE</span>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<span class="text-neutral-500 font-['Inter'] text-[10px] uppercase tracking-[0.05em]">Operator ID</span>
+<span class="text-[#00FF41] font-['Space_Grotesk'] font-bold" id="header-op-id">882-X</span>
+</div>
+<div class="w-10 h-10 bg-surface-container-high rounded-sm flex items-center justify-center border border-outline-variant/20">
+<span class="material-symbols-outlined text-[#00FF41]">account_circle</span>
+</div>
 </div>
 </header>
-<!-- MAIN CONTENT CANVAS -->
-<main class="flex flex-col h-[calc(100vh-64px)] w-full p-4 gap-4 overflow-hidden bg-background">
-<!-- SYSTEM IDENTIFIERS SECTION -->
-<section class="grid grid-cols-2 gap-3">
-<div class="bg-surface-container-low p-4 relative group overflow-hidden border border-outline-variant/10">
-<div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
-<label class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">SYSTEM_ID</label>
-<div class="text-3xl font-headline font-bold text-primary tracking-tighter" id="display-id">----</div>
+<main class="flex-1 w-full max-w-4xl px-6 py-12 flex flex-col gap-10">
+<!-- Section: Identity Credentials -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-6 rounded-sm border-l-4 border-primary-container flex flex-col gap-4">
+<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">System Assigned ID</label>
+<div class="bg-surface-container-highest p-8 flex items-center justify-center">
+<span class="font-headline text-5xl md:text-6xl font-bold tracking-tighter text-primary-container" id="display-id">----</span>
 </div>
-<div class="bg-surface-container-low p-4 relative group overflow-hidden border border-outline-variant/10">
-<div class="absolute top-0 left-0 w-1 h-full bg-secondary-container"></div>
-<label class="font-headline text-[10px] uppercase tracking-widest text-on-surface-variant block mb-1">SECURE_PIN</label>
-<div class="text-3xl font-headline font-bold text-secondary tracking-tighter" id="display-pin">----</div>
+<p class="text-[10px] text-neutral-500 font-body uppercase leading-tight italic">Hardware-bound unique identifier for secure mesh routing.</p>
 </div>
-</section>
-<!-- CONFIGURATION GRID -->
-<div class="flex-1 grid grid-cols-1 gap-4 overflow-hidden">
-<!-- ROLE SELECTOR -->
-<section class="bg-surface-container p-4 flex flex-col gap-3">
-<div class="flex items-center justify-between border-b border-outline-variant/10 pb-2">
-<label class="font-headline text-xs uppercase tracking-[0.2em] text-on-surface">OPERATIONAL_ROLE</label>
-<span class="material-symbols-outlined text-sm opacity-30">security</span>
+<div class="bg-surface-container-low p-6 rounded-sm border-l-4 border-secondary-container flex flex-col gap-4">
+<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Temporary Access PIN</label>
+<div class="bg-surface-container-highest p-8 flex items-center justify-center">
+<span class="font-headline text-5xl md:text-6xl font-bold tracking-tighter text-secondary-container" id="display-pin">----</span>
 </div>
-<div class="grid grid-cols-4 gap-2">
-<div class="relative">
-<input checked="" class="hidden peer" id="role-foh" name="role" type="radio" value="FOH"/>
-<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-foh">
-                            FOH
-                        </label>
-</div>
-<div class="relative">
-<input class="hidden peer" id="role-boh" name="role" type="radio" value="BOH"/>
-<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-boh">
-                            BOH
-                        </label>
-</div>
-<div class="relative">
-<input class="hidden peer" id="role-mics" name="role" type="radio" value="MICS"/>
-<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-mics">
-                            MICS
-                        </label>
-</div>
-<div class="relative">
-<input class="hidden peer" id="role-custom" name="role" type="radio" value="CUSTOM"/>
-<label class="flex flex-col items-center justify-center py-4 bg-surface-container-high text-on-surface font-headline font-bold text-xs transition-all cursor-pointer rounded-sm hover:bg-[#2a2a2a]" for="role-custom">
-                            SPEC
-                        </label>
-</div>
-</div>
-<!-- HIDDEN CUSTOM ROLE INPUT -->
-<div class="hidden animate-in fade-in slide-in-from-top-2 duration-300" id="custom-role-container">
-<input class="w-full bg-surface-container-highest border-l-4 border-primary-fixed text-on-surface p-3 font-headline text-sm uppercase tracking-wider focus:ring-0 focus:outline-none placeholder:opacity-30" id="custom-role-input" placeholder="ENTER CUSTOM DESIGNATION..." type="text"/>
+<p class="text-[10px] text-neutral-500 font-body uppercase leading-tight italic">Required for mobile-to-console synchronization handshake.</p>
 </div>
 </section>
-<!-- CHANNEL SELECTOR -->
-<section class="bg-surface-container p-4 flex flex-col gap-3">
-<div class="flex items-center justify-between border-b border-outline-variant/10 pb-2">
-<label class="font-headline text-xs uppercase tracking-[0.2em] text-on-surface">SIGNAL_CHANNELS</label>
-<span class="material-symbols-outlined text-sm opacity-30">settings_input_component</span>
+<!-- Section: Role Configuration -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed-dim">engineering</span>
+<h2 class="font-headline text-xl font-bold uppercase tracking-tight">Deployment Role</h2>
 </div>
-<div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-sm border border-outline-variant/10">
-<button class="w-12 h-12 flex items-center justify-center bg-surface-container-high text-primary-container rounded-sm active:scale-95 transition-transform" id="chan-minus">
-<span class="material-symbols-outlined">remove</span>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="role-selector">
+<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('FOH', this)">
+<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">01</span>
+<span class="block font-headline font-bold text-lg">FOH</span>
 </button>
-<div class="flex-1 text-center">
-<div class="text-4xl font-headline font-black text-on-surface" id="chan-count">12</div>
-<div class="text-[9px] uppercase tracking-widest opacity-40 font-bold">ACTIVE_NODES</div>
-</div>
-<button class="w-12 h-12 flex items-center justify-center bg-surface-container-high text-primary-container rounded-sm active:scale-95 transition-transform" id="chan-plus">
-<span class="material-symbols-outlined">add</span>
+<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('BOH', this)">
+<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">02</span>
+<span class="block font-headline font-bold text-lg">BOH</span>
+</button>
+<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('MICS', this)">
+<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">03</span>
+<span class="block font-headline font-bold text-lg">MICS</span>
+</button>
+<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('CUSTOM', this)">
+<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">04</span>
+<span class="block font-headline font-bold text-lg">CUSTOM</span>
 </button>
 </div>
-</section>
+<div class="hidden mt-2" id="custom-role-container">
+<input class="w-full bg-surface-container-highest border-none p-4 font-headline text-lg uppercase tracking-widest text-primary-fixed-dim placeholder:text-neutral-600" id="custom-role-input" placeholder="SPECIFY CUSTOM ROLE..." type="text"/>
 </div>
-<!-- CTA BUTTON -->
-<footer class="mt-auto">
-<button class="w-full bg-primary-container text-on-primary-container py-5 rounded-sm font-headline font-black uppercase tracking-[0.25em] text-lg shadow-[0_0_20px_rgba(0,255,65,0.3)] active:scale-[0.98] transition-all flex items-center justify-center gap-3" id="init-uplink">
-<span class="material-symbols-outlined">router</span>
-                INITIALIZE UPLINK
-            </button>
-</footer>
+</section>
+<!-- Section: Channel Matrix -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed-dim">hub</span>
+<h2 class="font-headline text-xl font-bold uppercase tracking-tight">Channel Density</h2>
+</div>
+<span class="font-headline text-3xl font-bold text-primary-container" id="channel-count-display">12</span>
+</div>
+<div class="bg-surface-container-low p-6 rounded-sm">
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary-container" id="channel-slider" max="64" min="1" oninput="updateChannels(this.value)" type="range" value="12"/>
+<div class="flex justify-between mt-4 font-label text-[10px] text-neutral-500 uppercase tracking-widest">
+<span>Low Latency (01)</span>
+<span>Standard (32)</span>
+<span>High Capacity (64)</span>
+</div>
+</div>
+</section>
+<!-- Action Area -->
+<div class="mt-8 flex flex-col gap-4">
+<button class="w-full bg-primary-container py-6 rounded-sm flex items-center justify-center gap-4 group hover:shadow-[0_0_30px_#00ff4133] active:scale-[0.98] transition-all" onclick="initializeUplink()">
+<span class="font-headline text-2xl font-black text-on-primary-container tracking-widest">INITIALIZE UPLINK</span>
+<span class="material-symbols-outlined text-on-primary-container text-3xl group-hover:translate-x-1 transition-transform">rocket_launch</span>
+</button>
+<p class="text-center font-label text-[10px] text-neutral-500 uppercase tracking-widest px-12">
+                By initializing, you agree to technical protocol 7-B regarding real-time frequency distribution and encrypted data packet handling.
+            </p>
+</div>
 </main>
+<!-- Contextual Footer (BottomNavBar) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 bg-[#1c1b1b] h-20 shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<button class="flex items-center justify-center bg-[#00ff41] text-[#007117] rounded-sm scale-110 shadow-[0_0_15px_#00ff41] px-6 py-3">
+<span class="material-symbols-outlined" data-icon="settings_remote">settings_remote</span>
+</button>
+<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+</button>
+<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</button>
+<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+</button>
+</nav>
 <script>
-        // DOM Elements
-        const displayId = document.getElementById('display-id');
-        const displayPin = document.getElementById('display-pin');
-        const chanCount = document.getElementById('chan-count');
-        const chanMinus = document.getElementById('chan-minus');
-        const chanPlus = document.getElementById('chan-plus');
-        const roleRadios = document.getElementsByName('role');
-        const customRoleContainer = document.getElementById('custom-role-container');
-        const customRoleInput = document.getElementById('custom-role-input');
-        const initButton = document.getElementById('init-uplink');
+        let selectedRole = 'FOH';
+        let currentId = '';
+        let currentPin = '';
 
-        // State initialization from localStorage or defaults
-        let config = JSON.parse(localStorage.getItem('st04_ops9_config')) || {};
-        
-        // Use ID/PIN from config (if it exists) or generate new ones
-        let currentId = config.id || String(Math.floor(1000 + Math.random() * 9000));
-        let currentPin = config.pin || String(Math.floor(1000 + Math.random() * 9000));
-        let currentChannels = parseInt(config.channels) || 12;
-
-        // Ensure 4 digits
-        currentId = String(currentId).padStart(4, '0').slice(0, 4);
-        currentPin = String(currentPin).padStart(4, '0').slice(0, 4);
-
-        // Init values on screen
-        displayId.textContent = currentId;
-        displayPin.textContent = currentPin;
-        chanCount.textContent = currentChannels;
-
-        // Channel Controls
-        chanMinus.addEventListener('click', () => {
-            if (currentChannels > 1) {
-                currentChannels--;
-                chanCount.textContent = currentChannels;
-            }
-        });
-
-        chanPlus.addEventListener('click', () => {
-            if (currentChannels < 24) {
-                currentChannels++;
-                chanCount.textContent = currentChannels;
-            }
-        });
-
-        // Role Logic
-        roleRadios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                if (e.target.value === 'CUSTOM') {
-                    customRoleContainer.classList.remove('hidden');
-                    customRoleInput.focus();
-                } else {
-                    customRoleContainer.classList.add('hidden');
-                }
-            });
-        });
-
-        // Initialize Logic
-        initButton.addEventListener('click', () => {
-            let selectedRadio = document.querySelector('input[name="role"]:checked');
-            let selectedRole = selectedRadio ? selectedRadio.value : 'FOH';
-            let finalRoleName = selectedRole;
+        // Initialize numeric IDs on load
+        window.onload = () => {
+            currentId = Math.floor(1000 + Math.random() * 9000).toString();
+            currentPin = Math.floor(1000 + Math.random() * 9000).toString();
             
-            if (selectedRole === 'CUSTOM') {
-                finalRoleName = customRoleInput.value.trim().toUpperCase() || 'CUSTOM_SPEC';
+            document.getElementById('display-id').innerText = currentId;
+            document.getElementById('display-pin').innerText = currentPin;
+            document.getElementById('header-op-id').innerText = `ID: ${currentId.substring(0,3)}-X`;
+            
+            // Set default active button
+            const btns = document.querySelectorAll('.role-btn');
+            btns[0].classList.add('bg-primary-container', 'text-on-primary-container');
+            btns[0].classList.remove('bg-surface-container-high');
+        };
+
+        function selectRole(role, element) {
+            selectedRole = role;
+            
+            // Reset all buttons
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
+                btn.classList.add('bg-surface-container-high');
+            });
+            
+            // Highlight selected
+            element.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
+            element.classList.remove('bg-surface-container-high');
+            
+            // Show/Hide custom input
+            const customInput = document.getElementById('custom-role-container');
+            if(role === 'CUSTOM') {
+                customInput.classList.remove('hidden');
+                document.getElementById('custom-role-input').focus();
+            } else {
+                customInput.classList.add('hidden');
             }
+        }
 
-            const configData = {
-                id: currentId,
-                pin: currentPin,
-                role: finalRoleName,
-                channels: currentChannels,
-                timestamp: new Date().toISOString()
-            };
+        function updateChannels(val) {
+            document.getElementById('channel-count-display').innerText = val;
+        }
 
-            // Save all final data to localStorage
-            localStorage.setItem('st04_ops9_config', JSON.stringify(configData));
+        function initializeUplink() {
+            let finalRole = selectedRole;
+            if (selectedRole === 'CUSTOM') {
+                finalRole = document.getElementById('custom-role-input').value || 'CUSTOM';
+            }
+            
+            const channels = document.getElementById('channel-slider').value;
+            
+            localStorage.setItem('av_comm_id', currentId);
+            localStorage.setItem('av_comm_pin', currentPin);
+            localStorage.setItem('av_comm_role', finalRole);
+            localStorage.setItem('av_comm_channels', channels);
+            
+            // Visual feedback before "redirect"
+            const btn = document.querySelector('button[onclick="initializeUplink()"]');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> <span class="font-headline font-bold">ESTABLISHING LINK...</span>';
+            btn.classList.replace('bg-primary-container', 'bg-surface-container-highest');
+            btn.classList.replace('text-on-primary-container', 'text-primary-container');
 
-            // Visual feedback
-            initButton.innerHTML = `<span class="material-symbols-outlined animate-spin">refresh</span> UPLINKING...`;
-            initButton.classList.replace('bg-primary-container', 'bg-surface-container-highest');
-            initButton.classList.add('text-primary-container');
-
-            // Redirect to grid.html
             setTimeout(() => {
                 window.location.href = 'grid.html';
             }, 800);
-        });
+        }
     </script>
 </body></html>
