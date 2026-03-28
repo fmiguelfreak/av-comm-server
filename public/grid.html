@@ -14,53 +14,14 @@
         theme: {
           extend: {
             colors: {
-              "error": "#ffb4ab",
-              "on-error-container": "#ffdad6",
-              "outline-variant": "#3b4b37",
-              "inverse-primary": "#006e16",
-              "secondary-fixed": "#ffdcc1",
-              "on-primary": "#003907",
-              "surface-bright": "#393939",
               "primary-container": "#00ff41",
-              "on-secondary-fixed": "#2e1500",
-              "on-secondary-container": "#613400",
-              "surface-container-low": "#1c1b1b",
-              "on-primary-container": "#007117",
-              "tertiary-fixed": "#ffdad2",
-              "tertiary": "#fff8f6",
-              "surface-tint": "#00e639",
-              "on-error": "#690005",
-              "surface-variant": "#353534",
-              "on-tertiary-fixed": "#3c0700",
-              "on-secondary": "#4c2700",
-              "error-container": "#93000a",
-              "surface-container-highest": "#353534",
-              "primary-fixed": "#72ff70",
-              "tertiary-fixed-dim": "#ffb4a2",
-              "secondary-fixed-dim": "#ffb778",
-              "surface": "#131313",
               "secondary-container": "#fd9000",
-              "on-secondary-fixed-variant": "#6c3a00",
-              "surface-dim": "#131313",
-              "primary-fixed-dim": "#00e639",
-              "surface-container-lowest": "#0e0e0e",
-              "inverse-surface": "#e5e2e1",
-              "on-tertiary-container": "#b82a00",
+              "surface": "#131313",
               "on-surface": "#e5e2e1",
-              "on-tertiary": "#621100",
-              "tertiary-container": "#ffd3c8",
-              "inverse-on-surface": "#313030",
-              "outline": "#84967e",
-              "primary": "#ebffe2",
-              "on-background": "#e5e2e1",
-              "surface-container": "#201f1f",
-              "on-primary-fixed": "#002203",
-              "on-tertiary-fixed-variant": "#8a1d00",
-              "secondary": "#ffb778",
-              "background": "#131313",
-              "on-primary-fixed-variant": "#00530e",
-              "surface-container-high": "#2a2a2a",
-              "on-surface-variant": "#b9ccb2"
+              "on-surface-variant": "#b9ccb2",
+              "error-container": "#93000a",
+              "primary-fixed": "#72ff70",
+              "secondary-fixed": "#ffb778",
             },
             fontFamily: {
               "headline": ["Space Grotesk"],
@@ -79,252 +40,248 @@
         body {
             background-color: #131313;
             color: #e5e2e1;
-            overflow: hidden; /* Zero-scroll mandate */
+            overflow: hidden;
             height: 100vh;
             height: 100dvh;
         }
-        /* Ensure the grid takes up exactly the remaining space and items don't overflow */
         main {
             height: calc(100dvh - 56px - 64px);
         }
+        .channel-btn.state-ready { border-left-color: #00ff41; opacity: 1; }
+        .channel-btn.state-alert { border-left-color: #fd9000; opacity: 1; }
+        .channel-btn.state-idle { border-left-color: #3b4b37; opacity: 0.5; }
     </style>
 </head>
 <body class="flex flex-col font-body bg-[#131313]">
 <!-- TOP APP BAR -->
-<header class="h-14 bg-[#131313] border-b-2 border-[#00FF41] shadow-[0_0_15px_rgba(0,255,65,0.1)] flex justify-between items-center w-full px-4 z-50 shrink-0">
+<header class="h-14 bg-[#131313] border-b-2 border-[#00FF41] flex justify-between items-center w-full px-4 z-50 shrink-0">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-[#00FF41] text-xl" data-icon="terminal">terminal</span>
-<h1 class="font-headline uppercase tracking-widest text-[10px] text-[#00FF41] opacity-70" id="session-display">SESSION: SYNCING...</h1>
+<h1 class="font-headline uppercase tracking-widest text-[10px] text-[#00FF41] opacity-70" id="session-display">SYNCING...</h1>
 </div>
-<button class="flex items-center gap-2 bg-[#1c1b1b] px-3 py-1 rounded-sm border border-[#00FF41]/20 active:bg-[#2a2a2a] transition-colors" id="role-toggle">
-<span class="font-headline font-bold tracking-tighter text-[#00FF41] text-sm uppercase" id="header-role">...</span>
+<button class="flex items-center gap-3 bg-[#1c1b1b] px-4 py-1.5 rounded-sm border border-[#00FF41]/30 active:bg-[#2a2a2a] transition-colors" id="role-toggle">
+<span class="font-headline font-bold tracking-tighter text-[#00FF41] text-sm uppercase" id="header-role">---</span>
 <span class="text-[10px] text-[#00FF41]/40">|</span>
-<span class="font-headline text-[10px] tracking-tight text-[#00FF41] opacity-80" id="header-id">----</span>
+<span class="font-headline text-xs tracking-tight text-[#00FF41]" id="header-id">----</span>
 <span class="text-[10px] text-[#00FF41]/40">|</span>
-<span class="font-headline text-[10px] tracking-tight text-[#00FF41] opacity-80" id="header-pin">----</span>
+<span class="font-headline text-xs tracking-tight text-[#00FF41]" id="header-pin">----</span>
 </button>
 </header>
-<!-- MAIN OPERATIONAL GRID (12 CHANNELS - 2x6) -->
+<!-- MAIN OPERATIONAL GRID (12 CHANNELS) -->
 <main class="flex-grow p-2 grid grid-cols-2 grid-rows-6 gap-1.5 bg-[#0e0e0e] overflow-hidden" id="channel-grid">
-<!-- CH 01 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 01</span>
-<span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MIC 1</h2>
-</button>
-<!-- CH 02 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-secondary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 02</span>
-<span class="status-tag text-[7px] font-black text-secondary-container bg-on-secondary px-1 rounded-sm">ALERT</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-secondary-fixed leading-none uppercase truncate w-full text-left">MIC 2</h2>
-</button>
-<!-- CH 03 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60 min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 03</span>
-<span class="status-tag text-[7px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-on-surface leading-none uppercase truncate w-full text-left">ST-LR</h2>
-</button>
-<!-- CH 04 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 04</span>
-<span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">COMM 1</h2>
-</button>
-<!-- CH 05 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 05</span>
-<span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">TALK</h2>
-</button>
-<!-- CH 06 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60 min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 06</span>
-<span class="status-tag text-[7px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-on-surface leading-none uppercase truncate w-full text-left">REVERB</h2>
-</button>
-<!-- CH 07 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 07</span>
-<span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MON 1</h2>
-</button>
-<!-- CH 08 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 08</span>
-<span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MON 2</h2>
-</button>
-<!-- CH 09 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60 min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 09</span>
-<span class="status-tag text-[7px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-on-surface leading-none uppercase truncate w-full text-left">SPARE</h2>
-</button>
-<!-- CH 10 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 10</span>
-<span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">V-PLAY</h2>
-</button>
-<!-- CH 11 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 11</span>
-<span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">STAGE</h2>
-</button>
-<!-- CH 12 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-secondary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
-<div class="w-full flex justify-between items-start">
-<span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 12</span>
-<span class="status-tag text-[7px] font-black text-secondary-container bg-on-secondary px-1 rounded-sm">ALERT</span>
-</div>
-<h2 class="ch-name font-headline font-bold text-base md:text-lg text-secondary-fixed leading-none uppercase truncate w-full text-left">PIT</h2>
-</button>
+<!-- Channels injected via JS -->
 </main>
 <!-- BOTTOM NAVIGATION -->
-<nav class="bg-[#0e0e0e] w-full flex justify-between items-center px-4 h-16 shrink-0 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] border-t border-[#00FF41]/10">
-<div class="flex gap-4">
+<nav class="bg-[#0e0e0e] w-full flex justify-between items-center px-4 h-16 shrink-0 z-50 border-t border-[#00FF41]/10">
+<div class="flex gap-6">
 <a class="flex flex-col items-center justify-center text-[#00FF41]" href="#">
 <span class="material-symbols-outlined text-xl" data-icon="hub">hub</span>
 <span class="font-label text-[8px] uppercase font-black tracking-tighter">Channels</span>
 </a>
-<a class="flex flex-col items-center justify-center text-gray-500 hover:text-[#00FF41] transition-all" href="#">
+<a class="flex flex-col items-center justify-center text-gray-500 hover:text-[#00FF41]" href="#">
 <span class="material-symbols-outlined text-xl" data-icon="forum">forum</span>
 <span class="font-label text-[8px] uppercase font-black tracking-tighter">Chat</span>
 </a>
 </div>
-<!-- PTT BUTTON IN CENTER -->
-<button class="relative -top-3 h-16 w-16 bg-[#131313] border-2 border-primary-container rounded-full flex items-center justify-center active:bg-primary-container active:scale-90 transition-all shadow-[0_0_20px_rgba(0,255,65,0.3)]" id="ptt-button">
+<!-- PTT BUTTON -->
+<div class="relative flex flex-col items-center">
+<button class="relative -top-3 h-16 w-16 bg-[#131313] border-2 border-primary-container rounded-full flex items-center justify-center active:bg-primary-container transition-all shadow-[0_0_20px_rgba(0,255,65,0.2)]" id="ptt-button">
 <span class="material-symbols-outlined text-2xl text-primary-container active:text-on-primary-container" data-icon="mic" id="ptt-icon" style="font-variation-settings: 'FILL' 1;">mic</span>
 </button>
-<div class="flex gap-4">
-<a class="flex flex-col items-center justify-center text-gray-500 hover:text-[#00FF41] transition-all" href="#">
+<div class="absolute top-14 text-[9px] text-[#00FF41] font-headline uppercase truncate w-32 text-center opacity-0 transition-opacity" id="ptt-transcript">LISTENING...</div>
+</div>
+<div class="flex gap-6">
+<a class="flex flex-col items-center justify-center text-gray-500 hover:text-[#00FF41]" href="#">
 <span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
 <span class="font-label text-[8px] uppercase font-black tracking-tighter">Alerts</span>
 </a>
-<a class="flex flex-col items-center justify-center text-gray-500 hover:text-[#00FF41] transition-all" href="#">
+<a class="flex flex-col items-center justify-center text-gray-500 hover:text-[#00FF41]" href="#">
 <span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
 <span class="font-label text-[8px] uppercase font-black tracking-tighter">Setup</span>
 </a>
 </div>
 </nav>
-<!-- SYSTEM OVERLAY GRADIENT (DECORATIVE) -->
+<!-- GRID OVERLAY -->
 <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-[100]" style="background-image: radial-gradient(#00FF41 1px, transparent 1px); background-size: 20px 20px;"></div>
 <script>
-    const ROLES = ['FOH', 'BOH', 'MICS', 'TECH', 'LD'];
+    const ROLES = ['FOH', 'BOH', 'MICS', 'CUSTOM'];
     let socket;
+    let session = JSON.parse(localStorage.getItem('av_comm_session') || '{}');
     
-    function initApp() {
-        const saved = JSON.parse(localStorage.getItem('av_comm_config') || '{}');
-        const config = {
-            role: saved.role || 'FOH',
-            sessionId: saved.id,
-            pin: saved.pin,
-            channels: saved.channels || 12
-        };
+    const grid = document.getElementById('channel-grid');
+    const roleEl = document.getElementById('header-role');
+    const idEl = document.getElementById('header-id');
+    const pinEl = document.getElementById('header-pin');
+    const sessionDisplay = document.getElementById('session-display');
 
-        // Initialize Header Role
-        document.getElementById('header-role').textContent = config.role;
+    function initSocket() {
+        if (!session.id) {
+            console.error("No session found in localStorage");
+            return;
+        }
 
-        // Socket Connection
         socket = io("https://av-comm-server-production.up.railway.app");
 
         socket.on('connect', () => {
-            console.log('Connected to server');
-            socket.emit('join_room', { roomID: config.sessionId, pin: config.pin, role: config.role });
+            socket.emit('join_room', { 
+                roomID: session.id, 
+                pin: session.pin, 
+                role: session.role || 'FOH' 
+            });
         });
 
         socket.on('joined_success', (data) => {
-            // Populate ID and PIN from config/server response
-            document.getElementById('header-id').textContent = data.roomID;
-            document.getElementById('header-pin').textContent = config.pin;
-            document.getElementById('session-display').textContent = `SESSION: ${data.roomID}`;
+            idEl.textContent = data.roomID;
+            pinEl.textContent = session.pin;
+            roleEl.textContent = session.role || 'FOH';
+            sessionDisplay.textContent = `SESSION: ${data.roomID}`;
+            renderGrid(data.channels || 12);
         });
 
-        // Role Toggle Logic
-        document.getElementById('role-toggle').addEventListener('click', () => {
-            let currentRole = document.getElementById('header-role').textContent;
-            let nextIndex = (ROLES.indexOf(currentRole) + 1) % ROLES.length;
-            let nextRole = ROLES[nextIndex];
-            
-            document.getElementById('header-role').textContent = nextRole;
-            
-            // Update saved config
-            saved.role = nextRole;
-            localStorage.setItem('av_comm_config', JSON.stringify(saved));
-            
-            // Re-sync with server
-            if (socket && socket.connected) {
-                socket.emit('join_room', { roomID: config.sessionId, pin: config.pin, role: nextRole });
-            }
-            
-            // Visual feedback
-            const btn = document.getElementById('role-toggle');
-            btn.classList.add('border-primary-container');
-            setTimeout(() => btn.classList.remove('border-primary-container'), 300);
-        });
-
-        // PTT Logic (Voice to Text Placeholder)
-        const pttBtn = document.getElementById('ptt-button');
-        const pttIcon = document.getElementById('ptt-icon');
-        
-        let recognition;
-        if ('webkitSpeechRecognition' in window) {
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = true;
-            
-            recognition.onresult = (event) => {
-                const transcript = event.results[event.results.length-1][0].transcript;
-                console.log('Voice Command:', transcript);
-            };
-        }
-
-        pttBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            pttBtn.classList.add('bg-primary-container');
-            pttIcon.classList.add('text-on-primary-container');
-            if (recognition) recognition.start();
-            if (socket) socket.emit('ptt_active', true);
-        });
-
-        pttBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            pttBtn.classList.remove('bg-primary-container');
-            pttIcon.classList.remove('text-on-primary-container');
-            if (recognition) recognition.stop();
-            if (socket) socket.emit('ptt_active', false);
+        socket.on('channel_update', (data) => {
+            updateChannelUI(data.channelId, data.status);
         });
     }
 
-    // Run on load
-    window.addEventListener('DOMContentLoaded', initApp);
+    function renderGrid(count) {
+        grid.innerHTML = '';
+        for (let i = 1; i <= count; i++) {
+            const chId = i.toString().padStart(2, '0');
+            const btn = document.createElement('button');
+            btn.className = `channel-btn state-idle bg-[#201f1f] rounded-sm p-2 flex flex-col justify-between items-start border-l-4 relative overflow-hidden active:scale-[0.98] transition-all min-h-0`;
+            btn.id = `ch-${chId}`;
+            
+            btn.innerHTML = `
+                <div class="w-full flex justify-between items-start">
+                    <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH ${chId}</span>
+                    <span class="status-tag text-[7px] font-black px-1 rounded-sm uppercase bg-black/40" id="tag-${chId}">IDLE</span>
+                </div>
+                <h2 class="ch-name font-headline font-bold text-base text-on-surface leading-none uppercase truncate w-full text-left" id="name-${chId}">CHANNEL ${chId}</h2>
+            `;
+
+            // Interaction Logic: Single tap READY, Double tap ALERT
+            let timer = null;
+            btn.addEventListener('click', () => {
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                    handleStatusChange(chId, 'ALERT');
+                } else {
+                    timer = setTimeout(() => {
+                        handleStatusChange(chId, 'READY');
+                        timer = null;
+                    }, 250);
+                }
+            });
+
+            grid.appendChild(btn);
+        }
+    }
+
+    function handleStatusChange(id, status) {
+        if (socket) socket.emit('update_status', { channelId: id, status: status });
+        updateChannelUI(id, status);
+    }
+
+    function updateChannelUI(id, status) {
+        const btn = document.getElementById(`ch-${id}`);
+        const tag = document.getElementById(`tag-${id}`);
+        const name = document.getElementById(`name-${id}`);
+        if (!btn) return;
+
+        btn.classList.remove('state-ready', 'state-alert', 'state-idle');
+        tag.classList.remove('text-primary-container', 'text-secondary-container', 'text-on-surface-variant');
+        name.classList.remove('text-primary-fixed', 'text-secondary-fixed', 'text-on-surface');
+
+        if (status === 'READY') {
+            btn.classList.add('state-ready');
+            tag.classList.add('text-primary-container');
+            tag.textContent = 'READY';
+            name.classList.add('text-primary-fixed');
+        } else if (status === 'ALERT') {
+            btn.classList.add('state-alert');
+            tag.classList.add('text-secondary-container');
+            tag.textContent = 'ALERT';
+            name.classList.add('text-secondary-fixed');
+        } else {
+            btn.classList.add('state-idle');
+            tag.classList.add('text-on-surface-variant');
+            tag.textContent = 'IDLE';
+            name.classList.add('text-on-surface');
+        }
+    }
+
+    // Role Toggle Logic
+    document.getElementById('role-toggle').addEventListener('click', () => {
+        let currentRole = roleEl.textContent;
+        let nextIndex = (ROLES.indexOf(currentRole) + 1) % ROLES.length;
+        let nextRole = ROLES[nextIndex];
+        
+        session.role = nextRole;
+        localStorage.setItem('av_comm_session', JSON.stringify(session));
+        roleEl.textContent = nextRole;
+        
+        if (socket && socket.connected) {
+            socket.emit('join_room', { roomID: session.id, pin: session.pin, role: nextRole });
+        }
+    });
+
+    // PTT Voice-to-Text Logic
+    const pttBtn = document.getElementById('ptt-button');
+    const pttIcon = document.getElementById('ptt-icon');
+    const pttTranscript = document.getElementById('ptt-transcript');
     
-    // Prevent default scroll behavior for touch interface
-    document.addEventListener('touchmove', function(e) {
-        if (!e.target.closest('.scrollable')) {
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            pttTranscript.textContent = transcript;
+            pttTranscript.classList.remove('opacity-0');
+        };
+
+        recognition.onend = () => {
+            const finalMsg = pttTranscript.textContent;
+            if (finalMsg && finalMsg !== 'LISTENING...') {
+                if (socket) socket.emit('voice_message', { text: finalMsg, role: session.role });
+            }
+            setTimeout(() => {
+                pttTranscript.classList.add('opacity-0');
+                pttTranscript.textContent = 'LISTENING...';
+            }, 2000);
+        };
+    }
+
+    const startPTT = (e) => {
+        e.preventDefault();
+        pttBtn.classList.add('bg-primary-container');
+        pttIcon.classList.add('text-on-primary-container');
+        pttTranscript.classList.remove('opacity-0');
+        if (recognition) recognition.start();
+        if (socket) socket.emit('ptt_active', true);
+    };
+
+    const stopPTT = (e) => {
+        e.preventDefault();
+        pttBtn.classList.remove('bg-primary-container');
+        pttIcon.classList.remove('text-on-primary-container');
+        if (recognition) recognition.stop();
+        if (socket) socket.emit('ptt_active', false);
+    };
+
+    pttBtn.addEventListener('touchstart', startPTT);
+    pttBtn.addEventListener('touchend', stopPTT);
+    pttBtn.addEventListener('mousedown', startPTT);
+    pttBtn.addEventListener('mouseup', stopPTT);
+
+    window.addEventListener('DOMContentLoaded', initSocket);
+
+    // Prevent scroll bounce on iOS
+    document.addEventListener('touchmove', (e) => {
+        if (e.target.closest('main') === null) {
             e.preventDefault();
         }
     }, { passive: false });
