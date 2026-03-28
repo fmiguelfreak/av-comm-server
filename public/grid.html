@@ -4,59 +4,8 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <title>AV-COMM GRID | SYSTEM OPERATIONAL</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
-        // Data Handling Logic
-        const defaultData = {
-            showId: localStorage.getItem('showId') || '8821',
-            pin: localStorage.getItem('pin') || '4401',
-            role: localStorage.getItem('av_comm_role') || 'A1 - LEAD',
-            channels: parseInt(localStorage.getItem('av_comm_channels')) || 12
-        };
-
-        // Render Header Info
-        document.getElementById('display-id-pin').innerText = `ID: ${defaultData.showId} | PIN: ${defaultData.pin}`;
-        document.getElementById('display-role').innerText = defaultData.role;
-
-        // Dynamic Grid Generation
-        const grid = document.getElementById('channel-grid');
-        const channelNames = [
-            "DIRECTOR", "PRODUCER", "LIGHTING", "STAGE MGMT", 
-            "VIDEO OP", "AUDIO 1", "AUDIO 2", "VFX LEAD", 
-            "BACKSTAGE", "SECURITY", "RIGGING", "FOYER"
-        ];
-
-        function renderGrid() {
-            grid.innerHTML = '';
-            for (let i = 1; i <= defaultData.channels; i++) {
-                const isAlert = i === 2 || i === 8; // Mock alert states
-                const statusColor = isAlert ? 'bg-error' : 'bg-primary-container';
-                const textColor = isAlert ? 'text-error' : 'text-primary-container';
-                const borderColor = isAlert ? 'border-error-container' : 'border-primary-container';
-                const statusText = isAlert ? 'ALERT STATE' : 'ACTIVE LINK';
-                const icon = isAlert ? 'warning' : 'signal_cellular_alt';
-                const name = channelNames[i-1] || `CHANNEL ${i.toString().padStart(2, '0')}`;
-
-                const card = document.createElement('div');
-                card.className = `bg-surface-container-low relative flex flex-col justify-between p-3 border-l-4 ${borderColor} group hover:bg-surface-container-high transition-colors cursor-pointer active:bg-surface-container-highest`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">CH ${i.toString().padStart(2, '0')}</span>
-<span class="material-symbols-outlined ${textColor} text-lg">${icon}</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-headline font-bold text-base leading-tight text-white truncate pr-2">${name}</h3>
-<p class="font-label text-[9px] ${textColor} mt-1 opacity-80 tracking-tighter">${statusText}</p>
-</div>
-<div class="absolute top-0 right-0 w-1 h-full ${statusColor}"></div>
-                `;
-                grid.appendChild(card);
-            }
-        }
-
-        renderGrid();
-    </script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
@@ -127,7 +76,7 @@
             background-color: #131313;
             color: #e5e2e1;
             overflow: hidden;
-            height: 100vh;
+            height: 100dvh;
         }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -135,103 +84,101 @@
         .ptt-active {
             box-shadow: 0 0 25px #00ff41;
         }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        /* Ensure the grid fits without scroll */
+        #channel-grid {
+            height: calc(100dvh - 72px - 80px); /* Total minus header and footer */
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
 </head>
 <body class="flex flex-col font-body">
-<!-- TopAppBar (JSON Mapping) -->
-<header class="flex justify-between items-center w-full px-6 py-4 bg-[#131313] dark:bg-neutral-950 border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] z-50">
+<!-- TopAppBar -->
+<header class="h-[72px] flex justify-between items-center w-full px-6 bg-[#131313] border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] z-50 shrink-0">
 <div class="flex flex-col">
 <span class="font-['Space_Grotesk'] tracking-tighter uppercase font-bold text-sm text-[#00FF41]">SYSTEM OPERATIONAL</span>
 <div class="flex items-center gap-2 mt-0.5">
-<span class="font-headline font-bold text-xs tracking-widest text-neutral-400" id="display-id-pin">ID: 882-X | PIN: ****</span>
+<span class="font-headline font-bold text-xs tracking-widest text-neutral-400" id="display-id-pin">ID: ---- | PIN: ----</span>
 </div>
 </div>
 <div class="flex items-center gap-4">
-<span class="text-[#00FF41] font-headline font-black tracking-widest text-lg" id="display-role">A1 - LEAD</span>
+<button class="text-[#00FF41] font-headline font-black tracking-widest text-lg hover:opacity-80 transition-opacity uppercase text-right" id="role-toggle">
+<span id="display-role">LOADING...</span>
+</button>
 <div class="w-8 h-8 rounded-sm bg-surface-container-high border border-outline-variant flex items-center justify-center">
 <span class="material-symbols-outlined text-xs text-primary-fixed-dim">id_card</span>
 </div>
 </div>
 </header>
 <!-- Main Grid Canvas -->
-<main class="flex-1 p-3 grid grid-cols-2 gap-3 overflow-hidden" id="channel-grid">
-<!-- JS will populate these 12 modules -->
-<!-- Fallback Static Structure for UI Preview -->
-<div class="bg-surface-container-low relative flex flex-col justify-between p-3 border-l-4 border-primary-container group hover:bg-surface-container-high transition-colors">
-<div class="flex justify-between items-start">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">CH 01</span>
-<span class="material-symbols-outlined text-primary-container text-lg">signal_cellular_alt</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-headline font-bold text-lg leading-none text-white">DIRECTOR</h3>
-<p class="font-label text-[10px] text-primary-fixed-dim mt-1 opacity-80">ACTIVE LINK</p>
-</div>
-<div class="absolute top-0 right-0 w-1 h-full bg-primary-container"></div>
-</div>
-<div class="bg-surface-container-low relative flex flex-col justify-between p-3 border-l-4 border-error-container group hover:bg-surface-container-high transition-colors">
-<div class="flex justify-between items-start">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">CH 02</span>
-<span class="material-symbols-outlined text-error text-lg">error</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-headline font-bold text-lg leading-none text-white">PRODUCER</h3>
-<p class="font-label text-[10px] text-error mt-1 opacity-80">ALERT STATE</p>
-</div>
-<div class="absolute top-0 right-0 w-1 h-full bg-error"></div>
-</div>
-<!-- ... more items ... -->
+<main class="flex-1 p-3 grid grid-cols-2 grid-rows-6 gap-2 overflow-hidden" id="channel-grid">
+<!-- JS will populate these 12 modules dynamically -->
 </main>
-<!-- BottomNavBar (JSON Mapping) -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-20 bg-[#1c1b1b] shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<!-- BottomNavBar -->
+<nav class="h-20 w-full z-50 flex justify-around items-center px-4 bg-[#1c1b1b] shadow-[0_-8px_32px_rgba(0,0,0,0.5)] shrink-0">
 <button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined" data-icon="settings_remote">settings_remote</span>
+<span class="material-symbols-outlined">settings_remote</span>
 </button>
 <button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="material-symbols-outlined">analytics</span>
 </button>
 <!-- PTT CENTER ACTION -->
 <button class="flex items-center justify-center bg-[#00ff41] text-[#007117] rounded-sm scale-110 shadow-[0_0_15px_#00ff41] px-8 py-4 active:scale-95 transition-all duration-75">
-<span class="material-symbols-outlined text-3xl font-bold" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="material-symbols-outlined text-3xl font-bold" style="font-variation-settings: 'FILL' 1;">mic</span>
 </button>
 <button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="material-symbols-outlined">security</span>
 </button>
 <button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="material-symbols-outlined">terminal</span>
 </button>
 </nav>
 <script>
         // Data Handling Logic
-        const defaultData = {
+        const roles = ["A1 - LEAD", "A2 - ASSIST", "FOH", "BOH", "SYSTEMS", "PROD"];
+        
+        const state = {
             showId: localStorage.getItem('showId') || '8821',
             pin: localStorage.getItem('pin') || '4401',
             role: localStorage.getItem('av_comm_role') || 'A1 - LEAD',
             channels: parseInt(localStorage.getItem('av_comm_channels')) || 12
         };
 
-        // Render Header Info
-        document.getElementById('display-id-pin').innerText = `ID: ${defaultData.showId} | PIN: ${defaultData.pin}`;
-        document.getElementById('display-role').innerText = defaultData.role;
-
-        // Dynamic Grid Generation
+        // UI Elements
+        const displayIdPin = document.getElementById('display-id-pin');
+        const displayRole = document.getElementById('display-role');
+        const roleToggle = document.getElementById('role-toggle');
         const grid = document.getElementById('channel-grid');
+
         const channelNames = [
             "DIRECTOR", "PRODUCER", "LIGHTING", "STAGE MGMT", 
             "VIDEO OP", "AUDIO 1", "AUDIO 2", "VFX LEAD", 
             "BACKSTAGE", "SECURITY", "RIGGING", "FOYER"
         ];
 
+        // Initialization
+        function init() {
+            updateHeader();
+            renderGrid();
+            setupInteractions();
+        }
+
+        function updateHeader() {
+            displayIdPin.innerText = `ID: ${state.showId} | PIN: ${state.pin}`;
+            displayRole.innerText = state.role;
+        }
+
+        function setupInteractions() {
+            roleToggle.addEventListener('click', () => {
+                let currentIndex = roles.indexOf(state.role);
+                let nextIndex = (currentIndex + 1) % roles.length;
+                state.role = roles[nextIndex];
+                localStorage.setItem('av_comm_role', state.role);
+                updateHeader();
+            });
+        }
+
         function renderGrid() {
             grid.innerHTML = '';
-            for (let i = 1; i <= defaultData.channels; i++) {
+            for (let i = 1; i <= state.channels; i++) {
                 const isAlert = i === 2 || i === 8; // Mock alert states
                 const statusColor = isAlert ? 'bg-error' : 'bg-primary-container';
                 const textColor = isAlert ? 'text-error' : 'text-primary-container';
@@ -241,22 +188,23 @@
                 const name = channelNames[i-1] || `CHANNEL ${i.toString().padStart(2, '0')}`;
 
                 const card = document.createElement('div');
-                card.className = `bg-surface-container-low relative flex flex-col justify-between p-3 border-l-4 ${borderColor} group hover:bg-surface-container-high transition-colors cursor-pointer active:bg-surface-container-highest`;
+                // Added grid-related classes to ensure uniform sizing in the row-based grid
+                card.className = `bg-surface-container-low relative flex flex-col justify-between p-2 border-l-4 ${borderColor} group hover:bg-surface-container-high transition-colors cursor-pointer active:bg-surface-container-highest min-h-0`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">CH ${i.toString().padStart(2, '0')}</span>
-<span class="material-symbols-outlined ${textColor} text-lg">${icon}</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-headline font-bold text-base leading-tight text-white truncate pr-2">${name}</h3>
-<p class="font-label text-[9px] ${textColor} mt-1 opacity-80 tracking-tighter">${statusText}</p>
-</div>
-<div class="absolute top-0 right-0 w-1 h-full ${statusColor}"></div>
+                        <span class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-medium">CH ${i.toString().padStart(2, '0')}</span>
+                        <span class="material-symbols-outlined ${textColor} text-base">${icon}</span>
+                    </div>
+                    <div class="mt-auto">
+                        <h3 class="font-headline font-bold text-sm leading-tight text-white truncate pr-2 uppercase">${name}</h3>
+                        <p class="font-label text-[8px] ${textColor} mt-0.5 opacity-80 tracking-tighter">${statusText}</p>
+                    </div>
+                    <div class="absolute top-0 right-0 w-1 h-full ${statusColor}"></div>
                 `;
                 grid.appendChild(card);
             }
         }
 
-        renderGrid();
+        init();
     </script>
 </body></html>
