@@ -91,7 +91,7 @@
         padding: 4px;
       }
       .channel-card {
-        min-height: 0; /* Important for grid item shrinking */
+        min-height: 0;
       }
     </style>
 </head>
@@ -116,94 +116,61 @@
 </header>
 <!-- MAIN TACTICAL CANVAS (Zero Scroll Optimized) -->
 <main class="tactical-grid bg-[#1c1b1b] flex-grow" id="tactical-canvas">
-<!-- Channels will be dynamically injected here -->
+<!-- Channels dynamically injected -->
 </main>
 <!-- BOTTOM NAV BAR / PTT CONSOLE -->
 <nav class="shrink-0 w-full z-50 flex justify-around items-center px-2 pb-4 bg-[#131313] border-t border-[#3b4b37]/20 h-20">
-<!-- SYSTEM TAB -->
 <div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">settings_input_component</span>
 <span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">SYSTEM</span>
 </div>
-<!-- PATCH TAB -->
 <div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">settings_ethernet</span>
 <span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PATCH</span>
 </div>
-<!-- CENTRAL PTT BUTTON (PTT TAB ACTIVE) -->
+<!-- CENTRAL PTT BUTTON -->
 <div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 scale-110 shadow-[0_0_20px_rgba(0,255,65,0.4)] active:scale-100 transition-all cursor-pointer">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
 <span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PTT</span>
 </div>
-<!-- COMMS TAB -->
 <div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">hub</span>
 <span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">COMMS</span>
 </div>
-<!-- LOGS TAB -->
 <div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">list_alt</span>
 <span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">LOGS</span>
 </div>
 </nav>
-<!-- Overlay Signal / Alert State (Ghost) -->
 <div class="fixed inset-0 pointer-events-none border-4 border-primary-container/10 z-[60]"></div>
 <script>
-    const SERVER_URL = 'https://av-comm-server-production.up.railway.app';
-    const ROLES = ['FOH', 'STAGE', 'MON', 'LD', 'PROD', 'TECH'];
-    let currentRoleIndex = 0;
-    let config = {
-        id: '8829',
-        pin: '4492',
-        role: 'FOH',
-        channels: [
-            { id: '01', name: 'STAGE_LEFT', status: 'READY', active: true },
-            { id: '02', name: 'STAGE_RIGHT', status: 'STANDBY', active: false },
-            { id: '03', name: 'DIRECTOR_W', status: 'ALERT', active: true, color: 'secondary-container' },
-            { id: '04', name: 'PRODUCER', status: 'IDLE', active: false },
-            { id: '05', name: 'LIGHTING_1', status: 'READY', active: true },
-            { id: '06', name: 'VIDEO_WALL', status: 'IDLE', active: false },
-            { id: '07', name: 'RIGGING_M', status: 'IDLE', active: false },
-            { id: '08', name: 'SPOT_01', status: 'READY', active: true },
-            { id: '09', name: 'SPOT_02', status: 'IDLE', active: false },
-            { id: '10', name: 'PYRO_SAFE', status: 'IDLE', active: false },
-            { id: '11', name: 'SYSTEM_ERR', status: 'EMERGENCY', active: true, color: 'error-container' },
-            { id: '12', name: 'SPARE_LINE', status: 'IDLE', active: false }
-        ]
-    };
-
-    function loadConfig() {
-        const stored = localStorage.getItem('av_comm_config');
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored);
-                config = { ...config, ...parsed };
-                currentRoleIndex = ROLES.indexOf(config.role);
-                if (currentRoleIndex === -1) currentRoleIndex = 0;
-            } catch (e) { console.error("Config parse error", e); }
-        }
-        updateHeader();
-        renderChannels();
-    }
-
-    function saveConfig() {
-        localStorage.setItem('av_comm_config', JSON.stringify(config));
-    }
-
-    function updateHeader() {
-        document.getElementById('role-display').textContent = config.role;
-        document.getElementById('id-display').textContent = config.id;
-        document.getElementById('pin-display').textContent = config.pin;
-    }
+    const socket = io();
+    const session = JSON.parse(localStorage.getItem('av_session') || '{}');
+    
+    // Default channels if none provided in session
+    const defaultChannels = [
+        { id: '01', name: 'STAGE_LEFT', status: 'READY', active: true },
+        { id: '02', name: 'STAGE_RIGHT', status: 'STANDBY', active: false },
+        { id: '03', name: 'DIRECTOR_W', status: 'ALERT', active: true, color: 'secondary-container' },
+        { id: '04', name: 'PRODUCER', status: 'IDLE', active: false },
+        { id: '05', name: 'LIGHTING_1', status: 'READY', active: true },
+        { id: '06', name: 'VIDEO_WALL', status: 'IDLE', active: false },
+        { id: '07', name: 'RIGGING_M', status: 'IDLE', active: false },
+        { id: '08', name: 'SPOT_01', status: 'READY', active: true },
+        { id: '09', name: 'SPOT_02', status: 'IDLE', active: false },
+        { id: '10', name: 'PYRO_SAFE', status: 'IDLE', active: false },
+        { id: '11', name: 'SYSTEM_ERR', status: 'EMERGENCY', active: true, color: 'error-container' },
+        { id: '12', name: 'SPARE_LINE', status: 'IDLE', active: false }
+    ];
 
     function renderChannels() {
         const canvas = document.getElementById('tactical-canvas');
         canvas.innerHTML = '';
         
-        // Always enforce 12 slots for the zero-scroll grid layout
-        const displayChannels = config.channels.slice(0, 12);
+        // Use session channels or default, limit to 12 for grid alignment
+        const channels = (session.channels || defaultChannels).slice(0, 12);
         
-        displayChannels.forEach(ch => {
+        channels.forEach(ch => {
             const card = document.createElement('div');
             const borderColor = ch.color ? `border-${ch.color}` : (ch.active ? 'border-primary-container' : 'border-outline-variant');
             const textColor = ch.color ? `text-${ch.color.split('-')[0]}` : (ch.active ? 'text-primary-container' : 'text-on-surface');
@@ -220,9 +187,13 @@
                     <span class="font-label text-[9px] uppercase tracking-wider text-on-surface-variant truncate">${ch.name}</span>
                     <div class="h-1 w-full ${barColor}"></div>
                 </div>
-                ${ch.status === 'READY' || ch.status === 'ALERT' ? `
+                ${ch.status === 'READY' || ch.status === 'ALERT' || ch.status === 'EMERGENCY' ? `
                     <div class="absolute bottom-1 right-1">
-                        <span class="text-[8px] font-bold px-1 rounded-sm ${ch.status === 'ALERT' ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-container text-on-primary-container'}">${ch.status}</span>
+                        <span class="text-[8px] font-bold px-1 rounded-sm ${
+                            ch.status === 'ALERT' ? 'bg-secondary-container text-on-secondary-container' : 
+                            ch.status === 'EMERGENCY' ? 'bg-error-container text-on-error-container' : 
+                            'bg-primary-container text-on-primary-container'
+                        }">${ch.status}</span>
                     </div>
                 ` : ''}
             `;
@@ -230,54 +201,61 @@
         });
     }
 
-    // Interactive Role Switching
-    document.getElementById('header-auth-trigger').addEventListener('click', () => {
-        currentRoleIndex = (currentRoleIndex + 1) % ROLES.length;
-        config.role = ROLES[currentRoleIndex];
-        updateHeader();
-        saveConfig();
-        
-        // Notify server of role change if connected
-        if (socket && socket.connected) {
-            socket.emit('join_room', { 
-                room: config.id, 
-                pin: config.pin, 
-                role: config.role 
-            });
-        }
-    });
-
-    // Socket Connection
-    let socket;
-    function initSocket() {
-        socket = io(SERVER_URL);
-        const indicator = document.getElementById('status-indicator');
-
-        socket.on('connect', () => {
-            indicator.className = "w-2.5 h-2.5 rounded-full bg-primary-container shadow-[0_0_8px_#00FF41]";
-            socket.emit('join_room', { 
-                room: config.id, 
-                pin: config.pin, 
-                role: config.role 
-            });
-        });
-
-        socket.on('joined_success', (data) => {
-            console.log('Successfully joined:', data);
-            // Flash indicator
-            indicator.classList.add('animate-pulse');
-            setTimeout(() => indicator.classList.remove('animate-pulse'), 1000);
-        });
-
-        socket.on('disconnect', () => {
-            indicator.className = "w-2.5 h-2.5 rounded-full bg-error shadow-[0_0_8px_#ffb4ab]";
-        });
+    function updateHeader() {
+        document.getElementById('role-display').textContent = session.role || 'FOH';
+        document.getElementById('id-display').textContent = session.roomID || '----';
+        document.getElementById('pin-display').textContent = session.pin || '----';
     }
 
-    // Initialize
+    // Initialize Socket Connection
+    const indicator = document.getElementById('status-indicator');
+    
+    socket.on('connect', () => {
+        indicator.className = "w-2.5 h-2.5 rounded-full bg-primary-container shadow-[0_0_8px_#00FF41]";
+        socket.emit('join_room', { 
+            roomID: session.roomID, 
+            pin: session.pin, 
+            role: session.role || 'FOH' 
+        });
+    });
+
+    socket.on('joined_success', (data) => {
+        // Sync display from data if provided, else use session
+        if (data && data.roomID) session.roomID = data.roomID;
+        if (data && data.pin) session.pin = data.pin;
+        
+        updateHeader();
+        renderChannels();
+        
+        indicator.classList.add('animate-pulse');
+        setTimeout(() => indicator.classList.remove('animate-pulse'), 1000);
+    });
+
+    socket.on('disconnect', () => {
+        indicator.className = "w-2.5 h-2.5 rounded-full bg-error shadow-[0_0_8px_#ffb4ab]";
+    });
+
+    // Initialize View
     window.addEventListener('load', () => {
-        loadConfig();
-        initSocket();
+        updateHeader();
+        renderChannels();
+    });
+
+    // Handle Manual Role Toggle (Optional UI preservation)
+    document.getElementById('header-auth-trigger').addEventListener('click', () => {
+        const roles = ['FOH', 'STAGE', 'MON', 'LD', 'PROD', 'TECH'];
+        let currentIdx = roles.indexOf(session.role || 'FOH');
+        session.role = roles[(currentIdx + 1) % roles.length];
+        localStorage.setItem('av_session', JSON.stringify(session));
+        updateHeader();
+        
+        if (socket.connected) {
+            socket.emit('join_room', { 
+                roomID: session.roomID, 
+                pin: session.pin, 
+                role: session.role 
+            });
+        }
     });
 </script>
 </body></html>
