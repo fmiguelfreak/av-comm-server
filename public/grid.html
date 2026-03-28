@@ -5,8 +5,8 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <title>AV-COMM Tactical Grid</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
       tailwind.config = {
@@ -16,51 +16,13 @@
             colors: {
               "primary-fixed-dim": "#00e639",
               "primary-container": "#00ff41",
-              "outline": "#84967e",
-              "on-secondary-fixed": "#2e1500",
-              "on-tertiary-container": "#b82a00",
-              "secondary-container": "#fd9000",
-              "on-primary-container": "#007117",
-              "tertiary": "#fff8f6",
-              "tertiary-container": "#ffd3c8",
-              "surface-container-low": "#1c1b1b",
               "background": "#131313",
-              "error": "#ffb4ab",
-              "surface-variant": "#353534",
-              "secondary-fixed-dim": "#ffb778",
+              "surface-container-low": "#1c1b1b",
               "surface-container-high": "#2a2a2a",
-              "on-background": "#e5e2e1",
-              "primary": "#ebffe2",
-              "on-error": "#690005",
-              "inverse-on-surface": "#313030",
-              "secondary": "#ffb778",
-              "outline-variant": "#3b4b37",
-              "inverse-primary": "#006e16",
-              "on-secondary": "#4c2700",
-              "surface-container": "#201f1f",
-              "surface-bright": "#393939",
-              "primary-fixed": "#72ff70",
-              "on-secondary-container": "#613400",
-              "on-surface-variant": "#b9ccb2",
-              "error-container": "#93000a",
-              "on-tertiary-fixed-variant": "#8a1d00",
-              "surface-container-lowest": "#0e0e0e",
-              "on-primary-fixed-variant": "#00530e",
-              "surface-tint": "#00e639",
-              "surface": "#131313",
-              "on-secondary-fixed-variant": "#6c3a00",
-              "surface-dim": "#131313",
               "on-surface": "#e5e2e1",
-              "inverse-surface": "#e5e2e1",
-              "surface-container-highest": "#353534",
-              "tertiary-fixed-dim": "#ffb4a2",
-              "secondary-fixed": "#ffdcc1",
-              "on-tertiary": "#621100",
-              "on-primary": "#003907",
-              "on-error-container": "#ffdad6",
-              "on-primary-fixed": "#002203",
-              "on-tertiary-fixed": "#3c0700",
-              "tertiary-fixed": "#ffdad2"
+              "outline-variant": "#3b4b37",
+              "secondary-container": "#fd9000",
+              "error": "#ffb4ab",
             },
             fontFamily: {
               "headline": ["Space Grotesk"],
@@ -79,202 +41,199 @@
       body {
         overscroll-behavior: none;
         background-color: #131313;
+        height: 100dvh;
+        overflow: hidden;
       }
       .tactical-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(6, 1fr);
-        height: calc(100vh - 4rem - 5rem); /* viewport minus TopAppBar and BottomNavBar */
+        height: calc(100dvh - 4rem - 5rem);
         gap: 0.5rem;
         padding: 0.5rem;
       }
+      .channel-card {
+        transition: all 0.1s ease;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .channel-card:active {
+        background-color: #353534;
+      }
+      .state-ready { border-left-color: #00ff41 !important; }
+      .state-ready .status-bar { background-color: #00ff41; box-shadow: 0 0 10px rgba(0,255,65,0.4); }
+      .state-ready .ch-label { color: #00ff41; }
+      
+      .state-alert { border-left-color: #fd9000 !important; }
+      .state-alert .status-bar { background-color: #fd9000; box-shadow: 0 0 10px rgba(253,144,0,0.4); }
+      .state-alert .ch-label { color: #fd9000; }
+
+      #message-popup {
+        transform: translateY(100px);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      #message-popup.show {
+        transform: translateY(0);
+      }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="font-body text-on-surface bg-background select-none">
+</head>
+<body class="font-body text-on-surface bg-background">
 <!-- TOP APP BAR -->
-<header class="w-full border-t-4 border-[#00FF41] bg-[#131313] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-6 h-16 w-full sticky top-0 z-50">
+<header class="w-full border-t-4 border-[#00FF41] bg-[#131313] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-6 h-16 sticky top-0 z-50">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-[#00FF41]">terminal</span>
 <span class="font-headline font-bold text-xl tracking-tighter text-[#00FF41]">ST-AUTHORITY</span>
 </div>
-<!-- Role | ID | PIN Trigger -->
-<button class="flex flex-col items-end font-headline uppercase tracking-widest text-sm text-[#00FF41] hover:bg-[#2a2a2a] transition-colors p-1 rounded-sm active:scale-95 duration-75">
+<button class="flex flex-col items-end font-headline uppercase tracking-widest text-sm text-[#00FF41] hover:bg-[#2a2a2a] transition-colors p-1 rounded-sm active:scale-95 duration-75" id="header-config-trigger">
 <div class="flex items-center gap-2">
-<div class="w-2 h-2 rounded-full bg-[#00FF41] shadow-[0_0_8px_#00FF41]"></div>
-<span id="role-display">FOH | 8829 | 4492</span>
+<div class="w-2 h-2 rounded-full bg-neutral-600" id="connection-indicator"></div>
+<span id="header-info-display">OFFLINE</span>
 </div>
-<span class="text-[10px] opacity-60">ID: 992-PX</span>
+<span class="text-[10px] opacity-60" id="header-id-display">--</span>
 </button>
 </header>
-<!-- MAIN TACTICAL CANVAS (Zero Scroll Optimized) -->
-<main class="tactical-grid bg-[#1c1b1b]">
-<!-- Channel 01 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-primary-container">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-primary-container">CH 01</span>
-<span class="text-[10px] font-label text-outline opacity-50">VOX-ACTIVE</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">STAGE_LEFT</span>
-<div class="h-1 w-full bg-[#00FF41] shadow-[0_0_10px_rgba(0,255,65,0.4)]"></div>
-</div>
-<div class="absolute bottom-2 right-2">
-<span class="text-[10px] font-bold text-on-primary-container bg-primary-container px-1 rounded-sm">READY</span>
-</div>
-</div>
-<!-- Channel 02 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-on-surface">CH 02</span>
-<span class="text-[10px] font-label text-outline opacity-50">STANDBY</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">STAGE_RIGHT</span>
-<div class="h-1 w-full bg-outline-variant/30"></div>
-</div>
-</div>
-<!-- Channel 03 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-secondary-container">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-secondary-container">CH 03</span>
-<span class="text-[10px] font-label text-outline opacity-50">PRIORITY</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">DIRECTOR_W</span>
-<div class="h-1 w-full bg-secondary-container"></div>
-</div>
-<div class="absolute bottom-2 right-2">
-<span class="text-[10px] font-bold text-on-secondary-container bg-secondary-container px-1 rounded-sm">ALERT</span>
-</div>
-</div>
-<!-- Channel 04 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-on-surface">CH 04</span>
-<span class="text-[10px] font-label text-outline opacity-50">IDLE</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">PRODUCER</span>
-<div class="h-1 w-full bg-outline-variant/30"></div>
-</div>
-</div>
-<!-- Channel 05 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-primary-container">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-primary-container">CH 05</span>
-<span class="text-[10px] font-label text-outline opacity-50">VOX-ACTIVE</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">LIGHTING_1</span>
-<div class="h-1 w-full bg-[#00FF41]"></div>
-</div>
-</div>
-<!-- Channel 06 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-on-surface">CH 06</span>
-<span class="text-[10px] font-label text-outline opacity-50">IDLE</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">VIDEO_WALL</span>
-<div class="h-1 w-full bg-outline-variant/30"></div>
-</div>
-</div>
-<!-- Channel 07 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-on-surface">CH 07</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">RIGGING_M</span>
-<div class="h-1 w-full bg-outline-variant/30"></div>
-</div>
-</div>
-<!-- Channel 08 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-primary-container">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-primary-container">CH 08</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SPOT_01</span>
-<div class="h-1 w-full bg-[#00FF41]"></div>
-</div>
-</div>
-<!-- Channel 09 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-on-surface">CH 09</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SPOT_02</span>
-<div class="h-1 w-full bg-outline-variant/30"></div>
-</div>
-</div>
-<!-- Channel 10 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-on-surface">CH 10</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">PYRO_SAFE</span>
-<div class="h-1 w-full bg-outline-variant/30"></div>
-</div>
-</div>
-<!-- Channel 11 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-error-container">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-error">CH 11</span>
-<span class="text-[10px] font-label text-error opacity-70">EMERGENCY</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SYSTEM_ERR</span>
-<div class="h-1 w-full bg-error animate-pulse"></div>
-</div>
-</div>
-<!-- Channel 12 -->
-<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="font-headline text-lg font-bold text-on-surface">CH 12</span>
-</div>
-<div class="flex flex-col gap-1">
-<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SPARE_LINE</span>
-<div class="h-1 w-full bg-outline-variant/30"></div>
-</div>
-</div>
+<!-- MAIN TACTICAL CANVAS -->
+<main class="tactical-grid bg-[#1c1b1b]" id="grid-container">
+<!-- Channels 01-12 generated by JS -->
 </main>
-<!-- BOTTOM NAV BAR / PTT CONSOLE -->
+<!-- BOTTOM NAV BAR -->
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-4 bg-[#131313] border-t border-[#3b4b37]/20 h-20">
-<!-- SYSTEM TAB -->
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
 <span class="material-symbols-outlined">settings_input_component</span>
-<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">SYSTEM</span>
+<span class="font-bold text-[10px] tracking-widest uppercase">SYSTEM</span>
 </div>
-<!-- PATCH TAB -->
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
 <span class="material-symbols-outlined">settings_ethernet</span>
-<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PATCH</span>
+<span class="font-bold text-[10px] tracking-widest uppercase">PATCH</span>
 </div>
-<!-- CENTRAL PTT BUTTON (PTT TAB ACTIVE) -->
-<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 scale-110 shadow-[0_0_20px_rgba(0,255,65,0.4)] active:scale-100 transition-all cursor-pointer">
+<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 scale-110 shadow-[0_0_20px_rgba(0,255,65,0.4)] active:scale-100 transition-all cursor-pointer" id="ptt-btn">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
-<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PTT</span>
+<span class="font-bold text-[10px] tracking-widest uppercase">PTT</span>
 </div>
-<!-- COMMS TAB -->
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
 <span class="material-symbols-outlined">hub</span>
-<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">COMMS</span>
+<span class="font-bold text-[10px] tracking-widest uppercase">COMMS</span>
 </div>
-<!-- LOGS TAB -->
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
 <span class="material-symbols-outlined">list_alt</span>
-<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">LOGS</span>
+<span class="font-bold text-[10px] tracking-widest uppercase">LOGS</span>
 </div>
 </nav>
-<!-- Overlay Signal / Alert State (Ghost) -->
-<div class="fixed inset-0 pointer-events-none border-4 border-primary-container/10 z-[60]"></div>
+<!-- Message Popup -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] bg-primary-container text-on-primary-container px-4 py-2 rounded-sm font-bold shadow-lg flex items-center gap-2 pointer-events-none" id="message-popup">
+<span class="material-symbols-outlined">notifications_active</span>
+<span>NEW MESSAGE RECEIVED</span>
+</div>
+<script>
+    // 1. Session & Config Initialization
+    let session = JSON.parse(localStorage.getItem('av_comm_session') || '{"roomID":"MAIN_HUB","pin":"4492","role":"FOH","userID":"8829"}');
+    const roles = ['FOH', 'BOH', 'MICS', 'CUSTOM'];
+    const channelNames = ["STAGE_L", "STAGE_R", "DIRECTOR", "PRODUCER", "LIGHTS_1", "VIDEO", "RIGGING", "SPOT_01", "SPOT_02", "PYRO", "SYS_ERR", "SPARE"];
+    
+    // 2. DOM Elements
+    const gridContainer = document.getElementById('grid-container');
+    const headerInfo = document.getElementById('header-info-display');
+    const headerId = document.getElementById('header-id-display');
+    const connIndicator = document.getElementById('connection-indicator');
+    const pttBtn = document.getElementById('ptt-btn');
+    const msgPopup = document.getElementById('message-popup');
+
+    // 3. Socket Connection
+    const socket = io('https://av-comm-server-production.up.railway.app');
+
+    socket.on('connect', () => {
+        connIndicator.classList.remove('bg-neutral-600', 'bg-red-500');
+        connIndicator.classList.add('bg-[#00FF41]', 'shadow-[0_0_8px_#00FF41]');
+        socket.emit('join_room', session);
+    });
+
+    socket.on('joined_success', (data) => {
+        updateHeader();
+    });
+
+    socket.on('new_message', () => {
+        msgPopup.classList.add('show');
+        setTimeout(() => msgPopup.classList.remove('show'), 3000);
+    });
+
+    // 4. Grid Rendering
+    function renderGrid() {
+        gridContainer.innerHTML = '';
+        for (let i = 1; i <= 12; i++) {
+            const ch = document.createElement('div');
+            ch.className = `channel-card bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant`;
+            ch.dataset.id = i;
+            ch.innerHTML = `
+                <div class="flex justify-between items-start pointer-events-none">
+                    <span class="ch-label font-headline text-lg font-bold">CH ${i.toString().padStart(2, '0')}</span>
+                    <span class="status-text text-[10px] font-label text-outline opacity-50 uppercase">IDLE</span>
+                </div>
+                <div class="flex flex-col gap-1 pointer-events-none">
+                    <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">${channelNames[i-1]}</span>
+                    <div class="status-bar h-1 w-full bg-outline-variant/30"></div>
+                </div>
+            `;
+            
+            // Handshake Logic (Multi-tap)
+            let tapCount = 0;
+            let tapTimer = null;
+
+            ch.addEventListener('pointerdown', (e) => {
+                tapCount++;
+                if (tapTimer) clearTimeout(tapTimer);
+                
+                tapTimer = setTimeout(() => {
+                    const state = tapCount === 1 ? 'READY' : 'ALERT';
+                    updateChannelState(ch, state);
+                    socket.emit('update_channel', { channel: i, state: state, user: session.userID });
+                    tapCount = 0;
+                }, 250);
+            });
+            
+            gridContainer.appendChild(ch);
+        }
+    }
+
+    function updateChannelState(el, state) {
+        el.classList.remove('state-ready', 'state-alert');
+        const statusText = el.querySelector('.status-text');
+        
+        if (state === 'READY') {
+            el.classList.add('state-ready');
+            statusText.innerText = 'READY';
+        } else if (state === 'ALERT') {
+            el.classList.add('state-alert');
+            statusText.innerText = 'ALERT';
+        }
+    }
+
+    // 5. Header Logic
+    function updateHeader() {
+        headerInfo.innerText = `${session.role} | ${session.userID} | ${session.pin}`;
+        headerId.innerText = `ID: ${session.roomID}`;
+    }
+
+    document.getElementById('header-config-trigger').addEventListener('click', () => {
+        const currentIdx = roles.indexOf(session.role);
+        session.role = roles[(currentIdx + 1) % roles.length];
+        localStorage.setItem('av_comm_session', JSON.stringify(session));
+        updateHeader();
+        socket.emit('update_role', { role: session.role, userID: session.userID });
+    });
+
+    // 6. PTT (Mock)
+    pttBtn.addEventListener('pointerdown', () => {
+        pttBtn.classList.add('brightness-125');
+        // socket.emit('ptt_start');
+    });
+    pttBtn.addEventListener('pointerup', () => {
+        pttBtn.classList.remove('brightness-125');
+        // socket.emit('ptt_stop');
+    });
+
+    // Initial Load
+    renderGrid();
+    updateHeader();
+
+</script>
 </body></html>
