@@ -2,214 +2,215 @@
 
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>STAGE_TECH_AUTH // SIGNAL &amp; STEEL</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AV-COMM | STAGE_TECH_AUTH</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#00FF41",
-                        "signal": "#00FF41",
-                        "steel": "#4b5563",
-                        "on-primary": "#000000",
-                        "background": "#050505",
-                        "surface": "#0a0a0a",
-                        "surface-variant": "#1a1a1a",
-                        "outline": "#333333"
-                    },
-                    fontFamily: {
-                        "headline": ["Space Grotesk"],
-                        "body": ["Inter"]
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-primary": "#006e16",
+              "tertiary-fixed": "#ffdad2",
+              "surface-container": "#201f1f",
+              "surface": "#131313",
+              "primary": "#ebffe2",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "surface-dim": "#131313",
+              "error-container": "#93000a",
+              "on-primary-fixed": "#002203",
+              "secondary": "#ffb778",
+              "inverse-surface": "#e5e2e1",
+              "on-tertiary-container": "#b82a00",
+              "tertiary": "#fff8f6",
+              "surface-tint": "#00e639",
+              "surface-container-high": "#2a2a2a",
+              "outline": "#84967e",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "primary-container": "#00ff41",
+              "on-tertiary-fixed": "#3c0700",
+              "on-background": "#e5e2e1",
+              "surface-variant": "#353534",
+              "primary-fixed": "#72ff70",
+              "surface-container-lowest": "#0e0e0e",
+              "secondary-fixed-dim": "#ffb778",
+              "primary-fixed-dim": "#00e639",
+              "error": "#ffb4ab",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "surface-bright": "#393939",
+              "surface-container-low": "#1c1b1b",
+              "on-secondary": "#4c2700",
+              "on-primary-container": "#007117",
+              "background": "#131313",
+              "secondary-fixed": "#ffdcc1",
+              "on-error-container": "#ffdad6",
+              "on-primary-fixed-variant": "#00530e",
+              "outline-variant": "#3b4b37",
+              "secondary-container": "#fd9000",
+              "on-tertiary": "#621100",
+              "inverse-on-surface": "#313030",
+              "surface-container-highest": "#353534",
+              "tertiary-container": "#ffd3c8",
+              "on-surface": "#e5e2e1",
+              "on-surface-variant": "#b9ccb2",
+              "on-primary": "#003907",
+              "on-secondary-fixed": "#2e1500",
+              "on-secondary-container": "#613400",
+              "on-error": "#690005"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
     </script>
 <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        body { overflow-x: hidden; min-height: 100vh; background-color: #050505; }
-        .tactical-glow { box-shadow: 0 0 15px rgba(0, 255, 65, 0.15); }
-        .neon-border { border: 1px solid #333333; transition: all 0.2s ease; }
-        .neon-border:focus-within { border-color: #00FF41; box-shadow: 0 0 8px rgba(0, 255, 65, 0.2); }
-        .steel-divider { height: 1px; background: linear-gradient(90deg, transparent, #4b5563, transparent); }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-        .status-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-        .loading-shimmer { background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        .glow-signal {
+            box-shadow: 0 0 20px rgba(0, 230, 57, 0.15);
+        }
     </style>
-</head>
-<body class="bg-background text-signal font-body select-none pb-24">
-<!-- Top Bar -->
-<header class="fixed top-0 left-0 w-full h-16 bg-background border-b border-outline z-50 flex items-center justify-between px-6">
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Anchor (Shared Component) -->
+<header class="bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-wider text-sm docked full-width top-0 border-t-4 border-[#00FF41] bg-[#1c1b1b] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-4 h-14 w-full z-50">
 <div class="flex items-center gap-3">
-<div class="w-2 h-2 rounded-full bg-signal status-pulse"></div>
-<h1 class="font-headline font-bold tracking-[0.2em] text-sm uppercase">Stage_Tech_Auth</h1>
+<span class="material-symbols-outlined text-[#00FF41]">security</span>
+<h1 class="font-bold text-[#00FF41] tracking-tighter text-xl">STAGE_TECH_AUTH</h1>
 </div>
-<div class="flex items-center gap-4 text-steel">
-<span class="material-symbols-outlined text-sm" data-icon="hub">hub</span>
-<span class="font-headline text-[10px] font-bold tracking-widest">OPS-9</span>
+<div class="hidden md:flex items-center gap-6">
+<span class="text-[#00FF41] font-bold">SESSION: 992-ALPHA</span>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<span class="text-[#3b4b37]">ROLE: LEAD_TECH</span>
 </div>
 </header>
-<main class="pt-24 px-6 max-w-md mx-auto space-y-8">
-<!-- Protocol 01: Create -->
-<section class="space-y-4" id="create-section">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="text-[10px] font-bold text-steel tracking-tighter uppercase">P_01</span>
-<h2 class="font-headline font-bold text-lg uppercase tracking-tight text-white">Initialize Show</h2>
+<!-- Main Command Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center p-6 md:p-12 space-y-12 max-w-7xl mx-auto w-full">
+<!-- System Status Decorative Banner -->
+<div class="w-full text-left border-l-4 border-primary-fixed pl-4 mb-8">
+<p class="font-headline text-label-md uppercase tracking-[0.2em] text-primary-fixed-dim">Status: Ready for Uplink</p>
+<h2 class="font-headline text-3xl md:text-5xl font-extrabold tracking-tighter text-on-surface">AV-COMM TACTICAL INTERFACE</h2>
+</div>
+<!-- Two-Column Asymmetric Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+<!-- SECTION 1: INITIALIZE SHOW -->
+<section class="lg:col-span-7 bg-surface-container-low p-8 relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-9xl">settings_input_component</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="w-2 h-6 bg-primary-container"></span>
+<h3 class="font-headline text-2xl font-bold uppercase tracking-wide">INITIALIZE SHOW</h3>
+</div>
+<div class="space-y-6 max-w-md">
+<div class="group">
+<label class="block font-headline text-xs uppercase tracking-widest text-outline mb-2">PRODUCTION NAME</label>
+<input class="w-full bg-surface-container-highest border-none focus:ring-0 focus:border-l-4 focus:border-primary-fixed text-primary-fixed-dim font-headline py-4 px-4 transition-all duration-200 placeholder:text-surface-variant" placeholder="ENTER SYSTEM ID..." type="text"/>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed font-body">
+                            Establishing a new production environment generates a unique cryptographic signature required for all subsequent hardware handshakes.
+                        </p>
 </div>
 </div>
-<div class="space-y-4 bg-surface p-5 border border-outline rounded-sm">
-<div class="space-y-1">
-<label class="text-[9px] font-black uppercase tracking-[0.2em] text-steel">Production Identity</label>
-<div class="neon-border bg-black flex items-center p-3">
-<input class="bg-transparent border-none focus:ring-0 w-full text-signal placeholder:text-outline uppercase font-headline font-bold text-sm" id="create-name" placeholder="ASSIGN NAME" type="text"/>
-</div>
-</div>
-<button class="w-full bg-signal text-on-primary font-headline font-black py-4 tactical-glow active:scale-[0.98] transition-all uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3" onclick="handleCreate()">
-                Generate Show ID
-                <span class="material-symbols-outlined text-sm" data-icon="double_arrow">double_arrow</span>
-</button>
-</div>
-</section>
-<!-- Tactical Divider -->
-<div class="relative flex items-center py-4">
-<div class="flex-grow steel-divider"></div>
-<span class="mx-6 text-[9px] font-black text-steel tracking-[0.5em] uppercase">Connect_Link</span>
-<div class="flex-grow steel-divider"></div>
-</div>
-<!-- Protocol 02: Join -->
-<section class="space-y-4" id="join-section">
-<div class="flex items-center gap-2">
-<span class="text-[10px] font-bold text-steel tracking-tighter uppercase">P_02</span>
-<h2 class="font-headline font-bold text-lg uppercase tracking-tight text-white">Join Uplink</h2>
-</div>
-<div class="space-y-4 bg-surface p-5 border border-outline rounded-sm relative overflow-hidden">
-<!-- Loading Overlay -->
-<div class="hidden absolute inset-0 bg-black/80 z-10 flex flex-col items-center justify-center space-y-3" id="auth-overlay">
-<div class="w-12 h-1 loading-shimmer"></div>
-<span class="text-[10px] font-headline font-bold tracking-[0.3em] text-signal animate-pulse">AUTHORIZING_PROTOCOL</span>
-</div>
-<div class="grid grid-cols-2 gap-4">
-<div class="space-y-1">
-<label class="text-[9px] font-black uppercase tracking-[0.2em] text-steel">Room ID</label>
-<div class="neon-border bg-black flex items-center p-3">
-<input class="bg-transparent border-none focus:ring-0 w-full text-signal placeholder:text-outline text-center text-lg font-headline font-bold tracking-[0.3em]" id="join-id" maxlength="4" placeholder="0000" type="text"/>
-</div>
-</div>
-<div class="space-y-1">
-<label class="text-[9px] font-black uppercase tracking-[0.2em] text-steel">Secure PIN</label>
-<div class="neon-border bg-black flex items-center p-3">
-<input class="bg-transparent border-none focus:ring-0 w-full text-signal placeholder:text-outline text-center text-lg font-headline font-bold tracking-[0.3em]" id="join-pin" maxlength="4" placeholder="****" type="password"/>
-</div>
-</div>
-</div>
-<div class="hidden text-[10px] font-bold text-red-500 uppercase tracking-widest text-center py-1" id="error-display">
-                ERROR: INVALID_LINK_PARAMETERS
-            </div>
-<button class="w-full bg-surface-variant text-signal border border-outline font-headline font-black py-4 active:scale-[0.98] transition-all uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3 group" onclick="handleJoin()">
-                Authorize Uplink
-                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="login">login</span>
-</button>
+<div class="mt-12">
+<a class="inline-flex items-center justify-between w-full md:w-auto md:min-w-[280px] bg-primary-container text-on-primary-container px-6 py-5 font-headline font-bold uppercase tracking-widest text-sm hover:bg-primary-fixed transition-all active:scale-95 group glow-signal" href="config.html">
+<span>GENERATE SHOW ID</span>
+<span class="material-symbols-outlined ml-4 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
 </div>
 </section>
+<!-- SECTION 2: JOIN UPLINK -->
+<section class="lg:col-span-5 bg-surface-container-high p-8 flex flex-col justify-between border-t-4 border-secondary-container">
+<div>
+<div class="flex items-center gap-2 mb-6">
+<span class="w-2 h-6 bg-secondary-container"></span>
+<h3 class="font-headline text-2xl font-bold uppercase tracking-wide">JOIN UPLINK</h3>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div>
+<label class="block font-headline text-xs uppercase tracking-widest text-outline mb-2">ROOM ID</label>
+<input class="w-full bg-surface-container-lowest border-none focus:ring-0 focus:border-l-4 focus:border-secondary-container text-secondary text-center font-headline text-2xl tracking-[0.5em] py-4 transition-all placeholder:text-surface-container" maxlength="4" placeholder="0000" type="text"/>
+</div>
+<div>
+<label class="block font-headline text-xs uppercase tracking-widest text-outline mb-2">SECURE PIN</label>
+<input class="w-full bg-surface-container-lowest border-none focus:ring-0 focus:border-l-4 focus:border-secondary-container text-secondary text-center font-headline text-2xl tracking-[0.5em] py-4 transition-all placeholder:text-surface-container" maxlength="4" placeholder="****" type="password"/>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 flex items-start gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary text-sm">info</span>
+<p class="text-xs text-on-surface-variant font-body">Required for multi-operator environments. Ensure local firewall permits UDP port 8080 traffic.</p>
+</div>
+</div>
+<div class="mt-8">
+<a class="inline-flex items-center justify-center w-full bg-surface-container-highest text-on-surface px-6 py-5 font-headline font-bold uppercase tracking-widest text-sm hover:bg-secondary-container hover:text-on-secondary-container transition-all active:scale-95 border border-outline-variant/20" href="grid.html">
+                        AUTHORIZE UPLINK
+                    </a>
+</div>
+</section>
+</div>
+<!-- System Metadata Footer Decoration -->
+<div class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 border-t border-outline-variant/10 pt-8">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-outline">Latency</span>
+<span class="font-headline text-primary-fixed-dim font-bold">0.42ms</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-outline">Encryption</span>
+<span class="font-headline text-primary-fixed-dim font-bold">AES-256-BIT</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-outline">Uplink Status</span>
+<span class="font-headline text-primary-fixed-dim font-bold flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                    ACTIVE
+                </span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-outline">Engine</span>
+<span class="font-headline text-primary-fixed-dim font-bold">CORE_V9.2</span>
+</div>
+</div>
 </main>
-<!-- Bottom Navigation (Static for Index) -->
-<nav class="fixed bottom-0 left-0 w-full h-20 bg-background border-t border-outline flex items-center justify-around px-2 z-50">
-<div class="flex flex-col items-center justify-center text-signal bg-signal/5 border border-signal/20 rounded-sm p-3 w-16">
-<span class="material-symbols-outlined text-xl" data-icon="sensors">sensors</span>
-</div>
-<div class="flex flex-col items-center justify-center text-steel p-3 w-16 opacity-50">
-<span class="material-symbols-outlined text-xl" data-icon="grid_view">grid_view</span>
-</div>
-<div class="flex flex-col items-center justify-center text-steel p-3 w-16 opacity-50">
-<span class="material-symbols-outlined text-xl" data-icon="monitoring">monitoring</span>
-</div>
-<div class="flex flex-col items-center justify-center text-steel p-3 w-16 opacity-50">
-<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
-</div>
+<!-- Bottom Navigation Shell (Shared Component) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-4 bg-[#131313] h-20 shadow-none border-t-0 bg-[#1c1b1b]">
+<!-- Terminal is Active for Entry Screen -->
+<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">analytics</span>
+</button>
+<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">settings_remote</span>
+</button>
+<button class="flex items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm p-4 scale-125 shadow-[0_0_15px_#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">terminal</span>
+</button>
 </nav>
-<!-- System Stats -->
-<div class="fixed bottom-24 right-4 flex flex-col items-end pointer-events-none opacity-30 select-none">
-<span class="font-headline text-[7px] tracking-widest uppercase">Kernel: S_STEEL_9.0</span>
-<span class="font-headline text-[7px] tracking-widest uppercase">Buffer: 1024_MS</span>
-</div>
-<script>
-    const SERVER_URL = 'https://av-comm-server-production.up.railway.app';
-    let socket = null;
-
-    function handleCreate() {
-        const name = document.getElementById('create-name').value;
-        if (!name) {
-            triggerError('create-name');
-            return;
-        }
-        
-        localStorage.setItem('temp_show_name', name);
-        window.location.href = 'config.html';
-    }
-
-    function handleJoin() {
-        const roomID = document.getElementById('join-id').value;
-        const pin = document.getElementById('join-pin').value;
-        const overlay = document.getElementById('auth-overlay');
-        const errorMsg = document.getElementById('error-display');
-
-        if (roomID.length < 4 || pin.length < 4) {
-            triggerError('join-section');
-            return;
-        }
-
-        // Tactical UI State
-        overlay.classList.remove('hidden');
-        errorMsg.classList.add('hidden');
-
-        // Socket logic
-        if (!socket) {
-            socket = io(SERVER_URL);
-        }
-
-        socket.emit('join_room', { roomID, pin });
-
-        socket.on('joined_success', (data) => {
-            const session = {
-                roomID: roomID,
-                pin: pin,
-                role: 'FOH', // Default protocol role
-                timestamp: Date.now()
-            };
-            localStorage.setItem('av_comm_session', JSON.stringify(session));
-            window.location.href = 'grid.html';
-        });
-
-        socket.on('error', (err) => {
-            overlay.classList.add('hidden');
-            errorMsg.classList.remove('hidden');
-            triggerError('join-section');
-        });
-
-        // Connection timeout safety
-        setTimeout(() => {
-            if (!overlay.classList.contains('hidden')) {
-                overlay.classList.add('hidden');
-                errorMsg.innerText = "TIMEOUT: SERVER_UNREACHABLE";
-                errorMsg.classList.remove('hidden');
-            }
-        }, 5000);
-    }
-
-    function triggerError(elementId) {
-        const el = document.getElementById(elementId);
-        el.classList.add('border-red-500/50');
-        setTimeout(() => el.classList.remove('border-red-500/50'), 1000);
-    }
-</script>
+<!-- Ambient Glow Decoration -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-32 bg-primary-container/5 blur-[100px] pointer-events-none"></div>
 </body></html>
