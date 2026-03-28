@@ -237,31 +237,30 @@
     let socket;
     
     function initApp() {
+        const saved = JSON.parse(localStorage.getItem('av_comm_config') || '{}');
         const config = {
-            role: localStorage.getItem('av_comm_role') || 'FOH',
-            sessionId: '0492-X' // Hardcoded target for initial join, would normally be dynamic
+            role: saved.role || 'FOH',
+            sessionId: saved.id,
+            pin: saved.pin,
+            channels: saved.channels || 12
         };
 
         // Initialize Header Role
         document.getElementById('header-role').textContent = config.role;
 
         // Socket Connection
-        // Note: Using a generic placeholder URL as real server is determined at runtime
-        socket = io('https://api.av-comm.com', { autoConnect: false });
-        
-        // Manual connect trigger
-        socket.connect();
+        socket = io("https://av-comm-server-production.up.railway.app");
 
         socket.on('connect', () => {
             console.log('Connected to server');
-            socket.emit('join_show', { session: config.sessionId, role: config.role });
+            socket.emit('join_room', { roomID: config.sessionId, pin: config.pin, role: config.role });
         });
 
-        socket.on('show_joined', (data) => {
-            // Populate ID and PIN from server response
-            document.getElementById('header-id').textContent = data.id || '8821';
-            document.getElementById('header-pin').textContent = data.pin || '4401';
-            document.getElementById('session-display').textContent = `SESSION: ${data.session || config.sessionId}`;
+        socket.on('joined_success', (data) => {
+            // Populate ID and PIN from config/server response
+            document.getElementById('header-id').textContent = data.roomID;
+            document.getElementById('header-pin').textContent = config.pin;
+            document.getElementById('session-display').textContent = `SESSION: ${data.roomID}`;
         });
 
         // Role Toggle Logic
@@ -271,11 +270,14 @@
             let nextRole = ROLES[nextIndex];
             
             document.getElementById('header-role').textContent = nextRole;
-            localStorage.setItem('av_comm_role', nextRole);
+            
+            // Update saved config
+            saved.role = nextRole;
+            localStorage.setItem('av_comm_config', JSON.stringify(saved));
             
             // Re-sync with server
             if (socket && socket.connected) {
-                socket.emit('join_show', { session: config.sessionId, role: nextRole });
+                socket.emit('join_room', { roomID: config.sessionId, pin: config.pin, role: nextRole });
             }
             
             // Visual feedback
@@ -297,7 +299,6 @@
             recognition.onresult = (event) => {
                 const transcript = event.results[event.results.length-1][0].transcript;
                 console.log('Voice Command:', transcript);
-                // Here we would emit 'voice_command' to socket
             };
         }
 
