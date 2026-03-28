@@ -1,299 +1,83 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="en"><head>
+<html class="dark" lang="en">
+<head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AV-COMM | STAGE_TECH_AUTH</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "inverse-primary": "#006e16",
-              "tertiary-fixed": "#ffdad2",
-              "surface-container": "#201f1f",
-              "surface": "#131313",
-              "primary": "#ebffe2",
-              "on-tertiary-fixed-variant": "#8a1d00",
-              "surface-dim": "#131313",
-              "error-container": "#93000a",
-              "on-primary-fixed": "#002203",
-              "secondary": "#ffb778",
-              "inverse-surface": "#e5e2e1",
-              "on-tertiary-container": "#b82a00",
-              "tertiary": "#fff8f6",
-              "surface-tint": "#00e639",
-              "surface-container-high": "#2a2a2a",
-              "outline": "#84967e",
-              "on-secondary-fixed-variant": "#6c3a00",
-              "primary-container": "#00ff41",
-              "on-tertiary-fixed": "#3c0700",
-              "on-background": "#e5e2e1",
-              "surface-variant": "#353534",
-              "primary-fixed": "#72ff70",
-              "surface-container-lowest": "#0e0e0e",
-              "secondary-fixed-dim": "#ffb778",
-              "primary-fixed-dim": "#00e639",
-              "error": "#ffb4ab",
-              "tertiary-fixed-dim": "#ffb4a2",
-              "surface-bright": "#393939",
-              "surface-container-low": "#1c1b1b",
-              "on-secondary": "#4c2700",
-              "on-primary-container": "#007117",
-              "background": "#131313",
-              "secondary-fixed": "#ffdcc1",
-              "on-error-container": "#ffdad6",
-              "on-primary-fixed-variant": "#00530e",
-              "outline-variant": "#3b4b37",
-              "secondary-container": "#fd9000",
-              "on-tertiary": "#621100",
-              "inverse-on-surface": "#313030",
-              "surface-container-highest": "#353534",
-              "tertiary-container": "#ffd3c8",
-              "on-surface": "#e5e2e1",
-              "on-surface-variant": "#b9ccb2",
-              "on-primary": "#003907",
-              "on-secondary-fixed": "#2e1500",
-              "on-secondary-container": "#613400",
-              "on-error": "#690005"
-            },
-            fontFamily: {
-              "headline": ["Space Grotesk"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
+
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            background-color: #131313;
-            color: #e5e2e1;
-            font-family: 'Inter', sans-serif;
-        }
-        .glow-signal {
-            box-shadow: 0 0 20px rgba(0, 230, 57, 0.15);
-        }
-        body {
-          min-height: max(884px, 100dvh);
-        }
-    </style>
+body { background:#131313; color:#e5e2e1; font-family: Inter; }
+</style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
-<header class="bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-wider text-sm docked full-width top-0 border-t-4 border-[#00FF41] bg-[#1c1b1b] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-4 h-14 w-full z-50">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#00FF41]">security</span>
-<h1 class="font-bold text-[#00FF41] tracking-tighter text-xl">STAGE_TECH_AUTH</h1>
-</div>
-<div class="hidden md:flex items-center gap-6">
-<span class="text-[#00FF41] font-bold" id="session-display">SESSION: OFFLINE</span>
-<div class="h-4 w-[1px] bg-outline-variant/30"></div>
-<span class="text-[#3b4b37]">ROLE: LEAD_TECH</span>
-</div>
-</header>
-<main class="flex-grow flex flex-col items-center justify-center p-6 md:p-12 space-y-12 max-w-7xl mx-auto w-full">
-<div class="w-full text-left border-l-4 border-primary-fixed pl-4 mb-8">
-<p class="font-headline text-label-md uppercase tracking-[0.2em] text-primary-fixed-dim" id="status-indicator">Status: Ready for Uplink</p>
-<h2 class="font-headline text-3xl md:text-5xl font-extrabold tracking-tighter text-on-surface">AV-COMM TACTICAL INTERFACE</h2>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
-<!-- SECTION 1: INITIALIZE SHOW -->
-<section class="lg:col-span-7 bg-surface-container-low p-8 relative overflow-hidden flex flex-col justify-between min-h-[400px]">
-<div class="absolute top-0 right-0 p-4 opacity-10">
-<span class="material-symbols-outlined text-9xl">settings_input_component</span>
-</div>
-<div class="relative z-10">
-<div class="flex items-center gap-2 mb-6">
-<span class="w-2 h-6 bg-primary-container"></span>
-<h3 class="font-headline text-2xl font-bold uppercase tracking-wide">INITIALIZE SHOW</h3>
-</div>
-<div class="space-y-6 max-w-md">
-<div class="group">
-<label class="block font-headline text-xs uppercase tracking-widest text-outline mb-2">PRODUCTION NAME</label>
-<input class="w-full bg-surface-container-highest border-none focus:ring-0 focus:border-l-4 focus:border-primary-fixed text-primary-fixed-dim font-headline py-4 px-4 transition-all duration-200 placeholder:text-surface-variant" id="prod-name-input" placeholder="ENTER SYSTEM ID..." type="text"/>
-</div>
-<p class="text-sm text-on-surface-variant leading-relaxed font-body">
-                            Establishing a new production environment generates a unique cryptographic signature required for all subsequent hardware handshakes.
-                        </p>
-</div>
-</div>
-<div class="mt-12">
-<button class="inline-flex items-center justify-between w-full md:w-auto md:min-w-[280px] bg-primary-container text-on-primary-container px-6 py-5 font-headline font-bold uppercase tracking-widest text-sm hover:bg-primary-fixed transition-all active:scale-95 group glow-signal" id="btn-generate">
-<span>GENERATE SHOW ID</span>
-<span class="material-symbols-outlined ml-4 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+
+<body class="flex flex-col items-center justify-center h-screen gap-6">
+
+<h1 class="text-2xl font-bold text-green-400">AV-COMM</h1>
+
+<button id="btn-generate" class="bg-green-500 px-6 py-3 font-bold">
+CRIAR SALA
 </button>
+
+<div class="flex gap-2">
+<input id="room-id" placeholder="ID" class="px-3 py-2 bg-black"/>
+<input id="pin" placeholder="PIN" class="px-3 py-2 bg-black"/>
 </div>
-</section>
-<!-- SECTION 2: JOIN UPLINK -->
-<section class="lg:col-span-5 bg-surface-container-high p-8 flex flex-col justify-between border-t-4 border-secondary-container">
-<div>
-<div class="flex items-center gap-2 mb-6">
-<span class="w-2 h-6 bg-secondary-container"></span>
-<h3 class="font-headline text-2xl font-bold uppercase tracking-wide">JOIN UPLINK</h3>
-</div>
-<div class="grid grid-cols-2 gap-4 mb-8">
-<div>
-<label class="block font-headline text-xs uppercase tracking-widest text-outline mb-2">ROOM ID</label>
-<input class="w-full bg-surface-container-lowest border-none focus:ring-0 focus:border-l-4 focus:border-secondary-container text-secondary text-center font-headline text-2xl tracking-[0.5em] py-4 transition-all placeholder:text-surface-container" id="room-id-input" maxlength="4" placeholder="0000" type="text"/>
-</div>
-<div>
-<label class="block font-headline text-xs uppercase tracking-widest text-outline mb-2">SECURE PIN</label>
-<input class="w-full bg-surface-container-lowest border-none focus:ring-0 focus:border-l-4 focus:border-secondary-container text-secondary text-center font-headline text-2xl tracking-[0.5em] py-4 transition-all placeholder:text-surface-container" id="pin-input" maxlength="4" placeholder="****" type="password"/>
-</div>
-</div>
-<div class="bg-surface-container-low p-4 flex items-start gap-3 mb-6">
-<span class="material-symbols-outlined text-secondary text-sm">info</span>
-<p class="text-xs text-on-surface-variant font-body" id="error-message">Required for multi-operator environments. Ensure local firewall permits UDP port 8080 traffic.</p>
-</div>
-</div>
-<div class="mt-8">
-<button class="inline-flex items-center justify-center w-full bg-surface-container-highest text-on-surface px-6 py-5 font-headline font-bold uppercase tracking-widest text-sm hover:bg-secondary-container hover:text-on-secondary-container transition-all active:scale-95 border border-outline-variant/20" id="btn-authorize">
-                        AUTHORIZE UPLINK
-                    </button>
-</div>
-</section>
-</div>
-<div class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 border-t border-outline-variant/10 pt-8">
-<div class="flex flex-col">
-<span class="text-[10px] uppercase tracking-widest text-outline">Latency</span>
-<span class="font-headline text-primary-fixed-dim font-bold" id="latency-val">0.42ms</span>
-</div>
-<div class="flex flex-col">
-<span class="text-[10px] uppercase tracking-widest text-outline">Encryption</span>
-<span class="font-headline text-primary-fixed-dim font-bold">AES-256-BIT</span>
-</div>
-<div class="flex flex-col">
-<span class="text-[10px] uppercase tracking-widest text-outline">Uplink Status</span>
-<span class="font-headline text-primary-fixed-dim font-bold flex items-center gap-2">
-<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse" id="status-dot"></span>
-<span id="conn-status">ACTIVE</span>
-</span>
-</div>
-<div class="flex flex-col">
-<span class="text-[10px] uppercase tracking-widest text-outline">Engine</span>
-<span class="font-headline text-primary-fixed-dim font-bold">CORE_V9.2</span>
-</div>
-</div>
-</main>
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-4 bg-[#131313] h-20 shadow-none border-t-0 bg-[#1c1b1b]">
-<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">grid_view</span>
+
+<button id="btn-join" class="bg-gray-700 px-6 py-3">
+ENTRAR
 </button>
-<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">analytics</span>
-</button>
-<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">mic</span>
-</button>
-<button class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">settings_remote</span>
-</button>
-<button class="flex items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm p-4 scale-125 shadow-[0_0_15px_#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">terminal</span>
-</button>
-</nav>
-<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-32 bg-primary-container/5 blur-[100px] pointer-events-none"></div>
+
+<p id="status"></p>
+
 <script>
-        const socket = io('https://av-comm-server-production.up.railway.app');
-        
-        const btnGenerate = document.getElementById('btn-generate');
-        const btnAuthorize = document.getElementById('btn-authorize');
-        const prodNameInput = document.getElementById('prod-name-input');
-        const roomIdInput = document.getElementById('room-id-input');
-        const pinInput = document.getElementById('pin-input');
-        const errorMessage = document.getElementById('error-message');
-        const statusIndicator = document.getElementById('status-indicator');
-        const sessionDisplay = document.getElementById('session-display');
+const socket = io("https://av-comm-server-production.up.railway.app");
 
-        // Socket Event Listeners
-        socket.on('connect', () => {
-            document.getElementById('conn-status').innerText = 'CONNECTED';
-            document.getElementById('status-dot').classList.replace('bg-error', 'bg-primary-container');
-        });
+const status = document.getElementById("status");
 
-        socket.on('disconnect', () => {
-            document.getElementById('conn-status').innerText = 'OFFLINE';
-            document.getElementById('status-dot').classList.replace('bg-primary-container', 'bg-error');
-        });
+socket.on("connect", () => {
+    status.innerText = "Ligado ao servidor";
+});
 
-        socket.on('room_created', (data) => {
-            // After creating, we treat it like a join success
-            handleSuccess(data);
-        });
+socket.on("room_created", (data) => saveAndGo(data));
+socket.on("joined_success", (data) => saveAndGo(data));
 
-        socket.on('joined_success', (data) => {
-            handleSuccess(data);
-        });
+socket.on("error_msg", (msg) => {
+    status.innerText = msg;
+});
 
-        socket.on('error_msg', (msg) => {
-            errorMessage.textContent = msg;
-            errorMessage.classList.add('text-error');
-            statusIndicator.textContent = `Status: Auth Failure`;
-        });
+function saveAndGo(data){
+    const config = {
+        id: data.roomID,
+        pin: data.pin,
+        role: "LEAD",
+        channels: data.channels || 12
+    };
 
-        function handleSuccess(data) {
-            // Save session to localStorage per request
-            localStorage.setItem('av_session', JSON.stringify({
-                roomID: data.roomID,
-                pin: data.pin,
-                prodName: data.prodName || 'UNTITLED_PRODUCTION',
-                role: 'LEAD_TECH',
-                timestamp: Date.now()
-            }));
-            
-            statusIndicator.textContent = `Status: Secure Uplink Established`;
-            sessionDisplay.textContent = `SESSION: ${data.roomID}-ALPHA`;
-            
-            // Redirect to grid
-            setTimeout(() => {
-                window.location.href = 'grid.html';
-            }, 800);
-        }
+    localStorage.setItem("av_comm_config", JSON.stringify(config));
 
-        // Action Handlers
-        btnGenerate.addEventListener('click', () => {
-            const prodName = prodNameInput.value.trim() || 'NEW_PRODUCTION';
-            socket.emit('create_room', { prodName });
-            statusIndicator.textContent = 'Status: Initializing Cryptography...';
-        });
+    window.location.href = "grid.html";
+}
 
-        btnAuthorize.addEventListener('click', () => {
-            const roomID = roomIdInput.value.trim();
-            const pin = pinInput.value.trim();
+// CREATE
+document.getElementById("btn-generate").onclick = () => {
+    socket.emit("create_room", { channels: 12 });
+};
 
-            if (!roomID || !pin) {
-                errorMessage.textContent = "Error: Protocol requires Room ID and Pin.";
-                errorMessage.classList.add('text-error');
-                return;
-            }
+// JOIN
+document.getElementById("btn-join").onclick = () => {
+    const id = document.getElementById("room-id").value;
+    const pin = document.getElementById("pin").value;
 
-            statusIndicator.textContent = 'Status: Authenticating...';
-            // Align with server.js 'join_room' event
-            socket.emit('join_room', { roomID, pin });
-        });
+    socket.emit("join_room", {
+        roomID: id,
+        pin: pin,
+        role: "REMOTE"
+    });
+};
+</script>
 
-        // Simple ping tracker for latency display
-        let lastPing = Date.now();
-        setInterval(() => {
-            if (socket.connected) {
-                lastPing = Date.now();
-                socket.emit('ping');
-            }
-        }, 3000);
-
-        socket.on('pong', () => {
-            const latency = Date.now() - lastPing;
-            document.getElementById('latency-val').innerText = `${latency}ms`;
-        });
-    </script>
-</body></html>
+</body>
+</html>
