@@ -1,57 +1,65 @@
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 <script>
-const socket = io();
+document.addEventListener("DOMContentLoaded", () => {
 
-const session = JSON.parse(localStorage.getItem('av_session'));
+    const socket = io();
 
-if (!session) {
-    alert("NO SESSION");
-    window.location.href = "/";
-}
+    const sessionRaw = localStorage.getItem('av_session');
 
-// HEADER
-document.getElementById('header-id').innerText = session.roomID;
-document.getElementById('header-pin').innerText = session.pin;
-
-// JOIN ROOM AUTOMATICO
-socket.emit('join_room', {
-    roomID: session.roomID,
-    pin: session.pin,
-    role: "CLIENT"
-});
-
-// GRID DINÂMICO
-const grid = document.getElementById('channel-grid');
-grid.innerHTML = "";
-
-for (let i = 1; i <= session.channels; i++) {
-    const btn = document.createElement('button');
-    btn.className = "bg-surface-container-high p-2";
-    btn.innerText = "CH " + i;
-    btn.id = "ch_" + i;
-
-    btn.onclick = () => {
-        socket.emit('update_channel', {
-            roomID: session.roomID,
-            chID: i,
-            status: "active",
-            role: "CLIENT"
-        });
-    };
-
-    grid.appendChild(btn);
-}
-
-// REALTIME UPDATE
-socket.on('channel_updated', (data) => {
-    const el = document.getElementById("ch_" + data.chID);
-    if (!el) return;
-
-    if (data.status === "active") {
-        el.style.background = "#00ff41";
-    } else {
-        el.style.background = "";
+    if (!sessionRaw) {
+        window.location.href = "/";
+        return;
     }
+
+    const session = JSON.parse(sessionRaw);
+
+    // HEADER
+    const idEl = document.getElementById('header-id');
+    const pinEl = document.getElementById('header-pin');
+
+    if (idEl) idEl.innerText = session.roomID;
+    if (pinEl) pinEl.innerText = session.pin;
+
+    // JOIN ROOM
+    socket.emit('join_room', {
+        roomID: session.roomID,
+        pin: session.pin,
+        role: "CLIENT"
+    });
+
+    // GRID
+    const grid = document.getElementById('channel-grid');
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    for (let i = 1; i <= session.channels; i++) {
+
+        const btn = document.createElement('button');
+        btn.className = "bg-surface-container-high p-2";
+        btn.innerText = "CH " + i;
+        btn.id = "ch_" + i;
+
+        btn.onclick = () => {
+            socket.emit('update_channel', {
+                roomID: session.roomID,
+                chID: i,
+                status: "active",
+                role: "CLIENT"
+            });
+        };
+
+        grid.appendChild(btn);
+    }
+
+    // REALTIME
+    socket.on('channel_updated', (data) => {
+        const el = document.getElementById("ch_" + data.chID);
+        if (!el) return;
+
+        el.style.background = data.status === "active" ? "#00ff41" : "";
+    });
+
 });
 </script>
