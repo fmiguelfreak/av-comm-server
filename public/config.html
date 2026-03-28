@@ -9,69 +9,117 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "error": "#ffb4ab",
-              "on-error-container": "#ffdad6",
-              "outline-variant": "#3b4b37",
-              "inverse-primary": "#006e16",
-              "secondary-fixed": "#ffdcc1",
-              "on-primary": "#003907",
-              "surface-bright": "#393939",
-              "primary-container": "#00ff41",
-              "on-secondary-fixed": "#2e1500",
-              "on-secondary-container": "#613400",
-              "surface-container-low": "#1c1b1b",
-              "on-primary-container": "#007117",
-              "tertiary-fixed": "#ffdad2",
-              "tertiary": "#fff8f6",
-              "surface-tint": "#00e639",
-              "on-error": "#690005",
-              "surface-variant": "#353534",
-              "on-tertiary-fixed": "#3c0700",
-              "on-secondary": "#4c2700",
-              "error-container": "#93000a",
-              "surface-container-highest": "#353534",
-              "primary-fixed": "#72ff70",
-              "tertiary-fixed-dim": "#ffb4a2",
-              "secondary-fixed-dim": "#ffb778",
-              "surface": "#131313",
-              "secondary-container": "#fd9000",
-              "on-secondary-fixed-variant": "#6c3a00",
-              "surface-dim": "#131313",
-              "primary-fixed-dim": "#00e639",
-              "surface-container-lowest": "#0e0e0e",
-              "inverse-surface": "#e5e2e1",
-              "on-tertiary-container": "#b82a00",
-              "on-surface": "#e5e2e1",
-              "on-tertiary": "#621100",
-              "tertiary-container": "#ffd3c8",
-              "inverse-on-surface": "#313030",
-              "outline": "#84967e",
-              "primary": "#ebffe2",
-              "on-background": "#e5e2e1",
-              "surface-container": "#201f1f",
-              "on-primary-fixed": "#002203",
-              "on-tertiary-fixed-variant": "#8a1d00",
-              "secondary": "#ffb778",
-              "background": "#131313",
-              "on-primary-fixed-variant": "#00530e",
-              "surface-container-high": "#2a2a2a",
-              "on-surface-variant": "#b9ccb2"
-            },
-            fontFamily: {
-              "headline": ["Space Grotesk"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
+    let socket;
+    let selectedRole = 'FOH';
+    let currentId = '';
+    let currentPin = '';
+
+    function connectSocket() {
+        const statusEl = document.getElementById('connection-status');
+        const uplinkBtn = document.getElementById('uplink-btn');
+        
+        socket = io();
+
+        socket.on('connect', () => {
+            statusEl.innerText = 'ONLINE';
+            statusEl.classList.remove('animate-pulse', 'text-primary-fixed');
+            statusEl.classList.add('bg-primary-container', 'text-on-primary-container');
+            uplinkBtn.disabled = false;
+        });
+
+        socket.on('disconnect', () => {
+            statusEl.innerText = 'OFFLINE';
+            statusEl.classList.add('animate-pulse', 'text-primary-fixed');
+            statusEl.classList.remove('bg-primary-container', 'text-on-primary-container');
+            uplinkBtn.disabled = true;
+        });
+
+        socket.on('room_created', (data) => {
+            currentId = data.roomID;
+            currentPin = data.pin;
+            
+            document.getElementById('system-id').innerText = currentId;
+            document.getElementById('access-pin').innerText = currentPin;
+
+            const btn = document.getElementById('uplink-btn');
+            btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> LINK ESTABLISHED';
+            btn.classList.replace('bg-primary-container', 'bg-primary-fixed');
+            
+            let roleToSave = selectedRole;
+            if (selectedRole === 'CUSTOM') {
+                roleToSave = document.getElementById('custom-role-input').value || 'CUSTOM_USER';
+            }
+
+            const config = {
+                id: data.roomID,
+                pin: data.pin,
+                role: roleToSave,
+                channels: document.getElementById('channel-slider').value
+            };
+            localStorage.setItem('av_comm_config', JSON.stringify(config));
+
+            setTimeout(() => {
+                window.location.href = 'grid.html';
+            }, 1000);
+        });
+
+        socket.on('error', (err) => {
+            statusEl.innerText = 'ERROR';
+            statusEl.classList.add('bg-error-container', 'text-on-error-container');
+            console.error('Socket error:', err);
+        });
+    }
+
+    function selectRole(role) {
+        selectedRole = role;
+        
+        const buttons = document.querySelectorAll('.role-btn');
+        buttons.forEach(btn => {
+            const roleName = btn.querySelector('.font-headline').innerText;
+            if (roleName === role) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        const container = document.getElementById('custom-role-container');
+        if (role === 'CUSTOM') {
+            container.classList.remove('hidden');
+            document.getElementById('custom-role-input').focus();
+        } else {
+            container.classList.add('hidden');
+        }
+    }
+
+    function updateChannels(val) {
+        document.getElementById('channel-display').innerText = val;
+        const percent = ((val / 24) * 100).toFixed(1);
+        document.getElementById('percent-display').innerText = `${percent}% OF MAX`;
+    }
+
+    function initializeUplink() {
+        const btn = document.getElementById('uplink-btn');
+        
+        const requestData = {
+            channels: document.getElementById('channel-slider').value
+        };
+
+        socket.emit('create_room', requestData);
+        
+        btn.disabled = true;
+        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> UPLINKING...';
+        
+        document.getElementById('connection-status').innerText = 'EMITTING...';
+    }
+
+    window.onload = () => {
+        connectSocket();
+        selectRole('FOH');
+        updateChannels(12);
+        document.getElementById('custom-role-input').value = 'A1 - LEAD';
+    };
+</script>
 <style>
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -233,7 +281,6 @@
         const statusEl = document.getElementById('connection-status');
         const uplinkBtn = document.getElementById('uplink-btn');
         
-        // Using common socket path for production environments
         socket = io();
 
         socket.on('connect', () => {
@@ -250,22 +297,26 @@
             uplinkBtn.disabled = true;
         });
 
-        socket.on('show_created', (data) => {
-            currentId = data.id;
+        socket.on('room_created', (data) => {
+            currentId = data.roomID;
             currentPin = data.pin;
             
             document.getElementById('system-id').innerText = currentId;
             document.getElementById('access-pin').innerText = currentPin;
 
-            // Visual feedback before redirect
             const btn = document.getElementById('uplink-btn');
             btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> LINK ESTABLISHED';
             btn.classList.replace('bg-primary-container', 'bg-primary-fixed');
             
+            let roleToSave = selectedRole;
+            if (selectedRole === 'CUSTOM') {
+                roleToSave = document.getElementById('custom-role-input').value || 'CUSTOM_USER';
+            }
+
             const config = {
-                id: currentId,
-                pin: currentPin,
-                role: selectedRole === 'CUSTOM' ? (document.getElementById('custom-role-input').value || 'CUSTOM_USER') : selectedRole,
+                id: data.roomID,
+                pin: data.pin,
+                role: roleToSave,
                 channels: document.getElementById('channel-slider').value
             };
             localStorage.setItem('av_comm_config', JSON.stringify(config));
@@ -312,33 +363,23 @@
 
     function initializeUplink() {
         const btn = document.getElementById('uplink-btn');
-        const btnText = document.getElementById('btn-text');
         
-        let roleToSave = selectedRole;
-        if (selectedRole === 'CUSTOM') {
-            roleToSave = document.getElementById('custom-role-input').value || 'CUSTOM_USER';
-        }
-
         const requestData = {
-            role: roleToSave,
             channels: document.getElementById('channel-slider').value
         };
 
-        // Emit creation request to server
-        socket.emit('create_show', requestData);
+        socket.emit('create_room', requestData);
         
-        // Update UI status
         btn.disabled = true;
         btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> UPLINKING...';
         
         document.getElementById('connection-status').innerText = 'EMITTING...';
     }
 
-    // Init
     window.onload = () => {
         connectSocket();
-        selectRole('FOH'); // Default role
-        updateChannels(12); // Default 12 channels
+        selectRole('FOH');
+        updateChannels(12);
         document.getElementById('custom-role-input').value = 'A1 - LEAD';
     };
 </script>
