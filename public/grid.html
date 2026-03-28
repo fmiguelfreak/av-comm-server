@@ -1,97 +1,62 @@
 <!DOCTYPE html>
-<html class="dark">
+<html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>AV-COMM GRID</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<title>GRID</title>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
-<style>
-body { background:#131313; color:white; }
-.channel { transition: all 0.2s; }
-.active { background:#00ff41; color:black; }
-</style>
 </head>
 
-<body class="p-4">
+<body style="background:#111;color:white;font-family:sans-serif;text-align:center">
 
-<h1 id="session" class="mb-4 text-green-400"></h1>
+<h2 id="title"></h2>
 
-<div id="grid" class="grid grid-cols-3 gap-2"></div>
-
-<button id="ptt" class="mt-6 w-full bg-green-500 py-4 text-xl">
-PTT
-</button>
+<div id="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:20px"></div>
 
 <script>
-const config = JSON.parse(localStorage.getItem("av_comm_config"));
+const socket = io();
 
-if(!config){
-    alert("Sem sessão");
-    location.href="index.html";
-}
+const session = JSON.parse(localStorage.getItem('av_session'));
 
-document.getElementById("session").innerText =
-`ROOM ${config.id} | PIN ${config.pin}`;
+document.getElementById('title').innerText = `ROOM ${session.roomID}`;
 
-// SOCKET
-const socket = io("https://av-comm-server-production.up.railway.app");
+let channels = session.channels || 12;
 
-socket.on("connect", () => {
-    socket.emit("join_room", {
-        roomID: config.id,
-        pin: config.pin,
-        role: config.role
-    });
+// JOIN ROOM AUTOMATICAMENTE
+socket.emit('join_room', {
+    roomID: session.roomID,
+    pin: session.pin,
+    role: "CLIENT"
 });
 
-// GRID INIT
-const grid = document.getElementById("grid");
+// CRIAR GRID
+for (let i = 1; i <= channels; i++) {
+    const btn = document.createElement('button');
+    btn.innerText = "CH " + i;
+    btn.style.height = "80px";
 
-for(let i=1;i<=config.channels;i++){
-    const el = document.createElement("div");
-    el.className = "channel bg-gray-800 p-6 text-center";
-    el.id = "ch_"+i;
-    el.innerText = "CH "+i;
-    grid.appendChild(el);
+    btn.onclick = () => {
+        socket.emit('update_channel', {
+            roomID: session.roomID,
+            chID: i,
+            status: "active",
+            role: "CLIENT"
+        });
+    };
+
+    btn.id = "ch_" + i;
+    document.getElementById('grid').appendChild(btn);
 }
 
-// REALTIME UPDATE
-socket.on("channel_updated", (data) => {
-    const el = document.getElementById("ch_"+data.chID);
+// RECEBER UPDATES
+socket.on('channel_updated', (data) => {
+    const el = document.getElementById("ch_" + data.chID);
 
-    if(!el) return;
-
-    if(data.status === "ACTIVE"){
-        el.classList.add("active");
+    if (data.status === "active") {
+        el.style.background = "green";
     } else {
-        el.classList.remove("active");
+        el.style.background = "gray";
     }
 });
-
-// PTT
-const ptt = document.getElementById("ptt");
-
-ptt.onmousedown = () => {
-    socket.emit("update_channel", {
-        roomID: config.id,
-        chID: 1,
-        status: "ACTIVE",
-        role: config.role
-    });
-};
-
-ptt.onmouseup = () => {
-    socket.emit("update_channel", {
-        roomID: config.id,
-        chID: 1,
-        status: "IDLE",
-        role: config.role
-    });
-};
 </script>
 
 </body>
