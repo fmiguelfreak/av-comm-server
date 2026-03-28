@@ -3,237 +3,249 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AV-COMM | SYSTEM INITIALIZATION</title>
-<!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<title>AV-COMM CONFIGURATION</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "error": "#ffb4ab",
-            "on-primary-fixed-variant": "#00530e",
-            "secondary-container": "#fd9000",
-            "tertiary-fixed": "#ffdad2",
-            "surface-container-low": "#1c1b1b",
-            "on-error": "#690005",
-            "on-tertiary-fixed": "#3c0700",
-            "background": "#131313",
-            "surface-dim": "#131313",
-            "secondary-fixed-dim": "#ffb778",
-            "surface-variant": "#353534",
-            "on-surface-variant": "#b9ccb2",
-            "surface-container": "#201f1f",
-            "on-secondary-fixed-variant": "#6c3a00",
-            "inverse-on-surface": "#313030",
-            "tertiary": "#fff8f6",
-            "tertiary-fixed-dim": "#ffb4a2",
-            "tertiary-container": "#ffd3c8",
-            "inverse-primary": "#006e16",
-            "on-tertiary-container": "#b82a00",
-            "on-primary-fixed": "#002203",
-            "surface-container-highest": "#353534",
-            "primary-container": "#00ff41",
-            "on-tertiary-fixed-variant": "#8a1d00",
-            "on-surface": "#e5e2e1",
-            "primary-fixed": "#72ff70",
-            "outline": "#84967e",
-            "surface-tint": "#00e639",
-            "on-secondary-container": "#613400",
-            "inverse-surface": "#e5e2e1",
-            "on-background": "#e5e2e1",
-            "surface": "#131313",
-            "error-container": "#93000a",
-            "outline-variant": "#3b4b37",
-            "on-primary-container": "#007117",
-            "primary": "#ebffe2",
-            "secondary-fixed": "#ffdcc1",
-            "secondary": "#ffb778",
-            "on-tertiary": "#621100",
-            "surface-container-lowest": "#0e0e0e",
-            "surface-container-high": "#2a2a2a",
-            "on-primary": "#003907",
-            "primary-fixed-dim": "#00e639",
-            "on-secondary-fixed": "#2e1500",
-            "surface-bright": "#393939",
-            "on-secondary": "#4c2700",
-            "on-error-container": "#ffdad6"
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-background": "#e5e2e1",
+                "inverse-primary": "#006e16",
+                "tertiary-fixed-dim": "#ffb4a2",
+                "error-container": "#93000a",
+                "on-secondary-container": "#613400",
+                "on-tertiary-container": "#b82a00",
+                "on-error-container": "#ffdad6",
+                "surface-bright": "#393939",
+                "surface-container-high": "#2a2a2a",
+                "primary-fixed-dim": "#00e639",
+                "surface-variant": "#353534",
+                "background": "#131313",
+                "tertiary": "#fff8f6",
+                "surface-container-highest": "#353534",
+                "tertiary-fixed": "#ffdad2",
+                "primary-container": "#00ff41",
+                "on-primary": "#003907",
+                "tertiary-container": "#ffd3c8",
+                "primary": "#ebffe2",
+                "error": "#ffb4ab",
+                "surface-container": "#201f1f",
+                "surface": "#131313",
+                "on-secondary": "#4c2700",
+                "surface-container-lowest": "#0e0e0e",
+                "primary-fixed": "#72ff70",
+                "secondary-fixed": "#ffdcc1",
+                "outline": "#84967e",
+                "secondary-fixed-dim": "#ffb778",
+                "outline-variant": "#3b4b37",
+                "surface-dim": "#131313",
+                "on-primary-container": "#007117",
+                "on-tertiary": "#621100",
+                "on-primary-fixed-variant": "#00530e",
+                "surface-container-low": "#1c1b1b",
+                "secondary": "#ffb778",
+                "on-secondary-fixed": "#2e1500",
+                "on-tertiary-fixed": "#3c0700",
+                "on-secondary-fixed-variant": "#6c3a00",
+                "on-error": "#690005",
+                "secondary-container": "#fd9000",
+                "inverse-on-surface": "#313030",
+                "on-surface-variant": "#b9ccb2",
+                "on-surface": "#e5e2e1",
+                "on-primary-fixed": "#002203",
+                "surface-tint": "#00e639",
+                "on-tertiary-fixed-variant": "#8a1d00",
+                "inverse-surface": "#e5e2e1"
+              },
+              fontFamily: {
+                "headline": ["Space Grotesk"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
           },
-          fontFamily: {
-            "headline": ["Space Grotesk"],
-            "body": ["Inter"],
-            "label": ["Inter"]
-          },
-          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-        },
-      },
-    }
-  </script>
+        }
+    </script>
 <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #131313; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #00ff41; }
-    .neon-glow { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
-    .asymmetric-cut { clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%); }
-  </style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            overflow: hidden;
+        }
+        /* Custom range slider styling */
+        input[type=range]::-webkit-slider-runnable-track {
+            background: #1c1b1b;
+            height: 8px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 12px;
+            background: #00ff41;
+            margin-top: -8px;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+    </style>
 <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
   </head>
-<body class="bg-surface text-on-surface font-body overflow-hidden h-screen flex flex-col">
-<!-- TopAppBar Anchor -->
-<header class="bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-tighter text-sm docked full-width top-0 border-t-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center w-full px-6 h-16 shrink-0 z-50">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#00FF41]">sensors</span>
-<span class="font-['Space_Grotesk'] font-bold text-[#00FF41] text-lg">SESSION: ALPHA-ONE | ROLE: LEAD_TECH</span>
-</div>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-[#1c1b1b] text-[#00ff41] font-['Space_Grotesk'] font-bold tracking-tight uppercase rounded-none border-b-4 border-[#00ff41] shadow-[0_0_20px_rgba(0,255,65,0.1)]">
 <div class="flex items-center gap-4">
-<div class="flex items-center gap-2 text-[#00FF41]">
-<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
-<span class="text-[10px] font-bold tracking-widest">UPLINK ACTIVE</span>
+<div class="w-10 h-10 bg-primary-container flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">terminal</span>
 </div>
-<span class="material-symbols-outlined text-[#00FF41]">terminal</span>
+<div>
+<h1 class="text-xl font-bold tracking-widest">SESSION: CONFIG</h1>
+<p class="text-[10px] font-label text-on-surface-variant leading-none">ROLE: LEAD_TECH</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-8 text-[12px] tracking-widest font-bold">
+<span class="text-[#ffffff]/60 hover:bg-[#2a2a2a] transition-colors px-2 py-1 cursor-pointer">SYSTEMS</span>
+<span class="text-[#ffffff]/60 hover:bg-[#2a2a2a] transition-colors px-2 py-1 cursor-pointer">DIAGNOSTICS</span>
+<span class="text-[#00ff41] font-bold px-2 py-1">CONFIG</span>
+</div>
+<div class="bg-[#2a2a2a] px-3 py-1 rounded-sm border border-outline-variant/20">
+<span class="text-[10px] block opacity-50">AUTH_TOKEN</span>
+<span class="font-mono text-sm tracking-widest">4492</span>
+</div>
 </div>
 </header>
-<!-- Main Content Canvas (Zero Scroll Layout) -->
-<main class="flex-1 p-6 grid grid-cols-12 gap-6 relative overflow-hidden">
-<!-- Background Texture/Visual -->
-<div class="absolute inset-0 opacity-5 pointer-events-none">
-<div class="absolute inset-0 bg-[radial-gradient(#00ff41_1px,transparent_1px)] [background-size:24px_24px]"></div>
+<!-- Main Content Canvas -->
+<main class="h-screen pt-24 pb-24 px-6 max-w-7xl mx-auto flex flex-col gap-6">
+<!-- Section 01: SYSTEM AUTH -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 flex flex-col justify-between h-48 border-l-4 border-primary-container relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-5">
+<span class="material-symbols-outlined text-[120px]">lan</span>
 </div>
-<!-- LEFT PANEL: CONNECTION STATUS -->
-<div class="col-span-12 lg:col-span-4 flex flex-col gap-6 h-full">
-<section class="bg-surface-container-low p-6 flex flex-col justify-between border-l-4 border-primary-container relative h-full">
-<div class="space-y-1">
-<p class="text-[10px] font-bold text-primary-fixed uppercase tracking-[0.2em] opacity-60">Network Environment</p>
-<h2 class="font-headline font-bold text-2xl uppercase italic">Secure Uplink</h2>
-</div>
-<!-- Connection Visualizer -->
-<div class="flex-1 flex flex-col justify-center items-center py-8">
-<div class="relative w-48 h-48 flex items-center justify-center">
-<div class="absolute inset-0 border-2 border-primary-container/20 rounded-full animate-[spin_10s_linear_infinite]"></div>
-<div class="absolute inset-4 border border-primary-container/10 rounded-full animate-[spin_6s_linear_infinite_reverse]"></div>
-<div class="text-center space-y-2">
-<span class="material-symbols-outlined text-5xl text-primary-container block" style="font-variation-settings: 'FILL' 1;">cloud_sync</span>
-<p class="font-headline font-bold text-sm tracking-widest text-primary-container">SYNCING...</p>
+<label class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">NETWORK ID</label>
+<div class="text-6xl font-headline font-bold text-primary-fixed tracking-tighter">
+                    TX-8829-01
+                </div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="text-[10px] font-bold text-primary-container/80">ENCRYPTED_UPLINK_ACTIVE</span>
 </div>
 </div>
+<div class="bg-surface-container-low p-6 flex flex-col justify-between h-48 border-l-4 border-secondary-container relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 opacity-5 text-secondary">
+<span class="material-symbols-outlined text-[120px]">lock</span>
 </div>
-<!-- Room Metadata -->
-<div class="bg-surface-container-high p-4 space-y-4">
-<div class="flex justify-between items-end border-b border-outline-variant pb-2">
-<span class="text-[10px] uppercase font-bold text-zinc-500">Room Identifier</span>
-<span class="font-headline text-4xl font-black text-primary-container neon-glow leading-none" id="room-id">8842</span>
-</div>
-<div class="flex justify-between items-end">
-<span class="text-[10px] uppercase font-bold text-zinc-500">Security PIN</span>
-<span class="font-headline text-4xl font-black text-primary-container neon-glow leading-none" id="pin-code">0911</span>
+<label class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">SECURITY PIN</label>
+<div class="text-6xl font-headline font-bold text-secondary tracking-widest">
+                    4492
+                </div>
+<div class="text-[10px] font-bold text-secondary-container/80">ROTATION_EXPIRES: 04:59:21</div>
 </div>
 </div>
-</section>
-</div>
-<!-- RIGHT PANEL: CONFIGURATION -->
-<div class="col-span-12 lg:col-span-8 grid grid-rows-2 gap-6 h-full">
-<!-- TOP: OPERATIONAL ROLE SELECTOR -->
-<section class="bg-surface-container p-6 relative flex flex-col h-full overflow-hidden">
-<div class="flex justify-between items-start mb-6">
-<div class="space-y-1">
-<p class="text-[10px] font-bold text-primary-fixed uppercase tracking-[0.2em] opacity-60">System Assignment</p>
-<h2 class="font-headline font-bold text-2xl uppercase">Operational Role</h2>
-</div>
-<span class="material-symbols-outlined text-zinc-700 text-4xl">badge</span>
-</div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
-<!-- Role Card: FOH -->
-<button class="role-btn group relative bg-surface-container-high border-t-2 border-transparent hover:border-primary-container p-4 flex flex-col items-center justify-center transition-all active:scale-95" data-role="FOH">
-<span class="material-symbols-outlined text-3xl mb-2 group-hover:text-primary-container">tune</span>
-<span class="font-headline font-bold text-xs uppercase">Front of House</span>
-<div class="absolute bottom-2 right-2 opacity-0 group-[.active]:opacity-100"><span class="material-symbols-outlined text-primary-container text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<!-- Section 02: OPERATIONAL ROLE -->
+<div class="bg-surface-container-high p-8 flex flex-col gap-6">
+<header class="flex justify-between items-end border-b border-outline-variant/30 pb-2">
+<h2 class="text-sm font-black uppercase tracking-[0.3em] text-primary-container">OPERATIONAL ROLE</h2>
+<span class="text-[10px] text-on-surface-variant font-mono">SELECT_DECODER_MAPPING</span>
+</header>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<button class="bg-surface-container-lowest p-6 border-b-4 border-transparent hover:bg-surface-container-highest transition-all flex flex-col items-start gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">speaker_group</span>
+<span class="font-headline font-bold text-lg tracking-tight">FOH</span>
 </button>
-<!-- Role Card: BOH -->
-<button class="role-btn group relative bg-surface-container-high border-t-2 border-transparent hover:border-primary-container p-4 flex flex-col items-center justify-center transition-all active:scale-95" data-role="BOH">
-<span class="material-symbols-outlined text-3xl mb-2 group-hover:text-primary-container">settings_input_component</span>
-<span class="font-headline font-bold text-xs uppercase">Back of House</span>
-<div class="absolute bottom-2 right-2 opacity-0 group-[.active]:opacity-100"><span class="material-symbols-outlined text-primary-container text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<button class="bg-surface-container-lowest p-6 border-b-4 border-transparent hover:bg-surface-container-highest transition-all flex flex-col items-start gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">dns</span>
+<span class="font-headline font-bold text-lg tracking-tight">BOH</span>
 </button>
-<!-- Role Card: MICS -->
-<button class="role-btn group relative bg-surface-container-high border-t-2 border-transparent hover:border-primary-container p-4 flex flex-col items-center justify-center transition-all active:scale-95 active" data-role="MICS">
-<span class="material-symbols-outlined text-3xl mb-2 text-primary-container">mic</span>
-<span class="font-headline font-bold text-xs uppercase">Mic Tech</span>
-<div class="absolute bottom-2 right-2 opacity-100"><span class="material-symbols-outlined text-primary-container text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<button class="bg-surface-container-lowest p-6 border-b-4 border-primary-container bg-primary-container/5 flex flex-col items-start gap-4">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="font-headline font-bold text-lg tracking-tight text-primary-container">MICS</span>
 </button>
-<!-- Role Card: CUSTOM -->
-<button class="role-btn group relative bg-surface-container-high border-t-2 border-transparent hover:border-primary-container p-4 flex flex-col items-center justify-center transition-all active:scale-95" data-role="CUSTOM" onclick="document.getElementById('custom-input-container').classList.remove('hidden')">
-<span class="material-symbols-outlined text-3xl mb-2 group-hover:text-primary-container">edit_square</span>
-<span class="font-headline font-bold text-xs uppercase">Custom</span>
+<button class="bg-surface-container-lowest p-6 border-b-4 border-transparent hover:bg-surface-container-highest transition-all flex flex-col items-start gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">edit_note</span>
+<span class="font-headline font-bold text-lg tracking-tight">CUSTOM</span>
 </button>
 </div>
-<!-- Hidden Custom Input -->
-<div class="mt-4 hidden animate-in slide-in-from-top-4 duration-300" id="custom-input-container">
-<input class="w-full bg-surface-container-highest border-l-4 border-primary-fixed text-on-surface p-4 font-headline uppercase focus:ring-0 focus:outline-none placeholder:text-zinc-600 tracking-widest" placeholder="ENTER SYSTEM CALLSIGN..." type="text"/>
-</div>
-</section>
-<!-- BOTTOM: CHANNEL DENSITY & INITIALIZE -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
-<!-- Channel Slider -->
-<section class="bg-surface-container p-6 flex flex-col justify-between">
-<div class="space-y-1">
-<p class="text-[10px] font-bold text-primary-fixed uppercase tracking-[0.2em] opacity-60">IO Density</p>
-<h2 class="font-headline font-bold text-2xl uppercase">Channel Count</h2>
-</div>
-<div class="flex items-center gap-6 py-4">
-<span class="font-headline text-6xl font-black text-secondary-container min-w-[80px]" id="channel-val">12</span>
-<div class="flex-1">
-<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-secondary-container" max="64" min="1" oninput="document.getElementById('channel-val').innerText = this.value" type="range" value="12"/>
-<div class="flex justify-between mt-2 text-[8px] font-bold uppercase text-zinc-500 tracking-tighter">
-<span>01 Min</span>
-<span>32 Mid</span>
-<span>64 Max</span>
+<!-- Conditional Custom Input (Visual only) -->
+<div class="mt-4 flex flex-col gap-2">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">ASSIGN CUSTOM IDENTIFIER</label>
+<div class="flex h-12">
+<input class="bg-surface-container-highest border-none focus:ring-0 text-primary-container placeholder:text-white/20 font-mono w-full px-4 border-l-4 border-primary-container" placeholder="ENTER_UNIQUE_NAMESPACE" type="text"/>
+<button class="bg-primary-container text-on-primary-container px-6 font-black uppercase text-[10px] tracking-widest">COMMIT</button>
 </div>
 </div>
 </div>
-</section>
-<!-- Initialize Action -->
-<section class="bg-primary-container/10 p-2 flex flex-col h-full">
-<button class="h-full w-full bg-primary-container text-on-primary-container flex flex-col items-center justify-center gap-2 group transition-all hover:bg-surface-tint active:scale-95 asymmetric-cut">
-<span class="material-symbols-outlined text-5xl group-hover:animate-pulse">bolt</span>
-<span class="font-headline font-black text-3xl tracking-tighter uppercase italic">Initialize Uplink</span>
-<p class="text-[10px] uppercase font-bold tracking-[0.3em] opacity-70">Confirming Session Protocols</p>
-</button>
-</section>
+<!-- Section 03: CHANNEL DENSITY -->
+<div class="flex-1 bg-surface-container-low p-8 flex flex-col md:flex-row items-center gap-12">
+<div class="flex flex-col items-start min-w-[200px]">
+<label class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-2">ACTIVE NODES</label>
+<div class="flex items-baseline gap-2">
+<span class="text-8xl font-headline font-black text-primary-container leading-none">12</span>
+<span class="text-xl font-bold opacity-30">/ 24</span>
 </div>
 </div>
+<div class="flex-1 w-full space-y-6">
+<div class="flex justify-between text-[10px] font-black text-on-surface-variant tracking-widest">
+<span>MIN_CAPACITY [01]</span>
+<span>MAX_CAPACITY [24]</span>
+</div>
+<input class="w-full appearance-none bg-transparent cursor-pointer" max="24" min="1" type="range" value="12"/>
+<div class="grid grid-cols-24 h-4 gap-1 opacity-20">
+<!-- Density Visualization Blocks -->
+<div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div>
+<div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div>
+<div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div>
+<div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div><div class="bg-primary-container h-full"></div>
+<div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div>
+<div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div>
+<div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div>
+<div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div><div class="bg-white/10 h-full"></div>
+</div>
+</div>
+</div>
+<!-- Action: INITIALIZE UPLINK -->
+<button class="w-full py-8 bg-primary-container text-on-primary-container font-headline font-black text-3xl tracking-[0.2em] rounded-sm shadow-[0_0_40px_rgba(0,255,65,0.3)] hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-4 group">
+<span class="material-symbols-outlined text-4xl group-hover:rotate-12 transition-transform">bolt</span>
+            INITIALIZE UPLINK
+        </button>
 </main>
-<!-- BottomNavBar Anchor (Suppressed in Shell Visiblity Rule as this is a focused setup journey, but rendering for completeness with inactive states) -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end pb-6 px-4 h-24 bg-[#1c1b1b] shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-<div class="flex flex-col items-center text-zinc-500 opacity-60 hover:text-[#00FF41] transition-all">
-<span class="material-symbols-outlined">hub</span>
-<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">Channels</span>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 bg-[#0e0e0e] px-2 rounded-none border-t-2 border-[#3b4b37]/20">
+<div class="flex flex-col items-center justify-center text-[#ffffff]/40 p-2 hover:text-[#00ff41] hover:bg-[#1c1b1b] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em]">SYSTEMS</span>
 </div>
-<div class="flex flex-col items-center text-zinc-500 opacity-60 hover:text-[#00FF41] transition-all">
-<span class="material-symbols-outlined">speaker_notes</span>
-<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">Messages</span>
+<div class="flex flex-col items-center justify-center text-[#ffffff]/40 p-2 hover:text-[#00ff41] hover:bg-[#1c1b1b] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em]">PTT</span>
 </div>
-<div class="flex flex-col items-center text-zinc-500 opacity-60 hover:text-[#00FF41] transition-all">
-<span class="material-symbols-outlined">mic</span>
-<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">PTT</span>
+<div class="flex flex-col items-center justify-center text-[#ffffff]/40 p-2 hover:text-[#00ff41] hover:bg-[#1c1b1b] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em]">CHANNELS</span>
 </div>
-<!-- Active Tab for this screen -->
-<div class="bg-[#00FF41] text-[#007117] rounded-sm px-4 py-2 flex flex-col items-center scale-110 shadow-[0_0_15px_rgba(0,255,65,0.4)]">
-<span class="material-symbols-outlined">settings_input_component</span>
-<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">Settings</span>
+<div class="flex flex-col items-center justify-center text-[#ffffff]/40 p-2 hover:text-[#00ff41] hover:bg-[#1c1b1b] transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
+<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em]">LOGS</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#00ff41] text-[#007117] rounded-sm px-6 py-2 shadow-[0_0_15px_rgba(0,255,65,0.4)] cursor-pointer">
+<span class="material-symbols-outlined" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em]">CONFIG</span>
 </div>
 </nav>
-<!-- Visual Accent: Status Bar -->
-<div class="fixed top-0 left-0 w-full h-1 bg-primary-container z-[60]"></div>
+<!-- Visual Polish: scanline effect overlay -->
+<div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.03] overflow-hidden">
+<div class="w-full h-full bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]"></div>
+</div>
 </body></html>
