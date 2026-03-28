@@ -1,46 +1,64 @@
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 <script>
-const socket = io();
+document.addEventListener("DOMContentLoaded", () => {
 
-// CREATE
-document.getElementById('btn-generate').addEventListener('click', () => {
-    const prodName = document.getElementById('prod-name-input').value || 'SHOW';
+    const socket = io();
 
-    socket.emit('create_room', {
-        showName: prodName,
-        channels: 12
+    const btnGenerate = document.getElementById('btn-generate');
+    const btnAuthorize = document.getElementById('btn-authorize');
+
+    // CREATE ROOM
+    if (btnGenerate) {
+        btnGenerate.addEventListener('click', () => {
+
+            const prodName = document.getElementById('prod-name-input')?.value || "SHOW";
+
+            socket.emit('create_room', {
+                showName: prodName,
+                channels: 12
+            });
+        });
+    }
+
+    // JOIN ROOM
+    if (btnAuthorize) {
+        btnAuthorize.addEventListener('click', () => {
+
+            const roomID = document.getElementById('room-id-input')?.value;
+            const pin = document.getElementById('pin-input')?.value;
+
+            if (!roomID || !pin) {
+                alert("ROOM ID + PIN obrigatórios");
+                return;
+            }
+
+            socket.emit('join_room', { roomID, pin });
+        });
+    }
+
+    // EVENTS
+    socket.on('room_created', (data) => {
+        saveSession(data);
+        window.location.href = "config.html";
     });
+
+    socket.on('joined_success', (data) => {
+        saveSession(data);
+        window.location.href = "grid.html";
+    });
+
+    socket.on('error_msg', (msg) => {
+        alert(msg);
+    });
+
+    function saveSession(data) {
+        localStorage.setItem('av_session', JSON.stringify({
+            roomID: data.roomID,
+            pin: data.pin,
+            channels: data.channels
+        }));
+    }
+
 });
-
-// JOIN
-document.getElementById('btn-authorize').addEventListener('click', () => {
-    const roomID = document.getElementById('room-id-input').value;
-    const pin = document.getElementById('pin-input').value;
-
-    socket.emit('join_room', { roomID, pin });
-});
-
-// RESPONSES
-socket.on('room_created', (data) => {
-    saveSession(data);
-    window.location.href = "config.html";
-});
-
-socket.on('joined_success', (data) => {
-    saveSession(data);
-    window.location.href = "grid.html";
-});
-
-socket.on('error_msg', (msg) => {
-    alert(msg);
-});
-
-function saveSession(data){
-    localStorage.setItem('av_session', JSON.stringify({
-        roomID: data.roomID,
-        pin: data.pin,
-        channels: data.channels
-    }));
-}
 </script>
