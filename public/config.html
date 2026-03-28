@@ -9,146 +9,146 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script id="tailwind-config">
-    let socket;
-    let selectedRole = 'FOH';
-    let currentId = '';
-    let currentPin = '';
+        let socket;
+        let selectedRole = 'FOH';
+        let currentId = '----';
+        let currentPin = '----';
 
-    function connectSocket() {
-        const statusEl = document.getElementById('connection-status');
-        const uplinkBtn = document.getElementById('uplink-btn');
-        
-        socket = io();
-
-        socket.on('connect', () => {
-            statusEl.innerText = 'ONLINE';
-            statusEl.classList.remove('animate-pulse', 'text-primary-fixed');
-            statusEl.classList.add('bg-primary-container', 'text-on-primary-container');
-            uplinkBtn.disabled = false;
-        });
-
-        socket.on('disconnect', () => {
-            statusEl.innerText = 'OFFLINE';
-            statusEl.classList.add('animate-pulse', 'text-primary-fixed');
-            statusEl.classList.remove('bg-primary-container', 'text-on-primary-container');
-            uplinkBtn.disabled = true;
-        });
-
-        socket.on('room_created', (data) => {
-            currentId = data.roomID;
-            currentPin = data.pin;
+        function connectSocket() {
+            const statusEl = document.getElementById('connection-status');
+            const uplinkBtn = document.getElementById('uplink-btn');
             
-            document.getElementById('system-id').innerText = currentId;
-            document.getElementById('access-pin').innerText = currentPin;
+            // Connect to production server
+            socket = io('https://av-comm-server-production.up.railway.app');
 
-            const btn = document.getElementById('uplink-btn');
-            btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> LINK ESTABLISHED';
-            btn.classList.replace('bg-primary-container', 'bg-primary-fixed');
-            
-            let roleToSave = selectedRole;
-            if (selectedRole === 'CUSTOM') {
-                roleToSave = document.getElementById('custom-role-input').value || 'CUSTOM_USER';
-            }
+            socket.on('connect', () => {
+                statusEl.innerText = 'ONLINE';
+                statusEl.classList.remove('animate-pulse', 'text-primary-fixed');
+                statusEl.classList.add('bg-primary-container', 'text-on-primary-container');
+                uplinkBtn.disabled = false;
+            });
 
-            const config = {
-                id: data.roomID,
-                pin: data.pin,
-                role: roleToSave,
-                channels: document.getElementById('channel-slider').value
-            };
-            localStorage.setItem('av_comm_config', JSON.stringify(config));
+            socket.on('disconnect', () => {
+                statusEl.innerText = 'OFFLINE';
+                statusEl.classList.add('animate-pulse', 'text-primary-fixed');
+                statusEl.classList.remove('bg-primary-container', 'text-on-primary-container');
+                uplinkBtn.disabled = true;
+            });
 
-            setTimeout(() => {
-                window.location.href = 'grid.html';
-            }, 1000);
-        });
+            socket.on('room_created', (data) => {
+                currentId = data.roomID;
+                currentPin = data.pin;
+                
+                document.getElementById('system-id').innerText = currentId;
+                document.getElementById('access-pin').innerText = currentPin;
 
-        socket.on('error', (err) => {
-            statusEl.innerText = 'ERROR';
-            statusEl.classList.add('bg-error-container', 'text-on-error-container');
-            console.error('Socket error:', err);
-        });
-    }
+                const btn = document.getElementById('uplink-btn');
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> LINK ESTABLISHED';
+                btn.classList.replace('bg-primary-container', 'bg-primary-fixed');
+                
+                let roleToSave = selectedRole;
+                if (selectedRole === 'CUSTOM') {
+                    roleToSave = document.getElementById('custom-role-input').value || 'CUSTOM_USER';
+                }
 
-    function selectRole(role) {
-        selectedRole = role;
-        
-        const buttons = document.querySelectorAll('.role-btn');
-        buttons.forEach(btn => {
-            const roleName = btn.querySelector('.font-headline').innerText;
-            if (roleName === role) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
+                const session = {
+                    id: data.roomID,
+                    pin: data.pin,
+                    role: roleToSave,
+                    channels: document.getElementById('channel-slider').value
+                };
+                
+                // Save to av_comm_session per new protocol
+                localStorage.setItem('av_comm_session', JSON.stringify(session));
 
-        const container = document.getElementById('custom-role-container');
-        if (role === 'CUSTOM') {
-            container.classList.remove('hidden');
-            document.getElementById('custom-role-input').focus();
-        } else {
-            container.classList.add('hidden');
+                setTimeout(() => {
+                    window.location.href = 'grid.html';
+                }, 1000);
+            });
+
+            socket.on('error', (err) => {
+                statusEl.innerText = 'ERROR';
+                statusEl.classList.add('bg-error-container', 'text-on-error-container');
+                console.error('Socket error:', err);
+            });
         }
-    }
 
-    function updateChannels(val) {
-        document.getElementById('channel-display').innerText = val;
-        const percent = ((val / 24) * 100).toFixed(1);
-        document.getElementById('percent-display').innerText = `${percent}% OF MAX`;
-    }
+        function selectRole(role) {
+            selectedRole = role;
+            
+            const buttons = document.querySelectorAll('.role-btn');
+            buttons.forEach(btn => {
+                const roleName = btn.getAttribute('data-role');
+                if (roleName === role) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
 
-    function initializeUplink() {
-        const btn = document.getElementById('uplink-btn');
-        
-        const requestData = {
-            channels: document.getElementById('channel-slider').value
+            const container = document.getElementById('custom-role-container');
+            if (role === 'CUSTOM') {
+                container.classList.remove('hidden');
+                document.getElementById('custom-role-input').focus();
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        function updateChannels(val) {
+            document.getElementById('channel-display').innerText = val;
+            const percent = ((val / 24) * 100).toFixed(1);
+            document.getElementById('percent-display').innerText = `${percent}% OF MAX`;
+        }
+
+        function initializeUplink() {
+            const btn = document.getElementById('uplink-btn');
+            const channels = document.getElementById('channel-slider').value;
+
+            // Emit create_room with channel count
+            socket.emit('create_room', { channels: channels });
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> UPLINKING...';
+            
+            document.getElementById('connection-status').innerText = 'EMITTING...';
+        }
+
+        window.onload = () => {
+            connectSocket();
+            selectRole('FOH');
+            updateChannels(12); // Default to 12
         };
-
-        socket.emit('create_room', requestData);
-        
-        btn.disabled = true;
-        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> UPLINKING...';
-        
-        document.getElementById('connection-status').innerText = 'EMITTING...';
-    }
-
-    window.onload = () => {
-        connectSocket();
-        selectRole('FOH');
-        updateChannels(12);
-        document.getElementById('custom-role-input').value = 'A1 - LEAD';
-    };
-</script>
+    </script>
 <style>
-      .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-      }
-      .glitch-subtle {
-        text-shadow: 2px 0 #007117, -2px 0 #93000a;
-      }
-      body {
-        height: 100vh;
-        height: 100dvh;
-        overflow: hidden;
-      }
-      .scroll-container {
-        height: 100%;
-        overflow-y: auto;
-        scrollbar-width: none;
-      }
-      .scroll-container::-webkit-scrollbar {
-        display: none;
-      }
-      .role-btn.active {
-        background-color: #00ff41;
-        color: #003907;
-        box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-      }
-      .role-btn.active span {
-        color: inherit;
-        opacity: 0.8;
-      }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glitch-subtle {
+            text-shadow: 2px 0 #007117, -2px 0 #93000a;
+        }
+        body {
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+        }
+        .scroll-container {
+            height: 100%;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .role-btn.active {
+            background-color: #00ff41;
+            color: #003907;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+        }
+        .role-btn.active span {
+            color: inherit;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container flex flex-col h-screen overflow-hidden">
@@ -172,13 +172,13 @@
 <div>
 <label class="font-label text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-1 block">System ID</label>
 <div class="bg-surface-container-lowest p-3 border-l-2 border-primary-container h-12 flex items-center">
-<span class="font-headline text-2xl font-light tracking-tighter text-primary-container glitch-subtle" id="system-id">----</span>
+<span class="font-headline text-2xl font-light tracking-widest text-primary-container glitch-subtle" id="system-id">----</span>
 </div>
 </div>
 <div>
 <label class="font-label text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-1 block">Access Pin</label>
 <div class="bg-surface-container-lowest p-3 border-l-2 border-secondary-container h-12 flex items-center">
-<span class="font-headline text-2xl font-light tracking-tighter text-secondary-container" id="access-pin">----</span>
+<span class="font-headline text-2xl font-light tracking-widest text-secondary-container" id="access-pin">----</span>
 </div>
 </div>
 </div>
@@ -187,19 +187,19 @@
 <section class="bg-surface-container-low p-4 shrink-0">
 <h2 class="font-headline font-bold text-[10px] uppercase tracking-[0.2em] text-primary-container mb-3 text-center">02: OPERATIONAL ROLE</h2>
 <div class="grid grid-cols-2 gap-2 mb-3" id="role-grid">
-<button class="role-btn bg-surface-container-high p-3 text-left transition-all active" onclick="selectRole('FOH')">
+<button class="role-btn bg-surface-container-high p-3 text-left transition-all active" data-role="FOH" onclick="selectRole('FOH')">
 <span class="font-label text-[8px] block opacity-50 mb-1">FRONT OF HOUSE</span>
 <span class="font-headline text-sm font-bold uppercase">FOH</span>
 </button>
-<button class="role-btn bg-surface-container-high p-3 text-left transition-all" onclick="selectRole('BOH')">
+<button class="role-btn bg-surface-container-high p-3 text-left transition-all" data-role="BOH" onclick="selectRole('BOH')">
 <span class="font-label text-[8px] block opacity-50 mb-1">BACK OF HOUSE</span>
 <span class="font-headline text-sm font-bold uppercase">BOH</span>
 </button>
-<button class="role-btn bg-surface-container-high p-3 text-left transition-all" onclick="selectRole('MICS')">
+<button class="role-btn bg-surface-container-high p-3 text-left transition-all" data-role="MICS" onclick="selectRole('MICS')">
 <span class="font-label text-[8px] block opacity-50 mb-1">WIRELESS</span>
 <span class="font-headline text-sm font-bold uppercase">MICS</span>
 </button>
-<button class="role-btn bg-surface-container-high p-3 text-left transition-all" onclick="selectRole('CUSTOM')">
+<button class="role-btn bg-surface-container-high p-3 text-left transition-all" data-role="CUSTOM" onclick="selectRole('CUSTOM')">
 <span class="font-label text-[8px] block opacity-50 mb-1">USER DEFINED</span>
 <span class="font-headline text-sm font-bold uppercase">CUSTOM</span>
 </button>
@@ -240,7 +240,7 @@
 </div>
 </section>
 <!-- Primary Action -->
-<div class="mt-auto pt-2">
+<div class="mt-auto pt-2 pb-4">
 <button class="w-full bg-primary-container text-on-primary-container py-4 rounded-sm font-headline font-black text-sm uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(0,255,65,0.2)] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="uplink-btn" onclick="initializeUplink()">
 <span class="material-symbols-outlined text-lg">cloud_upload</span>
 <span id="btn-text">INITIALIZE UPLINK</span>
@@ -271,116 +271,4 @@
 <span class="font-['Inter'] text-[8px] uppercase font-black tracking-tighter">Settings</span>
 </a>
 </nav>
-<script>
-    let socket;
-    let selectedRole = 'FOH';
-    let currentId = '';
-    let currentPin = '';
-
-    function connectSocket() {
-        const statusEl = document.getElementById('connection-status');
-        const uplinkBtn = document.getElementById('uplink-btn');
-        
-        socket = io();
-
-        socket.on('connect', () => {
-            statusEl.innerText = 'ONLINE';
-            statusEl.classList.remove('animate-pulse', 'text-primary-fixed');
-            statusEl.classList.add('bg-primary-container', 'text-on-primary-container');
-            uplinkBtn.disabled = false;
-        });
-
-        socket.on('disconnect', () => {
-            statusEl.innerText = 'OFFLINE';
-            statusEl.classList.add('animate-pulse', 'text-primary-fixed');
-            statusEl.classList.remove('bg-primary-container', 'text-on-primary-container');
-            uplinkBtn.disabled = true;
-        });
-
-        socket.on('room_created', (data) => {
-            currentId = data.roomID;
-            currentPin = data.pin;
-            
-            document.getElementById('system-id').innerText = currentId;
-            document.getElementById('access-pin').innerText = currentPin;
-
-            const btn = document.getElementById('uplink-btn');
-            btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> LINK ESTABLISHED';
-            btn.classList.replace('bg-primary-container', 'bg-primary-fixed');
-            
-            let roleToSave = selectedRole;
-            if (selectedRole === 'CUSTOM') {
-                roleToSave = document.getElementById('custom-role-input').value || 'CUSTOM_USER';
-            }
-
-            const config = {
-                id: data.roomID,
-                pin: data.pin,
-                role: roleToSave,
-                channels: document.getElementById('channel-slider').value
-            };
-            localStorage.setItem('av_comm_config', JSON.stringify(config));
-
-            setTimeout(() => {
-                window.location.href = 'grid.html';
-            }, 1000);
-        });
-
-        socket.on('error', (err) => {
-            statusEl.innerText = 'ERROR';
-            statusEl.classList.add('bg-error-container', 'text-on-error-container');
-            console.error('Socket error:', err);
-        });
-    }
-
-    function selectRole(role) {
-        selectedRole = role;
-        
-        const buttons = document.querySelectorAll('.role-btn');
-        buttons.forEach(btn => {
-            const roleName = btn.querySelector('.font-headline').innerText;
-            if (roleName === role) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
-        const container = document.getElementById('custom-role-container');
-        if (role === 'CUSTOM') {
-            container.classList.remove('hidden');
-            document.getElementById('custom-role-input').focus();
-        } else {
-            container.classList.add('hidden');
-        }
-    }
-
-    function updateChannels(val) {
-        document.getElementById('channel-display').innerText = val;
-        const percent = ((val / 24) * 100).toFixed(1);
-        document.getElementById('percent-display').innerText = `${percent}% OF MAX`;
-    }
-
-    function initializeUplink() {
-        const btn = document.getElementById('uplink-btn');
-        
-        const requestData = {
-            channels: document.getElementById('channel-slider').value
-        };
-
-        socket.emit('create_room', requestData);
-        
-        btn.disabled = true;
-        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> UPLINKING...';
-        
-        document.getElementById('connection-status').innerText = 'EMITTING...';
-    }
-
-    window.onload = () => {
-        connectSocket();
-        selectRole('FOH');
-        updateChannels(12);
-        document.getElementById('custom-role-input').value = 'A1 - LEAD';
-    };
-</script>
 </body></html>
