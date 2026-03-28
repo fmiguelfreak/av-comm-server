@@ -3,103 +3,91 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>AV-COMM TACTICAL GRID</title>
+<title>AV-COMM Tactical Grid</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "on-background": "#e5e2e1",
-                        "inverse-primary": "#006e16",
-                        "tertiary-fixed-dim": "#ffb4a2",
-                        "error-container": "#93000a",
-                        "on-secondary-container": "#613400",
-                        "on-tertiary-container": "#b82a00",
-                        "on-error-container": "#ffdad6",
-                        "surface-bright": "#393939",
-                        "surface-container-high": "#2a2a2a",
-                        "primary-fixed-dim": "#00e639",
-                        "surface-variant": "#353534",
-                        "background": "#131313",
-                        "tertiary": "#fff8f6",
-                        "surface-container-highest": "#353534",
-                        "tertiary-fixed": "#ffdad2",
-                        "primary-container": "#00ff41",
-                        "on-primary": "#003907",
-                        "tertiary-container": "#ffd3c8",
-                        "primary": "#ebffe2",
-                        "error": "#ffb4ab",
-                        "surface-container": "#201f1f",
-                        "surface": "#131313",
-                        "on-secondary": "#4c2700",
-                        "surface-container-lowest": "#0e0e0e",
-                        "primary-fixed": "#72ff70",
-                        "secondary-fixed": "#ffdcc1",
-                        "outline": "#84967e",
-                        "secondary-fixed-dim": "#ffb778",
-                        "outline-variant": "#3b4b37",
-                        "surface-dim": "#131313",
-                        "on-primary-container": "#007117",
-                        "on-tertiary": "#621100",
-                        "on-primary-fixed-variant": "#00530e",
-                        "surface-container-low": "#1c1b1b",
-                        "secondary": "#ffb778",
-                        "on-secondary-fixed": "#2e1500",
-                        "on-tertiary-fixed": "#3c0700",
-                        "on-secondary-fixed-variant": "#6c3a00",
-                        "on-error": "#690005",
-                        "secondary-container": "#fd9000",
-                        "inverse-on-surface": "#313030",
-                        "on-surface-variant": "#b9ccb2",
-                        "on-surface": "#e5e2e1",
-                        "on-primary-fixed": "#002203",
-                        "surface-tint": "#00e639",
-                        "on-tertiary-fixed-variant": "#8a1d00",
-                        "inverse-surface": "#e5e2e1"
-                    },
-                    fontFamily: {
-                        "headline": ["Space Grotesk"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-                },
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed-dim": "#00e639",
+              "primary-container": "#00ff41",
+              "outline": "#84967e",
+              "on-secondary-fixed": "#2e1500",
+              "on-tertiary-container": "#b82a00",
+              "secondary-container": "#fd9000",
+              "on-primary-container": "#007117",
+              "tertiary": "#fff8f6",
+              "tertiary-container": "#ffd3c8",
+              "surface-container-low": "#1c1b1b",
+              "background": "#131313",
+              "error": "#ffb4ab",
+              "surface-variant": "#353534",
+              "secondary-fixed-dim": "#ffb778",
+              "surface-container-high": "#2a2a2a",
+              "on-background": "#e5e2e1",
+              "primary": "#ebffe2",
+              "on-error": "#690005",
+              "inverse-on-surface": "#313030",
+              "secondary": "#ffb778",
+              "outline-variant": "#3b4b37",
+              "inverse-primary": "#006e16",
+              "on-secondary": "#4c2700",
+              "surface-container": "#201f1f",
+              "surface-bright": "#393939",
+              "primary-fixed": "#72ff70",
+              "on-secondary-container": "#613400",
+              "on-surface-variant": "#b9ccb2",
+              "error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "surface-container-lowest": "#0e0e0e",
+              "on-primary-fixed-variant": "#00530e",
+              "surface-tint": "#00e639",
+              "surface": "#131313",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "surface-dim": "#131313",
+              "on-surface": "#e5e2e1",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-highest": "#353534",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "secondary-fixed": "#ffdcc1",
+              "on-tertiary": "#621100",
+              "on-primary": "#003907",
+              "on-error-container": "#ffdad6",
+              "on-primary-fixed": "#002203",
+              "on-tertiary-fixed": "#3c0700",
+              "tertiary-fixed": "#ffdad2"
             },
-        }
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
     </script>
 <style>
-        body {
-            background-color: #131313;
-            height: 100vh;
-            overflow: hidden;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .zero-scroll-container {
-            height: calc(100vh - 64px - 80px); /* Adjusting for Header and Footer */
-        }
-        .tonal-shift-from-131313-to-1c1b1b {
-            background: linear-gradient(180deg, #131313 0%, #1c1b1b 100%);
-        }
-        .glow-active {
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
-        }
-        .pulse-alert {
-            animation: pulse-red 1.5s infinite ease-in-out;
-        }
-        @keyframes pulse-red {
-            0% { background-color: #93000a; }
-            50% { background-color: #ffb4ab; }
-            100% { background-color: #93000a; }
-        }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        overscroll-behavior: none;
+        background-color: #131313;
+      }
+      .tactical-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        height: calc(100vh - 4rem - 5rem); /* viewport minus TopAppBar and BottomNavBar */
+        gap: 0.5rem;
+        padding: 0.5rem;
+      }
     </style>
 <style>
     body {
@@ -107,184 +95,186 @@
     }
   </style>
   </head>
-<body class="flex flex-col font-body text-on-surface">
-<!-- TopAppBar -->
-<header class="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center bg-[#1c1b1b] rounded-none border-b-4 border-[#00ff41] shadow-[0_0_20px_rgba(0,255,65,0.1)]">
-<div class="flex flex-col">
-<span class="font-headline font-bold tracking-tight uppercase text-[#00ff41] text-xs">SESSION: ALPHA_STAGE_01</span>
-<span class="text-[10px] font-label text-on-surface-variant tracking-widest">Technician ID: 8829 | ROLE: LEAD_OPS</span>
+<body class="font-body text-on-surface bg-background select-none">
+<!-- TOP APP BAR -->
+<header class="w-full border-t-4 border-[#00FF41] bg-[#131313] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-6 h-16 w-full sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00FF41]">terminal</span>
+<span class="font-headline font-bold text-xl tracking-tighter text-[#00FF41]">ST-AUTHORITY</span>
 </div>
+<!-- Role | ID | PIN Trigger -->
+<button class="flex flex-col items-end font-headline uppercase tracking-widest text-sm text-[#00FF41] hover:bg-[#2a2a2a] transition-colors p-1 rounded-sm active:scale-95 duration-75">
 <div class="flex items-center gap-2">
-<div class="bg-surface-container-highest px-3 py-1 rounded-sm border border-outline-variant/20">
-<span class="font-headline font-bold text-[#00ff41] text-sm tracking-tighter">PIN: 4492</span>
+<div class="w-2 h-2 rounded-full bg-[#00FF41] shadow-[0_0_8px_#00FF41]"></div>
+<span id="role-display">FOH | 8829 | 4492</span>
 </div>
-</div>
+<span class="text-[10px] opacity-60">ID: 992-PX</span>
+</button>
 </header>
-<!-- Main Tactical Grid -->
-<main class="mt-[72px] mb-20 flex-grow px-4 py-2 zero-scroll-container">
-<div class="grid grid-cols-2 grid-rows-6 gap-2 h-full">
-<!-- CH 01: READY STATE (Solid Primary) -->
-<div class="bg-primary-container text-on-primary-container rounded-sm p-3 flex flex-col justify-between shadow-[0_0_15px_rgba(0,255,65,0.3)] border-l-4 border-on-primary-container scale-95 active:scale-90 transition-transform">
+<!-- MAIN TACTICAL CANVAS (Zero Scroll Optimized) -->
+<main class="tactical-grid bg-[#1c1b1b]">
+<!-- Channel 01 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-primary-container">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg">CH 01</span>
-<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span class="font-headline text-lg font-bold text-primary-container">CH 01</span>
+<span class="text-[10px] font-label text-outline opacity-50">VOX-ACTIVE</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider opacity-70">STATUS</span>
-<span class="font-headline font-bold text-sm">READY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">STAGE_LEFT</span>
+<div class="h-1 w-full bg-[#00FF41] shadow-[0_0_10px_rgba(0,255,65,0.4)]"></div>
+</div>
+<div class="absolute bottom-2 right-2">
+<span class="text-[10px] font-bold text-on-primary-container bg-primary-container px-1 rounded-sm">READY</span>
 </div>
 </div>
-<!-- CH 02: ALERT STATE (Pulsing Red) -->
-<div class="pulse-alert text-on-error-container rounded-sm p-3 flex flex-col justify-between border-l-4 border-white/40 scale-95 active:scale-90 transition-transform">
+<!-- Channel 02 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg">CH 02</span>
-<span class="material-symbols-outlined text-sm">warning</span>
+<span class="font-headline text-lg font-bold text-on-surface">CH 02</span>
+<span class="text-[10px] font-label text-outline opacity-50">STANDBY</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider opacity-70">STATUS</span>
-<span class="font-headline font-bold text-sm">CRITICAL</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">STAGE_RIGHT</span>
+<div class="h-1 w-full bg-outline-variant/30"></div>
 </div>
 </div>
-<!-- CH 03: NORMAL (Dark/Outline) -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 03 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-secondary-container">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 03</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-secondary-container">CH 03</span>
+<span class="text-[10px] font-label text-outline opacity-50">PRIORITY</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">DIRECTOR_W</span>
+<div class="h-1 w-full bg-secondary-container"></div>
+</div>
+<div class="absolute bottom-2 right-2">
+<span class="text-[10px] font-bold text-on-secondary-container bg-secondary-container px-1 rounded-sm">ALERT</span>
 </div>
 </div>
-<!-- CH 04: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 04 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 04</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-on-surface">CH 04</span>
+<span class="text-[10px] font-label text-outline opacity-50">IDLE</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">PRODUCER</span>
+<div class="h-1 w-full bg-outline-variant/30"></div>
 </div>
 </div>
-<!-- CH 05: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 05 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-primary-container">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 05</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-primary-container">CH 05</span>
+<span class="text-[10px] font-label text-outline opacity-50">VOX-ACTIVE</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">LIGHTING_1</span>
+<div class="h-1 w-full bg-[#00FF41]"></div>
 </div>
 </div>
-<!-- CH 06: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 06 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 06</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-on-surface">CH 06</span>
+<span class="text-[10px] font-label text-outline opacity-50">IDLE</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">VIDEO_WALL</span>
+<div class="h-1 w-full bg-outline-variant/30"></div>
 </div>
 </div>
-<!-- CH 07: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 07 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 07</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-on-surface">CH 07</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">RIGGING_M</span>
+<div class="h-1 w-full bg-outline-variant/30"></div>
 </div>
 </div>
-<!-- CH 08: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 08 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-primary-container">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 08</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-primary-container">CH 08</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SPOT_01</span>
+<div class="h-1 w-full bg-[#00FF41]"></div>
 </div>
 </div>
-<!-- CH 09: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 09 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 09</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-on-surface">CH 09</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SPOT_02</span>
+<div class="h-1 w-full bg-outline-variant/30"></div>
 </div>
 </div>
-<!-- CH 10: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 10 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 10</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-on-surface">CH 10</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">PYRO_SAFE</span>
+<div class="h-1 w-full bg-outline-variant/30"></div>
 </div>
 </div>
-<!-- CH 11: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 11 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-error-container">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 11</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-error">CH 11</span>
+<span class="text-[10px] font-label text-error opacity-70">EMERGENCY</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SYSTEM_ERR</span>
+<div class="h-1 w-full bg-error animate-pulse"></div>
 </div>
 </div>
-<!-- CH 12: NORMAL -->
-<div class="bg-surface-container-low border border-outline-variant/40 rounded-sm p-3 flex flex-col justify-between border-l-4 border-[#00ff41] scale-95 active:scale-90 transition-transform">
+<!-- Channel 12 -->
+<div class="bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant">
 <div class="flex justify-between items-start">
-<span class="font-headline font-bold text-lg text-primary-fixed-dim">CH 12</span>
-<span class="material-symbols-outlined text-sm text-on-surface-variant">volume_up</span>
+<span class="font-headline text-lg font-bold text-on-surface">CH 12</span>
 </div>
-<div class="flex flex-col">
-<span class="font-label text-[10px] font-black uppercase tracking-wider text-on-surface-variant">LINK</span>
-<span class="font-headline font-bold text-sm">STANDBY</span>
-</div>
+<div class="flex flex-col gap-1">
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">SPARE_LINE</span>
+<div class="h-1 w-full bg-outline-variant/30"></div>
 </div>
 </div>
 </main>
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 bg-[#0e0e0e] px-2 rounded-none border-t-2 border-[#3b4b37]/20">
-<!-- SYSTEMS -->
-<button class="flex flex-col items-center justify-center text-[#ffffff]/40 p-2 hover:text-[#00ff41] hover:bg-[#1c1b1b] transition-all">
-<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
-<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em] mt-1">SYSTEMS</span>
-</button>
-<!-- CHANNELS (Active) -->
-<button class="flex flex-col items-center justify-center bg-[#00ff41] text-[#007117] rounded-sm px-6 py-2 shadow-[0_0_15px_rgba(0,255,65,0.4)]">
-<span class="material-symbols-outlined" data-icon="settings_input_component" style="font-variation-settings: 'FILL' 1;">settings_input_component</span>
-<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em] mt-1">CHANNELS</span>
-</button>
-<!-- PTT (Central Action) -->
-<button class="relative -top-4 bg-primary-container text-on-primary-container w-16 h-16 rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(0,255,65,0.5)] border-4 border-background scale-95 active:scale-90 transition-all duration-100">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">mic</span>
-</button>
-<!-- LOGS -->
-<button class="flex flex-col items-center justify-center text-[#ffffff]/40 p-2 hover:text-[#00ff41] hover:bg-[#1c1b1b] transition-all">
-<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
-<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em] mt-1">LOGS</span>
-</button>
-<!-- CONFIG -->
-<button class="flex flex-col items-center justify-center text-[#ffffff]/40 p-2 hover:text-[#00ff41] hover:bg-[#1c1b1b] transition-all">
-<span class="material-symbols-outlined" data-icon="settings">settings</span>
-<span class="font-['Inter'] font-black text-[10px] uppercase tracking-[0.05em] mt-1">CONFIG</span>
-</button>
+<!-- BOTTOM NAV BAR / PTT CONSOLE -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-4 bg-[#131313] border-t border-[#3b4b37]/20 h-20">
+<!-- SYSTEM TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">SYSTEM</span>
+</div>
+<!-- PATCH TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">settings_ethernet</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PATCH</span>
+</div>
+<!-- CENTRAL PTT BUTTON (PTT TAB ACTIVE) -->
+<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 scale-110 shadow-[0_0_20px_rgba(0,255,65,0.4)] active:scale-100 transition-all cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PTT</span>
+</div>
+<!-- COMMS TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">COMMS</span>
+</div>
+<!-- LOGS TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">LOGS</span>
+</div>
 </nav>
-<!-- Visual status indicators overlay (Ambient) -->
-<div class="fixed top-0 left-0 w-1 h-full bg-primary-container/20"></div>
-<div class="fixed top-0 right-0 w-1 h-full bg-primary-container/20"></div>
+<!-- Overlay Signal / Alert State (Ghost) -->
+<div class="fixed inset-0 pointer-events-none border-4 border-primary-container/10 z-[60]"></div>
 </body></html>
