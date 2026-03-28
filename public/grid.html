@@ -3,208 +3,255 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>AV-COMM GRID | SYSTEM OPERATIONAL</title>
+<title>AV-COMM Tactical Interface</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              colors: {
-                "primary-fixed": "#72ff70",
-                "on-secondary-container": "#613400",
-                "outline": "#84967e",
-                "on-primary-fixed-variant": "#00530e",
-                "outline-variant": "#3b4b37",
-                "on-surface": "#e5e2e1",
-                "error-container": "#93000a",
-                "on-primary-fixed": "#002203",
-                "on-tertiary": "#621100",
-                "surface": "#131313",
-                "tertiary-fixed": "#ffdad2",
-                "secondary-container": "#fd9000",
-                "on-tertiary-container": "#b82a00",
-                "on-secondary": "#4c2700",
-                "secondary-fixed": "#ffdcc1",
-                "on-tertiary-fixed": "#3c0700",
-                "surface-tint": "#00e639",
-                "on-error": "#690005",
-                "on-secondary-fixed": "#2e1500",
-                "inverse-surface": "#e5e2e1",
-                "secondary-fixed-dim": "#ffb778",
-                "tertiary": "#fff8f6",
-                "surface-variant": "#353534",
-                "surface-dim": "#131313",
-                "tertiary-fixed-dim": "#ffb4a2",
-                "surface-bright": "#393939",
-                "secondary": "#ffb778",
-                "inverse-on-surface": "#313030",
-                "surface-container": "#201f1f",
-                "on-secondary-fixed-variant": "#6c3a00",
-                "surface-container-high": "#2a2a2a",
-                "on-tertiary-fixed-variant": "#8a1d00",
-                "primary-container": "#00ff41",
-                "error": "#ffb4ab",
-                "tertiary-container": "#ffd3c8",
-                "surface-container-lowest": "#0e0e0e",
-                "surface-container-low": "#1c1b1b",
-                "on-error-container": "#ffdad6",
-                "inverse-primary": "#006e16",
-                "on-primary-container": "#007117",
-                "on-background": "#e5e2e1",
-                "background": "#131313",
-                "surface-container-highest": "#353534",
-                "primary": "#ebffe2",
-                "primary-fixed-dim": "#00e639",
-                "on-surface-variant": "#b9ccb2",
-                "on-primary": "#003907"
-              },
-              fontFamily: {
-                "headline": ["Space Grotesk"],
-                "body": ["Inter"],
-                "label": ["Inter"]
-              },
-              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error": "#ffb4ab",
+              "on-error-container": "#ffdad6",
+              "outline-variant": "#3b4b37",
+              "inverse-primary": "#006e16",
+              "secondary-fixed": "#ffdcc1",
+              "on-primary": "#003907",
+              "surface-bright": "#393939",
+              "primary-container": "#00ff41",
+              "on-secondary-fixed": "#2e1500",
+              "on-secondary-container": "#613400",
+              "surface-container-low": "#1c1b1b",
+              "on-primary-container": "#007117",
+              "tertiary-fixed": "#ffdad2",
+              "tertiary": "#fff8f6",
+              "surface-tint": "#00e639",
+              "on-error": "#690005",
+              "surface-variant": "#353534",
+              "on-tertiary-fixed": "#3c0700",
+              "on-secondary": "#4c2700",
+              "error-container": "#93000a",
+              "surface-container-highest": "#353534",
+              "primary-fixed": "#72ff70",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "secondary-fixed-dim": "#ffb778",
+              "surface": "#131313",
+              "secondary-container": "#fd9000",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "surface-dim": "#131313",
+              "primary-fixed-dim": "#00e639",
+              "surface-container-lowest": "#0e0e0e",
+              "inverse-surface": "#e5e2e1",
+              "on-tertiary-container": "#b82a00",
+              "on-surface": "#e5e2e1",
+              "on-tertiary": "#621100",
+              "tertiary-container": "#ffd3c8",
+              "inverse-on-surface": "#313030",
+              "outline": "#84967e",
+              "primary": "#ebffe2",
+              "on-background": "#e5e2e1",
+              "surface-container": "#201f1f",
+              "on-primary-fixed": "#002203",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "secondary": "#ffb778",
+              "background": "#131313",
+              "on-primary-fixed-variant": "#00530e",
+              "surface-container-high": "#2a2a2a",
+              "on-surface-variant": "#b9ccb2"
             },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
           },
-        }
+        },
+      }
     </script>
 <style>
-        body {
-            background-color: #131313;
-            color: #e5e2e1;
-            overflow: hidden;
-            height: 100dvh;
-        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        .ptt-active {
-            box-shadow: 0 0 25px #00ff41;
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            overflow: hidden; /* Zero-scroll mandate */
+            height: 100vh;
         }
-        /* Ensure the grid fits without scroll */
-        #channel-grid {
-            height: calc(100dvh - 72px - 80px); /* Total minus header and footer */
-        }
+        .status-glow-ready { box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+        .status-glow-alert { box-shadow: 0 0 15px rgba(253, 144, 0, 0.2); }
     </style>
-</head>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
 <body class="flex flex-col font-body">
-<!-- TopAppBar -->
-<header class="h-[72px] flex justify-between items-center w-full px-6 bg-[#131313] border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] z-50 shrink-0">
-<div class="flex flex-col">
-<span class="font-['Space_Grotesk'] tracking-tighter uppercase font-bold text-sm text-[#00FF41]">SYSTEM OPERATIONAL</span>
-<div class="flex items-center gap-2 mt-0.5">
-<span class="font-headline font-bold text-xs tracking-widest text-neutral-400" id="display-id-pin">ID: ---- | PIN: ----</span>
+<!-- TOP APP BAR -->
+<header class="bg-[#131313] dark:bg-[#131313] docked full-width top-0 border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center w-full px-6 py-4 z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00FF41]" data-icon="terminal">terminal</span>
+<h1 class="font-headline uppercase tracking-widest text-sm text-[#00FF41]">SESSION: 0492-X</h1>
 </div>
+<div class="flex flex-col items-end">
+<div class="flex gap-4 font-headline text-[10px] tracking-tighter text-[#00FF41] opacity-80">
+<span class="bg-[#1c1b1b] px-2 py-0.5 rounded-sm">ID: 8821</span>
+<span class="bg-[#1c1b1b] px-2 py-0.5 rounded-sm">PIN: 4401</span>
 </div>
-<div class="flex items-center gap-4">
-<button class="text-[#00FF41] font-headline font-black tracking-widest text-lg hover:opacity-80 transition-opacity uppercase text-right" id="role-toggle">
-<span id="display-role">LOADING...</span>
-</button>
-<div class="w-8 h-8 rounded-sm bg-surface-container-high border border-outline-variant flex items-center justify-center">
-<span class="material-symbols-outlined text-xs text-primary-fixed-dim">id_card</span>
-</div>
+<span class="font-headline font-bold tracking-tighter text-[#00FF41] text-lg leading-tight uppercase">FOH</span>
 </div>
 </header>
-<!-- Main Grid Canvas -->
-<main class="flex-1 p-3 grid grid-cols-2 grid-rows-6 gap-2 overflow-hidden" id="channel-grid">
-<!-- JS will populate these 12 modules dynamically -->
+<!-- MAIN OPERATIONAL GRID (12 CHANNELS) -->
+<main class="flex-grow p-2 grid grid-cols-2 grid-rows-6 gap-2 bg-[#0e0e0e]">
+<!-- CHANNEL CARD 01 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-primary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 01</span>
+<span class="text-[8px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-primary-fixed leading-none uppercase">MIC 1</h2>
+<div class="absolute bottom-0 right-0 p-1 opacity-20">
+<span class="material-symbols-outlined text-4xl" data-icon="settings_input_antenna">settings_input_antenna</span>
+</div>
+</button>
+<!-- CHANNEL CARD 02 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-secondary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 02</span>
+<span class="text-[8px] font-black text-secondary-container bg-on-secondary px-1 rounded-sm">ALERT</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-secondary-fixed leading-none uppercase">MIC 2</h2>
+<div class="absolute bottom-0 right-0 p-1 opacity-20">
+<span class="material-symbols-outlined text-4xl" data-icon="warning">warning</span>
+</div>
+</button>
+<!-- CHANNEL CARD 03 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-outline-variant relative overflow-hidden active:scale-95 transition-transform opacity-70">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 03</span>
+<span class="text-[8px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-on-surface leading-none uppercase">ST-LR</h2>
+</button>
+<!-- CHANNEL CARD 04 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-primary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 04</span>
+<span class="text-[8px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-primary-fixed leading-none uppercase">COMM 1</h2>
+</button>
+<!-- CHANNEL CARD 05 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-primary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 05</span>
+<span class="text-[8px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-primary-fixed leading-none uppercase">TALK</h2>
+</button>
+<!-- CHANNEL CARD 06 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-outline-variant relative overflow-hidden active:scale-95 transition-transform opacity-70">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 06</span>
+<span class="text-[8px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-on-surface leading-none uppercase">REVERB</h2>
+</button>
+<!-- CHANNEL CARD 07 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-primary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 07</span>
+<span class="text-[8px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-primary-fixed leading-none uppercase">MON 1</h2>
+</button>
+<!-- CHANNEL CARD 08 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-primary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 08</span>
+<span class="text-[8px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-primary-fixed leading-none uppercase">MON 2</h2>
+</button>
+<!-- CHANNEL CARD 09 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-outline-variant relative overflow-hidden active:scale-95 transition-transform opacity-70">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 09</span>
+<span class="text-[8px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-on-surface leading-none uppercase">SPARE</h2>
+</button>
+<!-- CHANNEL CARD 10 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-primary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 10</span>
+<span class="text-[8px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-primary-fixed leading-none uppercase">V-PLAY</h2>
+</button>
+<!-- CHANNEL CARD 11 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-primary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 11</span>
+<span class="text-[8px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-primary-fixed leading-none uppercase">STAGE</h2>
+</button>
+<!-- CHANNEL CARD 12 -->
+<button class="bg-surface-container-high rounded-sm p-3 flex flex-col justify-between items-start border-l-4 border-secondary-container relative overflow-hidden active:scale-95 transition-transform">
+<div class="w-full flex justify-between items-start">
+<span class="font-headline text-[10px] text-on-surface-variant font-bold">CH 12</span>
+<span class="text-[8px] font-black text-secondary-container bg-on-secondary px-1 rounded-sm">ALERT</span>
+</div>
+<h2 class="font-headline font-bold text-xl text-secondary-fixed leading-none uppercase">PIT</h2>
+</button>
 </main>
-<!-- BottomNavBar -->
-<nav class="h-20 w-full z-50 flex justify-around items-center px-4 bg-[#1c1b1b] shadow-[0_-8px_32px_rgba(0,0,0,0.5)] shrink-0">
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined">settings_remote</span>
+<!-- FOOTER / PTT -->
+<footer class="bg-[#0e0e0e] h-28 flex items-center justify-center px-6 relative">
+<!-- PTT BUTTON -->
+<button class="relative group h-20 w-full max-w-md bg-[#131313] border-4 border-primary-container rounded-sm flex items-center justify-center gap-4 active:bg-primary-container active:scale-95 transition-all shadow-[0_0_30px_rgba(0,255,65,0.1)]">
+<div class="absolute left-4 flex gap-1">
+<div class="w-1 h-8 bg-primary-container opacity-30"></div>
+<div class="w-1 h-8 bg-primary-container opacity-60"></div>
+<div class="w-1 h-8 bg-primary-container opacity-100"></div>
+</div>
+<span class="material-symbols-outlined text-4xl text-primary-container group-active:text-on-primary-container" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="font-headline font-black text-2xl tracking-tighter text-primary-container group-active:text-on-primary-container uppercase">PUSH TO TALK</span>
+<div class="absolute right-4 flex gap-1">
+<div class="w-1 h-8 bg-primary-container opacity-100"></div>
+<div class="w-1 h-8 bg-primary-container opacity-60"></div>
+<div class="w-1 h-8 bg-primary-container opacity-30"></div>
+</div>
 </button>
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined">analytics</span>
-</button>
-<!-- PTT CENTER ACTION -->
-<button class="flex items-center justify-center bg-[#00ff41] text-[#007117] rounded-sm scale-110 shadow-[0_0_15px_#00ff41] px-8 py-4 active:scale-95 transition-all duration-75">
-<span class="material-symbols-outlined text-3xl font-bold" style="font-variation-settings: 'FILL' 1;">mic</span>
-</button>
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined">security</span>
-</button>
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-all duration-150">
-<span class="material-symbols-outlined">terminal</span>
-</button>
+</footer>
+<!-- BOTTOM NAVIGATION SHELL -->
+<nav class="bg-[#0e0e0e] dark:bg-[#0e0e0e] fixed bottom-0 left-0 w-full flex justify-around items-center px-2 pb-2 h-20 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center bg-[#00FF41] text-[#131313] rounded-sm scale-110 shadow-[0_0_15px_#00FF41] px-4 py-2 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+<span class="font-label text-[10px] uppercase font-black tracking-tighter">Channels</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-label text-[10px] uppercase font-black tracking-tighter">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="font-label text-[10px] uppercase font-black tracking-tighter">PTT</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-label text-[10px] uppercase font-black tracking-tighter">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label text-[10px] uppercase font-black tracking-tighter">Settings</span>
+</a>
 </nav>
-<script>
-        // Data Handling Logic
-        const roles = ["A1 - LEAD", "A2 - ASSIST", "FOH", "BOH", "SYSTEMS", "PROD"];
-        
-        const state = {
-            showId: localStorage.getItem('showId') || '8821',
-            pin: localStorage.getItem('pin') || '4401',
-            role: localStorage.getItem('av_comm_role') || 'A1 - LEAD',
-            channels: parseInt(localStorage.getItem('av_comm_channels')) || 12
-        };
-
-        // UI Elements
-        const displayIdPin = document.getElementById('display-id-pin');
-        const displayRole = document.getElementById('display-role');
-        const roleToggle = document.getElementById('role-toggle');
-        const grid = document.getElementById('channel-grid');
-
-        const channelNames = [
-            "DIRECTOR", "PRODUCER", "LIGHTING", "STAGE MGMT", 
-            "VIDEO OP", "AUDIO 1", "AUDIO 2", "VFX LEAD", 
-            "BACKSTAGE", "SECURITY", "RIGGING", "FOYER"
-        ];
-
-        // Initialization
-        function init() {
-            updateHeader();
-            renderGrid();
-            setupInteractions();
-        }
-
-        function updateHeader() {
-            displayIdPin.innerText = `ID: ${state.showId} | PIN: ${state.pin}`;
-            displayRole.innerText = state.role;
-        }
-
-        function setupInteractions() {
-            roleToggle.addEventListener('click', () => {
-                let currentIndex = roles.indexOf(state.role);
-                let nextIndex = (currentIndex + 1) % roles.length;
-                state.role = roles[nextIndex];
-                localStorage.setItem('av_comm_role', state.role);
-                updateHeader();
-            });
-        }
-
-        function renderGrid() {
-            grid.innerHTML = '';
-            for (let i = 1; i <= state.channels; i++) {
-                const isAlert = i === 2 || i === 8; // Mock alert states
-                const statusColor = isAlert ? 'bg-error' : 'bg-primary-container';
-                const textColor = isAlert ? 'text-error' : 'text-primary-container';
-                const borderColor = isAlert ? 'border-error-container' : 'border-primary-container';
-                const statusText = isAlert ? 'ALERT STATE' : 'ACTIVE LINK';
-                const icon = isAlert ? 'warning' : 'signal_cellular_alt';
-                const name = channelNames[i-1] || `CHANNEL ${i.toString().padStart(2, '0')}`;
-
-                const card = document.createElement('div');
-                // Added grid-related classes to ensure uniform sizing in the row-based grid
-                card.className = `bg-surface-container-low relative flex flex-col justify-between p-2 border-l-4 ${borderColor} group hover:bg-surface-container-high transition-colors cursor-pointer active:bg-surface-container-highest min-h-0`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <span class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant font-medium">CH ${i.toString().padStart(2, '0')}</span>
-                        <span class="material-symbols-outlined ${textColor} text-base">${icon}</span>
-                    </div>
-                    <div class="mt-auto">
-                        <h3 class="font-headline font-bold text-sm leading-tight text-white truncate pr-2 uppercase">${name}</h3>
-                        <p class="font-label text-[8px] ${textColor} mt-0.5 opacity-80 tracking-tighter">${statusText}</p>
-                    </div>
-                    <div class="absolute top-0 right-0 w-1 h-full ${statusColor}"></div>
-                `;
-                grid.appendChild(card);
-            }
-        }
-
-        init();
-    </script>
+<!-- SYSTEM OVERLAY GRADIENT (DECORATIVE) -->
+<div class="fixed inset-0 pointer-events-none opacity-[0.03]" style="background-image: radial-gradient(#00FF41 1px, transparent 1px); background-size: 20px 20px;"></div>
 </body></html>
