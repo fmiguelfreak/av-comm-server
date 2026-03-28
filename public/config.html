@@ -126,7 +126,7 @@
 <div class="space-y-2">
 <div class="flex items-center justify-between text-xs py-2 border-b border-outline-variant/10">
 <span class="text-on-surface-variant">HOST:</span>
-<span class="text-primary-container font-headline truncate max-w-[100px]">RAILWAY-PRD</span>
+<span class="text-primary-container font-headline truncate max-w-[100px]">LOCAL-PRD</span>
 </div>
 <div class="flex items-center justify-between text-xs py-2 border-b border-outline-variant/10">
 <span class="text-on-surface-variant">WS_LINK:</span>
@@ -148,6 +148,11 @@
 <div class="space-y-2 border-l-4 border-primary-container pl-6">
 <h2 class="font-headline text-2xl md:text-3xl font-bold tracking-tight text-on-surface uppercase">Uplink Configuration</h2>
 <p class="font-label text-[10px] uppercase tracking-widest text-outline">Stage Technology Command Unit // 00-1</p>
+</div>
+<!-- Show Name Input -->
+<div class="space-y-3">
+<label class="font-label text-[10px] font-bold uppercase tracking-widest text-outline">Show Designation</label>
+<input class="w-full h-12 bg-surface-container-high border border-outline-variant/20 text-primary-container font-label text-xs tracking-widest px-4 focus:ring-1 focus:ring-primary-container outline-none transition-all placeholder:text-outline/30 uppercase" id="show-name-input" placeholder="ENTER SHOW NAME..." type="text"/>
 </div>
 <!-- Results Display (Hidden by default) -->
 <div class="hidden grid grid-cols-2 gap-4 animate-pulse" id="results-container">
@@ -267,7 +272,7 @@
     </div>
 </footer>
 <script>
-    const socket = io('https://av-comm-server-production.up.railway.app');
+    const socket = io();
     let selectedRole = 'MICS';
     let channelCount = 12;
 
@@ -297,35 +302,31 @@
         consoleLog('CONNECTION TERMINATED', true);
     });
 
-    // CRITICAL FIX: Use EXACT event name 'room_created'
     socket.on('room_created', (data) => {
-        // data contains { roomId, pin }
-        if (data && data.roomId) {
+        if (data && data.roomID) {
             consoleLog('UPLINK ESTABLISHED // SYNCING...', false);
             
-            // Format to 4-digit strings for consistency if needed, though server should provide them
-            const showId = data.roomId.toString().padStart(4, '0');
-            const pinCode = data.pin.toString().padStart(4, '0');
+            // UI Previews use numeric-only 4-digit generation logic
+            const showIdDisplay = data.roomID.toString().padStart(4, '0');
+            const pinCodeDisplay = data.pin.toString().padStart(4, '0');
 
             const roleName = selectedRole === 'CUSTOM' ? 
                 (document.getElementById('custom-role-input').value || 'CUSTOM').toUpperCase() : 
                 selectedRole;
 
-            const sessionData = {
-                showId: showId,
-                pin: pinCode,
-                role: roleName,
-                channels: channelCount,
-                timestamp: Date.now()
-            };
-            
-            // CRITICAL FIX: Save to localStorage
-            localStorage.setItem('av_comm_session', JSON.stringify(sessionData));
+            // CRITICAL PROTOCOL: Store in localStorage as av_session
+            localStorage.setItem('av_session', JSON.stringify({ 
+                roomID: data.roomID, 
+                pin: data.pin, 
+                channels: data.channels, 
+                showName: data.showName,
+                role: roleName
+            }));
             
             // Visual feedback
             document.getElementById('results-container').classList.remove('hidden');
-            document.getElementById('id-display').textContent = showId;
-            document.getElementById('pin-display').textContent = pinCode;
+            document.getElementById('id-display').textContent = showIdDisplay;
+            document.getElementById('pin-display').textContent = pinCodeDisplay;
             
             if(lockInd) {
                 lockInd.classList.replace('bg-outline/40', 'bg-primary-container');
@@ -339,7 +340,6 @@
                 }
                 consoleLog('REDIRECTING TO GRID...');
                 
-                // CRITICAL FIX: Redirect to grid.html
                 setTimeout(() => {
                     window.location.href = 'grid.html';
                 }, 1200);
@@ -372,6 +372,13 @@
     }
 
     function initializeUplink() {
+        const showNameInput = document.getElementById('show-name-input');
+        if (!showNameInput.value.trim()) {
+            consoleLog('ERROR: SHOW NAME REQUIRED', true);
+            showNameInput.focus();
+            return;
+        }
+
         const btn = document.getElementById('init-btn');
         btn.disabled = true;
         const originalText = btn.innerHTML;
@@ -379,9 +386,10 @@
         
         consoleLog('EMITTING CREATE_ROOM...');
         
-        // CRITICAL FIX: Use EXACT event name 'create_room'
+        // CRITICAL PROTOCOL: Alignment with server expectations
         socket.emit('create_room', { 
-            channels: channelCount 
+            showName: showNameInput.value, 
+            channels: parseInt(document.getElementById('channel-slider').value) || 12 
         });
 
         // Safety timeout
