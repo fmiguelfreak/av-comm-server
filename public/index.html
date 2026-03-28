@@ -1,82 +1,53 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AV-COMM | STAGE_TECH_AUTH</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AV-COMM</title>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
-<style>
-body { background:#131313; color:#e5e2e1; font-family: Inter; }
-</style>
 </head>
 
-<body class="flex flex-col items-center justify-center h-screen gap-6">
+<body style="background:#111;color:white;font-family:sans-serif;text-align:center;padding:40px">
 
-<h1 class="text-2xl font-bold text-green-400">AV-COMM</h1>
+<h1>AV-COMM</h1>
 
-<button id="btn-generate" class="bg-green-500 px-6 py-3 font-bold">
-CRIAR SALA
-</button>
+<button id="createBtn">CRIAR SALA</button>
 
-<div class="flex gap-2">
-<input id="room-id" placeholder="ID" class="px-3 py-2 bg-black"/>
-<input id="pin" placeholder="PIN" class="px-3 py-2 bg-black"/>
-</div>
+<br><br>
 
-<button id="btn-join" class="bg-gray-700 px-6 py-3">
-ENTRAR
-</button>
-
-<p id="status"></p>
+<input id="room" placeholder="ROOM ID">
+<input id="pin" placeholder="PIN">
+<button id="joinBtn">ENTRAR</button>
 
 <script>
-const socket = io("https://av-comm-server-production.up.railway.app");
+const socket = io();
 
-const status = document.getElementById("status");
-
-socket.on("connect", () => {
-    status.innerText = "Ligado ao servidor";
-});
-
-socket.on("room_created", (data) => saveAndGo(data));
-socket.on("joined_success", (data) => saveAndGo(data));
-
-socket.on("error_msg", (msg) => {
-    status.innerText = msg;
-});
-
-function saveAndGo(data){
-    const config = {
-        id: data.roomID,
-        pin: data.pin,
-        role: "LEAD",
-        channels: data.channels || 12
-    };
-
-    localStorage.setItem("av_comm_config", JSON.stringify(config));
-
-    window.location.href = "grid.html";
-}
-
-// CREATE
-document.getElementById("btn-generate").onclick = () => {
-    socket.emit("create_room", { channels: 12 });
+document.getElementById('createBtn').onclick = () => {
+    socket.emit('create_room', { channels: 12 });
 };
 
-// JOIN
-document.getElementById("btn-join").onclick = () => {
-    const id = document.getElementById("room-id").value;
-    const pin = document.getElementById("pin").value;
+document.getElementById('joinBtn').onclick = () => {
+    const roomID = document.getElementById('room').value;
+    const pin = document.getElementById('pin').value;
 
-    socket.emit("join_room", {
-        roomID: id,
-        pin: pin,
-        role: "REMOTE"
-    });
+    socket.emit('join_room', { roomID, pin, role: "CLIENT" });
 };
+
+// CREATE RESPONSE
+socket.on('room_created', (data) => {
+    localStorage.setItem('av_session', JSON.stringify(data));
+    window.location.href = 'config.html';
+});
+
+// JOIN RESPONSE
+socket.on('joined_success', (data) => {
+    localStorage.setItem('av_session', JSON.stringify(data));
+    window.location.href = 'grid.html';
+});
+
+socket.on('error_msg', (msg) => {
+    alert(msg);
+});
 </script>
 
 </body>
