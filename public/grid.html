@@ -1,98 +1,310 @@
 <!DOCTYPE html>
-<html class="dark">
-<head>
+
+<html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>AV-COMM GRID</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Stage Tech Authority | Tactical Grid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error": "#ffb4ab",
+              "on-primary-fixed-variant": "#00530e",
+              "secondary-container": "#fd9000",
+              "tertiary-fixed": "#ffdad2",
+              "surface-container-low": "#1c1b1b",
+              "on-error": "#690005",
+              "on-tertiary-fixed": "#3c0700",
+              "background": "#131313",
+              "surface-dim": "#131313",
+              "secondary-fixed-dim": "#ffb778",
+              "surface-variant": "#353534",
+              "on-surface-variant": "#b9ccb2",
+              "surface-container": "#201f1f",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "inverse-on-surface": "#313030",
+              "tertiary": "#fff8f6",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "tertiary-container": "#ffd3c8",
+              "inverse-primary": "#006e16",
+              "on-tertiary-container": "#b82a00",
+              "on-primary-fixed": "#002203",
+              "surface-container-highest": "#353534",
+              "primary-container": "#00ff41",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "on-surface": "#e5e2e1",
+              "primary-fixed": "#72ff70",
+              "outline": "#84967e",
+              "surface-tint": "#00e639",
+              "on-secondary-container": "#613400",
+              "inverse-surface": "#e5e2e1",
+              "on-background": "#e5e2e1",
+              "surface": "#131313",
+              "error-container": "#93000a",
+              "outline-variant": "#3b4b37",
+              "on-primary-container": "#007117",
+              "primary": "#ebffe2",
+              "secondary-fixed": "#ffdcc1",
+              "secondary": "#ffb778",
+              "on-tertiary": "#621100",
+              "surface-container-lowest": "#0e0e0e",
+              "surface-container-high": "#2a2a2a",
+              "on-primary": "#003907",
+              "primary-fixed-dim": "#00e639",
+              "on-secondary-fixed": "#2e1500",
+              "surface-bright": "#393939",
+              "on-secondary": "#4c2700",
+              "on-error-container": "#ffdad6"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
 <style>
-body { background:#131313; color:white; }
-.channel { transition: all 0.2s; }
-.active { background:#00ff41; color:black; }
-</style>
-</head>
-
-<body class="p-4">
-
-<h1 id="session" class="mb-4 text-green-400"></h1>
-
-<div id="grid" class="grid grid-cols-3 gap-2"></div>
-
-<button id="ptt" class="mt-6 w-full bg-green-500 py-4 text-xl">
-PTT
-</button>
-
-<script>
-const config = JSON.parse(localStorage.getItem("av_comm_config"));
-
-if(!config){
-    alert("Sem sessão");
-    location.href="index.html";
-}
-
-document.getElementById("session").innerText =
-`ROOM ${config.id} | PIN ${config.pin}`;
-
-// SOCKET
-const socket = io("https://av-comm-server-production.up.railway.app");
-
-socket.on("connect", () => {
-    socket.emit("join_room", {
-        roomID: config.id,
-        pin: config.pin,
-        role: config.role
-    });
-});
-
-// GRID INIT
-const grid = document.getElementById("grid");
-
-for(let i=1;i<=config.channels;i++){
-    const el = document.createElement("div");
-    el.className = "channel bg-gray-800 p-6 text-center";
-    el.id = "ch_"+i;
-    el.innerText = "CH "+i;
-    grid.appendChild(el);
-}
-
-// REALTIME UPDATE
-socket.on("channel_updated", (data) => {
-    const el = document.getElementById("ch_"+data.chID);
-
-    if(!el) return;
-
-    if(data.status === "ACTIVE"){
-        el.classList.add("active");
-    } else {
-        el.classList.remove("active");
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            gap: 0.5rem;
+            height: calc(100vh - 4rem - 6rem); /* Subtract TopAppBar and BottomNavBar heights */
+            padding: 0.5rem;
+        }
+        .tactical-glow {
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+        }
+        .status-ready {
+            background-color: #00ff41 !important;
+            color: #007117 !important;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        }
+        .status-alert {
+            background-color: #fd9000 !important;
+            color: #613400 !important;
+            box-shadow: 0 0 20px rgba(253, 144, 0, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
     }
-});
+  </style>
+  </head>
+<body class="flex flex-col">
+<!-- TopAppBar Component -->
+<header class="flex justify-between items-center w-full px-6 h-16 bg-[#131313] docked full-width top-0 border-t-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#00FF41]" data-icon="sensors">sensors</span>
+<h1 class="font-['Space_Grotesk'] uppercase tracking-tighter text-sm font-bold text-[#00FF41]">SESSION: ALPHA-ONE | ROLE: LEAD_TECH</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#00FF41]" data-icon="terminal">terminal</span>
+</div>
+</header>
+<!-- Main Tactical Canvas -->
+<main class="flex-grow bg-[#131313] relative overflow-hidden">
+<div class="channel-grid">
+<!-- Channel 01 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75 group" data-channel-id="1">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-01</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">STAGE_LEFT</div>
+<div class="h-1 bg-zinc-800 w-full mt-2 overflow-hidden">
+<div class="h-full bg-primary-container w-1/3 opacity-20"></div>
+</div>
+</div>
+<!-- Channel 02 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75 group" data-channel-id="2">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-02</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">STAGE_RIGHT</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 03 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="3">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-03</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">FOH_AUDIO</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 04 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="4">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-04</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">LIGHTING_OP</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 05 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="5">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-05</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">VIDEO_WALL</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 06 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="6">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-06</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">RIGGING</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 07 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="7">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-07</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">AUTOMATION</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 08 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="8">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-08</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">PYRO_TECH</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 09 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="9">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-09</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">BACKLINE_1</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 10 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="10">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-10</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">BACKLINE_2</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 11 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="11">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-11</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">PRODUCER</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+<!-- Channel 12 -->
+<div class="bg-surface-container-high p-4 flex flex-col justify-between border-l-4 border-zinc-700 active:opacity-80 transition-all duration-75" data-channel-id="12">
+<div class="flex justify-between items-start">
+<span class="font-headline text-xs font-bold text-zinc-500 tracking-widest uppercase">CH-12</span>
+<span class="material-symbols-outlined text-zinc-600 text-sm" data-icon="radar">radar</span>
+</div>
+<div class="font-headline text-xl font-extrabold tracking-tighter">SECURITY</div>
+<div class="h-1 bg-zinc-800 w-full mt-2"></div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Component -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-end pb-6 px-4 bg-[#1c1b1b] h-24 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+<div class="flex flex-col items-center text-zinc-500 opacity-60 hover:text-[#00FF41] transition-all active:scale-95 duration-75">
+<span class="material-symbols-outlined mb-1" data-icon="hub">hub</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">Channels</span>
+</div>
+<div class="flex flex-col items-center text-zinc-500 opacity-60 hover:text-[#00FF41] transition-all active:scale-95 duration-75">
+<span class="material-symbols-outlined mb-1" data-icon="speaker_notes">speaker_notes</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">Messages</span>
+</div>
+<!-- Active PTT Button -->
+<div class="bg-[#00FF41] text-[#007117] rounded-sm px-6 py-4 flex flex-col items-center scale-110 shadow-[0_0_15px_rgba(0,255,65,0.4)] active:scale-95 duration-75">
+<span class="material-symbols-outlined text-3xl mb-1" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">PTT</span>
+</div>
+<div class="flex flex-col items-center text-zinc-500 opacity-60 hover:text-[#00FF41] transition-all active:scale-95 duration-75">
+<span class="material-symbols-outlined mb-1" data-icon="settings_input_component">settings_input_component</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold uppercase tracking-[0.05em]">Settings</span>
+</div>
+</nav>
+<!-- UI Interactions Script Simulation -->
+<script>
+        // Mapping of states for visual demonstration
+        const channels = document.querySelectorAll('[data-channel-id]');
+        
+        channels.forEach(channel => {
+            let lastClick = 0;
+            
+            channel.addEventListener('click', (e) => {
+                const now = Date.now();
+                const diff = now - lastClick;
+                
+                if (diff < 300) {
+                    // Double Click - ALERT (Red/Orange)
+                    toggleStatus(channel, 'status-alert');
+                } else {
+                    // Single Click - READY (Green)
+                    // We wait a moment to see if it's a double click
+                    setTimeout(() => {
+                        if (Date.now() - now >= 300) {
+                            toggleStatus(channel, 'status-ready');
+                        }
+                    }, 300);
+                }
+                lastClick = now;
+            });
+        });
 
-// PTT
-const ptt = document.getElementById("ptt");
-
-ptt.onmousedown = () => {
-    socket.emit("update_channel", {
-        roomID: config.id,
-        chID: 1,
-        status: "ACTIVE",
-        role: config.role
-    });
-};
-
-ptt.onmouseup = () => {
-    socket.emit("update_channel", {
-        roomID: config.id,
-        chID: 1,
-        status: "IDLE",
-        role: config.role
-    });
-};
-</script>
-
-</body>
-</html>
+        function toggleStatus(el, statusClass) {
+            const hasStatus = el.classList.contains(statusClass);
+            
+            // Clear current states
+            el.classList.remove('status-ready', 'status-alert');
+            el.classList.add('bg-surface-container-high');
+            el.querySelector('.font-headline').classList.remove('text-[#007117]', 'text-[#613400]');
+            el.querySelector('.font-headline').classList.add('text-on-surface');
+            
+            if (!hasStatus) {
+                el.classList.remove('bg-surface-container-high');
+                el.classList.add(statusClass);
+                
+                // Update typography for contrast
+                const text = el.querySelector('.font-headline');
+                text.classList.remove('text-on-surface');
+                if (statusClass === 'status-ready') text.classList.add('text-[#007117]');
+                if (statusClass === 'status-alert') text.classList.add('text-[#613400]');
+            }
+        }
+    </script>
+</body></html>
