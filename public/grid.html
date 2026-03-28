@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -82,121 +83,124 @@
             height: 100vh;
             height: 100dvh;
         }
+        /* Ensure the grid takes up exactly the remaining space and items don't overflow */
+        main {
+            height: calc(100dvh - 56px - 64px);
+        }
     </style>
 </head>
 <body class="flex flex-col font-body bg-[#131313]">
-<!-- TOP APP BAR: COMPACTED -->
+<!-- TOP APP BAR -->
 <header class="h-14 bg-[#131313] border-b-2 border-[#00FF41] shadow-[0_0_15px_rgba(0,255,65,0.1)] flex justify-between items-center w-full px-4 z-50 shrink-0">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-[#00FF41] text-xl" data-icon="terminal">terminal</span>
-<h1 class="font-headline uppercase tracking-widest text-[10px] text-[#00FF41] opacity-70">SESSION: 0492-X</h1>
+<h1 class="font-headline uppercase tracking-widest text-[10px] text-[#00FF41] opacity-70" id="session-display">SESSION: SYNCING...</h1>
 </div>
 <button class="flex items-center gap-2 bg-[#1c1b1b] px-3 py-1 rounded-sm border border-[#00FF41]/20 active:bg-[#2a2a2a] transition-colors" id="role-toggle">
-<span class="font-headline font-bold tracking-tighter text-[#00FF41] text-sm uppercase" id="header-role">FOH</span>
+<span class="font-headline font-bold tracking-tighter text-[#00FF41] text-sm uppercase" id="header-role">...</span>
 <span class="text-[10px] text-[#00FF41]/40">|</span>
-<span class="font-headline text-[10px] tracking-tight text-[#00FF41] opacity-80" id="header-id">8821</span>
+<span class="font-headline text-[10px] tracking-tight text-[#00FF41] opacity-80" id="header-id">----</span>
 <span class="text-[10px] text-[#00FF41]/40">|</span>
-<span class="font-headline text-[10px] tracking-tight text-[#00FF41] opacity-80" id="header-pin">4401</span>
+<span class="font-headline text-[10px] tracking-tight text-[#00FF41] opacity-80" id="header-pin">----</span>
 </button>
 </header>
 <!-- MAIN OPERATIONAL GRID (12 CHANNELS - 2x6) -->
-<main class="flex-grow p-2 grid grid-cols-2 grid-rows-6 gap-2 bg-[#0e0e0e] overflow-hidden" id="channel-grid">
-<!-- Channel Card Template (Repeated 12 times via script or hardcoded for minimal diff) -->
+<main class="flex-grow p-2 grid grid-cols-2 grid-rows-6 gap-1.5 bg-[#0e0e0e] overflow-hidden" id="channel-grid">
 <!-- CH 01 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 01</span>
 <span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MIC 1</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MIC 1</h2>
 </button>
 <!-- CH 02 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-secondary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-secondary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 02</span>
 <span class="status-tag text-[7px] font-black text-secondary-container bg-on-secondary px-1 rounded-sm">ALERT</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-secondary-fixed leading-none uppercase truncate w-full text-left">MIC 2</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-secondary-fixed leading-none uppercase truncate w-full text-left">MIC 2</h2>
 </button>
 <!-- CH 03 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60 min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 03</span>
 <span class="status-tag text-[7px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-on-surface leading-none uppercase truncate w-full text-left">ST-LR</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-on-surface leading-none uppercase truncate w-full text-left">ST-LR</h2>
 </button>
 <!-- CH 04 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 04</span>
 <span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">COMM 1</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">COMM 1</h2>
 </button>
 <!-- CH 05 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 05</span>
 <span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">TALK</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">TALK</h2>
 </button>
 <!-- CH 06 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60 min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 06</span>
 <span class="status-tag text-[7px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-on-surface leading-none uppercase truncate w-full text-left">REVERB</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-on-surface leading-none uppercase truncate w-full text-left">REVERB</h2>
 </button>
 <!-- CH 07 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 07</span>
 <span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MON 1</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MON 1</h2>
 </button>
 <!-- CH 08 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 08</span>
 <span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MON 2</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">MON 2</h2>
 </button>
 <!-- CH 09 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-outline-variant relative overflow-hidden active:scale-[0.98] transition-transform opacity-60 min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 09</span>
 <span class="status-tag text-[7px] font-black text-on-surface-variant bg-surface-container-lowest px-1 rounded-sm">IDLE</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-on-surface leading-none uppercase truncate w-full text-left">SPARE</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-on-surface leading-none uppercase truncate w-full text-left">SPARE</h2>
 </button>
 <!-- CH 10 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 10</span>
 <span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">V-PLAY</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">V-PLAY</h2>
 </button>
 <!-- CH 11 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-primary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 11</span>
 <span class="status-tag text-[7px] font-black text-primary-container bg-on-primary px-1 rounded-sm">READY</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">STAGE</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-primary-fixed leading-none uppercase truncate w-full text-left">STAGE</h2>
 </button>
 <!-- CH 12 -->
-<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-secondary-container relative overflow-hidden active:scale-[0.98] transition-transform">
+<button class="bg-surface-container-high rounded-sm p-2 flex flex-col justify-between items-start border-l-2 border-secondary-container relative overflow-hidden active:scale-[0.98] transition-transform min-h-0">
 <div class="w-full flex justify-between items-start">
 <span class="font-headline text-[8px] text-on-surface-variant font-bold">CH 12</span>
 <span class="status-tag text-[7px] font-black text-secondary-container bg-on-secondary px-1 rounded-sm">ALERT</span>
 </div>
-<h2 class="ch-name font-headline font-bold text-lg text-secondary-fixed leading-none uppercase truncate w-full text-left">PIT</h2>
+<h2 class="ch-name font-headline font-bold text-base md:text-lg text-secondary-fixed leading-none uppercase truncate w-full text-left">PIT</h2>
 </button>
 </main>
 <!-- BOTTOM NAVIGATION -->
@@ -212,8 +216,8 @@
 </a>
 </div>
 <!-- PTT BUTTON IN CENTER -->
-<button class="relative -top-3 h-16 w-16 bg-[#131313] border-2 border-primary-container rounded-full flex items-center justify-center active:bg-primary-container active:scale-90 transition-all shadow-[0_0_20px_rgba(0,255,65,0.3)]">
-<span class="material-symbols-outlined text-2xl text-primary-container active:text-on-primary-container" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+<button class="relative -top-3 h-16 w-16 bg-[#131313] border-2 border-primary-container rounded-full flex items-center justify-center active:bg-primary-container active:scale-90 transition-all shadow-[0_0_20px_rgba(0,255,65,0.3)]" id="ptt-button">
+<span class="material-symbols-outlined text-2xl text-primary-container active:text-on-primary-container" data-icon="mic" id="ptt-icon" style="font-variation-settings: 'FILL' 1;">mic</span>
 </button>
 <div class="flex gap-4">
 <a class="flex flex-col items-center justify-center text-gray-500 hover:text-[#00FF41] transition-all" href="#">
@@ -229,21 +233,36 @@
 <!-- SYSTEM OVERLAY GRADIENT (DECORATIVE) -->
 <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-[100]" style="background-image: radial-gradient(#00FF41 1px, transparent 1px); background-size: 20px 20px;"></div>
 <script>
-    const ROLES = ['FOH', 'MON', 'STAGE', 'TECH', 'LD'];
+    const ROLES = ['FOH', 'BOH', 'MICS', 'TECH', 'LD'];
+    let socket;
     
     function initApp() {
-        // Load data from localStorage
         const config = {
-            id: localStorage.getItem('av_comm_id') || '8821',
-            pin: localStorage.getItem('av_comm_pin') || '4401',
             role: localStorage.getItem('av_comm_role') || 'FOH',
-            channels: JSON.parse(localStorage.getItem('av_comm_channels') || '[]')
+            sessionId: '0492-X' // Hardcoded target for initial join, would normally be dynamic
         };
 
-        // Update Header
-        document.getElementById('header-id').textContent = config.id;
-        document.getElementById('header-pin').textContent = config.pin;
+        // Initialize Header Role
         document.getElementById('header-role').textContent = config.role;
+
+        // Socket Connection
+        // Note: Using a generic placeholder URL as real server is determined at runtime
+        socket = io('https://api.av-comm.com', { autoConnect: false });
+        
+        // Manual connect trigger
+        socket.connect();
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+            socket.emit('join_show', { session: config.sessionId, role: config.role });
+        });
+
+        socket.on('show_joined', (data) => {
+            // Populate ID and PIN from server response
+            document.getElementById('header-id').textContent = data.id || '8821';
+            document.getElementById('header-pin').textContent = data.pin || '4401';
+            document.getElementById('session-display').textContent = `SESSION: ${data.session || config.sessionId}`;
+        });
 
         // Role Toggle Logic
         document.getElementById('role-toggle').addEventListener('click', () => {
@@ -254,27 +273,59 @@
             document.getElementById('header-role').textContent = nextRole;
             localStorage.setItem('av_comm_role', nextRole);
             
+            // Re-sync with server
+            if (socket && socket.connected) {
+                socket.emit('join_show', { session: config.sessionId, role: nextRole });
+            }
+            
             // Visual feedback
             const btn = document.getElementById('role-toggle');
             btn.classList.add('border-primary-container');
             setTimeout(() => btn.classList.remove('border-primary-container'), 300);
         });
 
-        // Channel Sync (if local storage has specific names)
-        if (config.channels.length > 0) {
-            const names = document.querySelectorAll('.ch-name');
-            config.channels.forEach((name, idx) => {
-                if (names[idx]) names[idx].textContent = name;
-            });
+        // PTT Logic (Voice to Text Placeholder)
+        const pttBtn = document.getElementById('ptt-button');
+        const pttIcon = document.getElementById('ptt-icon');
+        
+        let recognition;
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            
+            recognition.onresult = (event) => {
+                const transcript = event.results[event.results.length-1][0].transcript;
+                console.log('Voice Command:', transcript);
+                // Here we would emit 'voice_command' to socket
+            };
         }
+
+        pttBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            pttBtn.classList.add('bg-primary-container');
+            pttIcon.classList.add('text-on-primary-container');
+            if (recognition) recognition.start();
+            if (socket) socket.emit('ptt_active', true);
+        });
+
+        pttBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            pttBtn.classList.remove('bg-primary-container');
+            pttIcon.classList.remove('text-on-primary-container');
+            if (recognition) recognition.stop();
+            if (socket) socket.emit('ptt_active', false);
+        });
     }
 
     // Run on load
     window.addEventListener('DOMContentLoaded', initApp);
     
-    // Prevent default scroll behavior
+    // Prevent default scroll behavior for touch interface
     document.addEventListener('touchmove', function(e) {
-        e.preventDefault();
+        if (!e.target.closest('.scrollable')) {
+            e.preventDefault();
+        }
     }, { passive: false });
 </script>
 </body></html>
