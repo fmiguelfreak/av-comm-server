@@ -1,273 +1,64 @@
-<!DOCTYPE html>
+<script>
+let socket;
+let config;
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>SESSION: 992-ALPHA | Operational Grid</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              colors: {
-                "inverse-primary": "#006e16",
-                "tertiary-fixed": "#ffdad2",
-                "surface-container": "#201f1f",
-                "surface": "#131313",
-                "primary": "#ebffe2",
-                "on-tertiary-fixed-variant": "#8a1d00",
-                "surface-dim": "#131313",
-                "error-container": "#93000a",
-                "on-primary-fixed": "#002203",
-                "secondary": "#ffb778",
-                "inverse-surface": "#e5e2e1",
-                "on-tertiary-container": "#b82a00",
-                "tertiary": "#fff8f6",
-                "surface-tint": "#00e639",
-                "surface-container-high": "#2a2a2a",
-                "outline": "#84967e",
-                "on-secondary-fixed-variant": "#6c3a00",
-                "primary-container": "#00ff41",
-                "on-tertiary-fixed": "#3c0700",
-                "on-background": "#e5e2e1",
-                "surface-variant": "#353534",
-                "primary-fixed": "#72ff70",
-                "surface-container-lowest": "#0e0e0e",
-                "secondary-fixed-dim": "#ffb778",
-                "primary-fixed-dim": "#00e639",
-                "error": "#ffb4ab",
-                "tertiary-fixed-dim": "#ffb4a2",
-                "surface-bright": "#393939",
-                "surface-container-low": "#1c1b1b",
-                "on-secondary": "#4c2700",
-                "on-primary-container": "#007117",
-                "background": "#131313",
-                "secondary-fixed": "#ffdcc1",
-                "on-error-container": "#ffdad6",
-                "on-primary-fixed-variant": "#00530e",
-                "outline-variant": "#3b4b37",
-                "secondary-container": "#fd9000",
-                "on-tertiary": "#621100",
-                "inverse-on-surface": "#313030",
-                "surface-container-highest": "#353534",
-                "tertiary-container": "#ffd3c8",
-                "on-surface": "#e5e2e1",
-                "on-surface-variant": "#b9ccb2",
-                "on-primary": "#003907",
-                "on-secondary-fixed": "#2e1500",
-                "on-secondary-container": "#613400",
-                "on-error": "#690005"
-              },
-              fontFamily: {
-                "headline": ["Space Grotesk"],
-                "body": ["Inter"],
-                "label": ["Inter"]
-              },
-              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-            },
-          },
-        }
-    </script>
-<style>
-        body {
-            background-color: #131313;
-            color: #e5e2e1;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .sync-pulse {
-            box-shadow: 0 0 8px #00ff41;
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
+function initApp() {
+    config = JSON.parse(localStorage.getItem('av_comm_config'));
+
+    if (!config) {
+        alert("Sem sessão. Voltar ao setup.");
+        window.location.href = "config.html";
+        return;
     }
-  </style>
-  </head>
-<body class="flex flex-col h-screen overflow-hidden select-none">
-<!-- TopAppBar -->
-<header class="bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-wider text-sm docked full-width top-0 border-t-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-4 h-14 w-full z-50">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-lg">security</span>
-<h1 class="font-bold text-[#00FF41] tracking-tighter">SESSION: 992-ALPHA</h1>
-</div>
-<div class="flex items-center gap-4">
-<div class="flex items-center gap-2">
-<div class="w-2 h-2 rounded-full bg-[#00FF41] sync-pulse"></div>
-<span class="text-[10px] opacity-70">SYNCED</span>
-</div>
-<div class="bg-[#1c1b1b] px-2 py-1 rounded-sm border border-[#3b4b37]/30">
-<span class="text-[#00FF41] font-bold">ROLE: LEAD_TECH</span>
-</div>
-</div>
-</header>
-<!-- Tactical Info Bar -->
-<div class="bg-surface-container-low px-4 py-2 flex justify-between items-center border-b border-outline-variant/10">
-<div class="flex flex-col">
-<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-[0.1em]">Unit Identifier</span>
-<span class="font-headline font-bold text-primary-container">FOH_LEAD_01</span>
-</div>
-<div class="flex flex-col items-end">
-<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-[0.1em]">Access Pin</span>
-<span class="font-headline font-medium text-on-surface">**** 9422</span>
-</div>
-</div>
-<!-- Main Operational Grid (2x6) -->
-<!-- Zero Scrolling Mandate: All 12 cards fit 100% on screen -->
-<main class="flex-grow p-2 grid grid-cols-2 grid-rows-6 gap-2 bg-surface">
-<!-- CH 01 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 01</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 02 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-error-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-error">CH 02</span>
-<span class="material-symbols-outlined text-error/30">warning</span>
-</div>
-<div class="bg-error-container px-2 py-1 rounded-sm self-start">
-<span class="text-on-error-container font-label font-bold text-[10px] uppercase tracking-widest">ALERT</span>
-</div>
-</div>
-<!-- CH 03 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 03</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 04 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 04</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 05 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 05</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 06 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-secondary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-secondary">CH 06</span>
-<span class="material-symbols-outlined text-secondary/30">sensors</span>
-</div>
-<div class="bg-secondary-container px-2 py-1 rounded-sm self-start">
-<span class="text-on-secondary-container font-label font-bold text-[10px] uppercase tracking-widest">PENDING</span>
-</div>
-</div>
-<!-- CH 07 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 07</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 08 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 08</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 09 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-error-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-error">CH 09</span>
-<span class="material-symbols-outlined text-error/30">warning</span>
-</div>
-<div class="bg-error-container px-2 py-1 rounded-sm self-start">
-<span class="text-on-error-container font-label font-bold text-[10px] uppercase tracking-widest">ALERT</span>
-</div>
-</div>
-<!-- CH 10 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 10</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 11 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 11</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-<!-- CH 12 -->
-<div class="bg-surface-container-high rounded-sm border-l-4 border-primary-container flex flex-col justify-between p-3 relative overflow-hidden active:scale-95 transition-transform duration-75">
-<div class="flex justify-between items-start">
-<span class="font-headline font-bold text-xl text-primary-container">CH 12</span>
-<span class="material-symbols-outlined text-primary-container/30">radar</span>
-</div>
-<div class="bg-primary-container/10 px-2 py-1 rounded-sm self-start">
-<span class="text-primary-container font-label font-bold text-[10px] uppercase tracking-widest">READY</span>
-</div>
-</div>
-</main>
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-4 h-20 bg-[#131313] border-t-0">
-<div class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">grid_view</span>
-</div>
-<div class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">analytics</span>
-</div>
-<!-- CENTRAL PTT BUTTON (MIC) -->
-<div class="flex items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm p-4 scale-125 shadow-[0_0_15px_#00FF41] active:bg-[#72ff70] active:scale-110 transition-all">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
-</div>
-<div class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">settings_remote</span>
-</div>
-<div class="flex items-center justify-center text-[#2a2a2a] p-2 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
-<span class="material-symbols-outlined">terminal</span>
-</div>
-</nav>
-<!-- Visual Polish: Surface Glow for Active State -->
-<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-primary-container/5 blur-[80px] rounded-full -z-10"></div>
-</body></html>
+
+    document.getElementById('header-role').textContent = config.role;
+    document.getElementById('header-id').textContent = config.id;
+    document.getElementById('header-pin').textContent = config.pin;
+    document.getElementById('session-display').textContent = `SESSION: ${config.id}`;
+
+    socket = io("https://av-comm-server-production.up.railway.app");
+
+    socket.on('connect', () => {
+        console.log("Ligado ao servidor");
+
+        socket.emit('join_room', {
+            roomID: config.id,
+            pin: config.pin,
+            role: config.role
+        });
+    });
+
+    socket.on('joined_success', (data) => {
+        console.log("Joined:", data);
+    });
+
+    socket.on('channel_updated', (data) => {
+        console.log("Channel update:", data);
+        // aqui depois ligamos à UI
+    });
+
+    setupPTT();
+}
+
+function setupPTT() {
+    const btn = document.getElementById('ptt-button');
+
+    btn.addEventListener('mousedown', () => {
+        socket.emit('update_channel', {
+            roomID: config.id,
+            chID: config.role,
+            status: 'ACTIVE'
+        });
+    });
+
+    btn.addEventListener('mouseup', () => {
+        socket.emit('update_channel', {
+            roomID: config.id,
+            chID: config.role,
+            status: 'IDLE'
+        });
+    });
+}
+
+window.addEventListener('DOMContentLoaded', initApp);
+</script>
