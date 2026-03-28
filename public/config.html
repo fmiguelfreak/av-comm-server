@@ -3,9 +3,9 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AV-COMM Config | System Operational</title>
+<title>AV-COMM | Show Configuration</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;600;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -14,53 +14,53 @@
         theme: {
           extend: {
             colors: {
-              "primary-fixed": "#72ff70",
-              "on-secondary-container": "#613400",
-              "outline": "#84967e",
-              "on-primary-fixed-variant": "#00530e",
+              "error": "#ffb4ab",
+              "on-error-container": "#ffdad6",
               "outline-variant": "#3b4b37",
-              "on-surface": "#e5e2e1",
-              "error-container": "#93000a",
-              "on-primary-fixed": "#002203",
-              "on-tertiary": "#621100",
-              "surface": "#131313",
-              "tertiary-fixed": "#ffdad2",
-              "secondary-container": "#fd9000",
-              "on-tertiary-container": "#b82a00",
-              "on-secondary": "#4c2700",
+              "inverse-primary": "#006e16",
               "secondary-fixed": "#ffdcc1",
-              "on-tertiary-fixed": "#3c0700",
+              "on-primary": "#003907",
+              "surface-bright": "#393939",
+              "primary-container": "#00ff41",
+              "on-secondary-fixed": "#2e1500",
+              "on-secondary-container": "#613400",
+              "surface-container-low": "#1c1b1b",
+              "on-primary-container": "#007117",
+              "tertiary-fixed": "#ffdad2",
+              "tertiary": "#fff8f6",
               "surface-tint": "#00e639",
               "on-error": "#690005",
-              "on-secondary-fixed": "#2e1500",
-              "inverse-surface": "#e5e2e1",
-              "secondary-fixed-dim": "#ffb778",
-              "tertiary": "#fff8f6",
               "surface-variant": "#353534",
-              "surface-dim": "#131313",
-              "tertiary-fixed-dim": "#ffb4a2",
-              "surface-bright": "#393939",
-              "secondary": "#ffb778",
-              "inverse-on-surface": "#313030",
-              "surface-container": "#201f1f",
-              "on-secondary-fixed-variant": "#6c3a00",
-              "surface-container-high": "#2a2a2a",
-              "on-tertiary-fixed-variant": "#8a1d00",
-              "primary-container": "#00ff41",
-              "error": "#ffb4ab",
-              "tertiary-container": "#ffd3c8",
-              "surface-container-lowest": "#0e0e0e",
-              "surface-container-low": "#1c1b1b",
-              "on-error-container": "#ffdad6",
-              "inverse-primary": "#006e16",
-              "on-primary-container": "#007117",
-              "on-background": "#e5e2e1",
-              "background": "#131313",
+              "on-tertiary-fixed": "#3c0700",
+              "on-secondary": "#4c2700",
+              "error-container": "#93000a",
               "surface-container-highest": "#353534",
-              "primary": "#ebffe2",
+              "primary-fixed": "#72ff70",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "secondary-fixed-dim": "#ffb778",
+              "surface": "#131313",
+              "secondary-container": "#fd9000",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "surface-dim": "#131313",
               "primary-fixed-dim": "#00e639",
-              "on-surface-variant": "#b9ccb2",
-              "on-primary": "#003907"
+              "surface-container-lowest": "#0e0e0e",
+              "inverse-surface": "#e5e2e1",
+              "on-tertiary-container": "#b82a00",
+              "on-surface": "#e5e2e1",
+              "on-tertiary": "#621100",
+              "tertiary-container": "#ffd3c8",
+              "inverse-on-surface": "#313030",
+              "outline": "#84967e",
+              "primary": "#ebffe2",
+              "on-background": "#e5e2e1",
+              "surface-container": "#201f1f",
+              "on-primary-fixed": "#002203",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "secondary": "#ffb778",
+              "background": "#131313",
+              "on-primary-fixed-variant": "#00530e",
+              "surface-container-high": "#2a2a2a",
+              "on-surface-variant": "#b9ccb2"
             },
             fontFamily: {
               "headline": ["Space Grotesk"],
@@ -73,24 +73,16 @@
       }
     </script>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            background-color: #131313;
-            color: #e5e2e1;
-            font-family: 'Inter', sans-serif;
-        }
-        .tactical-glow {
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.15);
-        }
-        input:focus {
-            outline: none;
-            border-left: 4px solid #72ff70 !important;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glitch-subtle {
+        text-shadow: 2px 0 #007117, -2px 0 #93000a;
+      }
+      .scanline {
+        background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 65, 0.05) 50%);
+        background-size: 100% 4px;
+      }
     </style>
 <style>
     body {
@@ -98,185 +90,182 @@
     }
   </style>
   </head>
-<body class="min-h-screen flex flex-col items-center selection:bg-primary-container selection:text-on-primary-container">
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
 <!-- Top Navigation Anchor -->
-<header class="bg-[#131313] dark:bg-neutral-950 flex justify-between items-center w-full px-6 py-4 docked full-width top-0 border-b-4 border-[#00FF41] tactical-glow z-50">
-<div class="flex flex-col">
-<span class="text-[#00FF41] font-black tracking-widest text-lg font-['Space_Grotesk'] uppercase">AV-COMM</span>
-<span class="text-[#00FF41] dark:text-green-400 font-['Space_Grotesk'] tracking-tighter uppercase font-bold text-sm">SYSTEM OPERATIONAL</span>
+<header class="bg-[#131313] dark:bg-[#131313] text-[#00FF41] dark:text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-widest text-sm docked full-width top-0 border-b-4 border-[#00FF41] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center w-full px-6 py-4 sticky z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-2xl" data-icon="terminal">terminal</span>
+<h1 class="text-[#00FF41] font-bold tracking-tighter text-xl">SESSION: 0492-X</h1>
 </div>
-<div class="flex items-center gap-4">
-<div class="flex flex-col items-end">
-<span class="text-neutral-500 font-['Inter'] text-[10px] uppercase tracking-[0.05em]">Operator ID</span>
-<span class="text-[#00FF41] font-['Space_Grotesk'] font-bold" id="header-op-id">882-X</span>
-</div>
-<div class="w-10 h-10 bg-surface-container-high rounded-sm flex items-center justify-center border border-outline-variant/20">
-<span class="material-symbols-outlined text-[#00FF41]">account_circle</span>
-</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8">
+<a class="text-gray-500 hover:text-[#00FF41] transition-colors" href="#">CHANNELS</a>
+<a class="text-[#00FF41] font-bold" href="#">CONFIG</a>
+<a class="text-gray-500 hover:text-[#00FF41] transition-colors" href="#">DIAGNOSTICS</a>
+</nav>
+<span class="px-3 py-1 bg-surface-container-high border border-primary-container/30 text-[10px] font-black tracking-[0.2em]">LEAD_TECH</span>
 </div>
 </header>
-<main class="flex-1 w-full max-w-4xl px-6 py-12 flex flex-col gap-10">
-<!-- Section: Identity Credentials -->
-<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="bg-surface-container-low p-6 rounded-sm border-l-4 border-primary-container flex flex-col gap-4">
-<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">System Assigned ID</label>
-<div class="bg-surface-container-highest p-8 flex items-center justify-center">
-<span class="font-headline text-5xl md:text-6xl font-bold tracking-tighter text-primary-container" id="display-id">----</span>
-</div>
-<p class="text-[10px] text-neutral-500 font-body uppercase leading-tight italic">Hardware-bound unique identifier for secure mesh routing.</p>
-</div>
-<div class="bg-surface-container-low p-6 rounded-sm border-l-4 border-secondary-container flex flex-col gap-4">
-<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Temporary Access PIN</label>
-<div class="bg-surface-container-highest p-8 flex items-center justify-center">
-<span class="font-headline text-5xl md:text-6xl font-bold tracking-tighter text-secondary-container" id="display-pin">----</span>
-</div>
-<p class="text-[10px] text-neutral-500 font-body uppercase leading-tight italic">Required for mobile-to-console synchronization handshake.</p>
-</div>
-</section>
-<!-- Section: Role Configuration -->
-<section class="flex flex-col gap-4">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary-fixed-dim">engineering</span>
-<h2 class="font-headline text-xl font-bold uppercase tracking-tight">Deployment Role</h2>
-</div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="role-selector">
-<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('FOH', this)">
-<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">01</span>
-<span class="block font-headline font-bold text-lg">FOH</span>
-</button>
-<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('BOH', this)">
-<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">02</span>
-<span class="block font-headline font-bold text-lg">BOH</span>
-</button>
-<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('MICS', this)">
-<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">03</span>
-<span class="block font-headline font-bold text-lg">MICS</span>
-</button>
-<button class="role-btn bg-surface-container-high p-4 text-left border-b-2 border-transparent hover:bg-surface-container-highest transition-all group" onclick="selectRole('CUSTOM', this)">
-<span class="block font-label text-[10px] text-neutral-500 group-hover:text-primary-container">04</span>
-<span class="block font-headline font-bold text-lg">CUSTOM</span>
-</button>
-</div>
-<div class="hidden mt-2" id="custom-role-container">
-<input class="w-full bg-surface-container-highest border-none p-4 font-headline text-lg uppercase tracking-widest text-primary-fixed-dim placeholder:text-neutral-600" id="custom-role-input" placeholder="SPECIFY CUSTOM ROLE..." type="text"/>
-</div>
-</section>
-<!-- Section: Channel Matrix -->
-<section class="flex flex-col gap-4">
+<main class="max-w-5xl mx-auto px-6 pt-12 pb-32 min-h-screen">
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Primary Credentials (The Source of Truth) -->
+<section class="lg:col-span-5 flex flex-col gap-6">
+<div class="bg-surface-container-low p-1 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary-container"></div>
+<div class="p-6 bg-surface-container flex flex-col gap-8 shadow-inner">
 <div class="flex items-center justify-between">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary-fixed-dim">hub</span>
-<h2 class="font-headline text-xl font-bold uppercase tracking-tight">Channel Density</h2>
+<h2 class="font-headline font-bold text-sm uppercase tracking-widest text-primary-fixed">Section 01: Credentials</h2>
+<span class="material-symbols-outlined text-primary-container/40" data-icon="fingerprint">fingerprint</span>
 </div>
-<span class="font-headline text-3xl font-bold text-primary-container" id="channel-count-display">12</span>
+<div class="space-y-8">
+<div>
+<label class="font-label text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-2 block">System ID</label>
+<div class="bg-surface-container-lowest p-6 rounded-sm border-l-4 border-primary-container shadow-[inset_0_0_20px_rgba(0,0,0,0.4)]">
+<span class="font-headline text-7xl font-light tracking-tighter text-primary-container glitch-subtle">8821</span>
 </div>
-<div class="bg-surface-container-low p-6 rounded-sm">
-<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary-container" id="channel-slider" max="64" min="1" oninput="updateChannels(this.value)" type="range" value="12"/>
-<div class="flex justify-between mt-4 font-label text-[10px] text-neutral-500 uppercase tracking-widest">
-<span>Low Latency (01)</span>
-<span>Standard (32)</span>
-<span>High Capacity (64)</span>
 </div>
+<div>
+<label class="font-label text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-2 block">Access Pin</label>
+<div class="bg-surface-container-lowest p-6 rounded-sm border-l-4 border-secondary-container shadow-[inset_0_0_20px_rgba(0,0,0,0.4)]">
+<span class="font-headline text-7xl font-light tracking-tighter text-secondary-container">4401</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-6 border-t border-outline-variant/20">
+<p class="font-label text-[10px] leading-relaxed text-on-surface-variant/60 uppercase">
+                                Broadcast these credentials to secondary terminals only via encrypted uplink. Hardware tokens required for manual override.
+                            </p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-highest p-4 rounded-sm flex items-center gap-4 border-l-4 border-error">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+<span class="font-label text-[10px] font-bold uppercase tracking-widest text-error">Uplink Uninitialized: Waiting for Node-Sync</span>
 </div>
 </section>
-<!-- Action Area -->
-<div class="mt-8 flex flex-col gap-4">
-<button class="w-full bg-primary-container py-6 rounded-sm flex items-center justify-center gap-4 group hover:shadow-[0_0_30px_#00ff4133] active:scale-[0.98] transition-all" onclick="initializeUplink()">
-<span class="font-headline text-2xl font-black text-on-primary-container tracking-widest">INITIALIZE UPLINK</span>
-<span class="material-symbols-outlined text-on-primary-container text-3xl group-hover:translate-x-1 transition-transform">rocket_launch</span>
+<!-- Right Column: Operational Logic -->
+<section class="lg:col-span-7 flex flex-col gap-8">
+<!-- Section 02: Role Assignment -->
+<div class="bg-surface-container-low p-8 relative">
+<div class="flex items-center gap-4 mb-8">
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+<h2 class="font-headline font-bold text-sm uppercase tracking-[0.3em] text-primary-container shrink-0">Section 02: Operational Role</h2>
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container transition-all p-6 text-left group">
+<span class="font-label text-[10px] block opacity-50 group-hover:opacity-100 mb-1">FRONT OF HOUSE</span>
+<span class="font-headline text-xl font-bold uppercase">FOH</span>
 </button>
-<p class="text-center font-label text-[10px] text-neutral-500 uppercase tracking-widest px-12">
-                By initializing, you agree to technical protocol 7-B regarding real-time frequency distribution and encrypted data packet handling.
-            </p>
+<button class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container transition-all p-6 text-left group">
+<span class="font-label text-[10px] block opacity-50 group-hover:opacity-100 mb-1">BACK OF HOUSE</span>
+<span class="font-headline text-xl font-bold uppercase">BOH</span>
+</button>
+<button class="bg-surface-container-high hover:bg-primary-container hover:text-on-primary-container transition-all p-6 text-left group">
+<span class="font-label text-[10px] block opacity-50 group-hover:opacity-100 mb-1">WIRELESS ASSETS</span>
+<span class="font-headline text-xl font-bold uppercase">MICS</span>
+</button>
+<button class="bg-primary-container text-on-primary-container transition-all p-6 text-left group shadow-[0_0_15px_rgba(0,255,65,0.2)]">
+<span class="font-label text-[10px] block mb-1">USER DEFINED</span>
+<span class="font-headline text-xl font-bold uppercase">CUSTOM</span>
+</button>
+</div>
+<!-- Conditional Custom Input -->
+<div class="mt-6 animate-pulse-slow">
+<div class="bg-surface-container-highest flex items-center border-l-4 border-primary-fixed">
+<div class="p-4 bg-surface-container-high text-primary-container">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+</div>
+<input class="bg-transparent border-none text-on-surface font-headline font-bold uppercase tracking-widest focus:ring-0 w-full px-6 py-4" placeholder="Enter Role Name..." type="text" value="A1 - LEAD"/>
+</div>
+</div>
+</div>
+<!-- Section 03: Channel Density -->
+<div class="bg-surface-container-low p-8 relative">
+<div class="flex items-center gap-4 mb-8">
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+<h2 class="font-headline font-bold text-sm uppercase tracking-[0.3em] text-primary-container shrink-0">Section 03: Channel Density</h2>
+<div class="h-[1px] flex-grow bg-outline-variant/30"></div>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<span class="font-headline text-5xl font-black text-on-surface">12</span>
+<span class="font-label text-xs uppercase text-on-surface-variant tracking-widest ml-2">Active Channels</span>
+</div>
+<div class="text-right">
+<span class="font-label text-[10px] uppercase text-on-surface-variant block">Allocation</span>
+<span class="font-headline text-sm font-bold text-primary-container">50.0% OF MAX</span>
+</div>
+</div>
+<!-- Custom Tactical Slider -->
+<div class="relative h-12 flex items-center">
+<div class="absolute w-full h-2 bg-surface-container-highest"></div>
+<div class="absolute h-2 bg-primary-container shadow-[0_0_10px_#00FF41]" style="width: 50%;"></div>
+<!-- Tick Marks -->
+<div class="absolute w-full flex justify-between px-1">
+<div class="w-[2px] h-4 bg-outline-variant/40"></div>
+<div class="w-[2px] h-4 bg-outline-variant/40"></div>
+<div class="w-[2px] h-6 bg-primary-container"></div>
+<div class="w-[2px] h-4 bg-outline-variant/40"></div>
+<div class="w-[2px] h-4 bg-outline-variant/40"></div>
+</div>
+<!-- Handle -->
+<div class="absolute left-1/2 -translate-x-1/2 w-8 h-10 bg-on-surface flex flex-col items-center justify-center cursor-pointer border-2 border-primary-container">
+<div class="w-1 h-4 bg-surface-container"></div>
+</div>
+</div>
+<div class="flex justify-between font-label text-[10px] font-black text-on-surface-variant/50">
+<span>01_CH</span>
+<span>12_CH</span>
+<span>24_MAX</span>
+</div>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-primary-container text-on-primary-container py-6 rounded-sm font-headline font-black text-lg uppercase tracking-[0.4em] shadow-[0_0_30px_rgba(0,255,65,0.3)] hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-4">
+<span class="material-symbols-outlined" data-icon="cloud_upload">cloud_upload</span>
+                    INITIALIZE UPLINK
+                </button>
+</section>
 </div>
 </main>
-<!-- Contextual Footer (BottomNavBar) -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 bg-[#1c1b1b] h-20 shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
-<button class="flex items-center justify-center bg-[#00ff41] text-[#007117] rounded-sm scale-110 shadow-[0_0_15px_#00ff41] px-6 py-3">
-<span class="material-symbols-outlined" data-icon="settings_remote">settings_remote</span>
-</button>
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
-<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
-</button>
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
-<span class="material-symbols-outlined" data-icon="mic">mic</span>
-</button>
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
-<span class="material-symbols-outlined" data-icon="security">security</span>
-</button>
-<button class="flex items-center justify-center text-neutral-500 hover:text-[#00ff41] px-4 transition-colors">
-<span class="material-symbols-outlined" data-icon="terminal">terminal</span>
-</button>
+<!-- Navigation Shell (BottomNavBar) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-2 pb-2 bg-[#0e0e0e] dark:bg-[#0e0e0e] h-20 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] z-50 md:hidden">
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="hub">hub</span>
+<span class="font-['Inter'] text-[10px] uppercase font-black tracking-tighter">Channels</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="forum">forum</span>
+<span class="font-['Inter'] text-[10px] uppercase font-black tracking-tighter">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="mic">mic</span>
+<span class="font-['Inter'] text-[10px] uppercase font-black tracking-tighter">PTT</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 hover:text-[#00FF41] transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications_active">notifications_active</span>
+<span class="font-['Inter'] text-[10px] uppercase font-black tracking-tighter">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#00FF41] text-[#131313] rounded-sm scale-110 shadow-[0_0_15px_#00FF41] px-4 py-2" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[10px] uppercase font-black tracking-tighter">Settings</span>
+</a>
 </nav>
-<script>
-        let selectedRole = 'FOH';
-        let currentId = '';
-        let currentPin = '';
-
-        // Initialize numeric IDs on load
-        window.onload = () => {
-            currentId = Math.floor(1000 + Math.random() * 9000).toString();
-            currentPin = Math.floor(1000 + Math.random() * 9000).toString();
-            
-            document.getElementById('display-id').innerText = currentId;
-            document.getElementById('display-pin').innerText = currentPin;
-            document.getElementById('header-op-id').innerText = `ID: ${currentId.substring(0,3)}-X`;
-            
-            // Set default active button
-            const btns = document.querySelectorAll('.role-btn');
-            btns[0].classList.add('bg-primary-container', 'text-on-primary-container');
-            btns[0].classList.remove('bg-surface-container-high');
-        };
-
-        function selectRole(role, element) {
-            selectedRole = role;
-            
-            // Reset all buttons
-            document.querySelectorAll('.role-btn').forEach(btn => {
-                btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
-                btn.classList.add('bg-surface-container-high');
-            });
-            
-            // Highlight selected
-            element.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
-            element.classList.remove('bg-surface-container-high');
-            
-            // Show/Hide custom input
-            const customInput = document.getElementById('custom-role-container');
-            if(role === 'CUSTOM') {
-                customInput.classList.remove('hidden');
-                document.getElementById('custom-role-input').focus();
-            } else {
-                customInput.classList.add('hidden');
-            }
-        }
-
-        function updateChannels(val) {
-            document.getElementById('channel-count-display').innerText = val;
-        }
-
-        function initializeUplink() {
-            let finalRole = selectedRole;
-            if (selectedRole === 'CUSTOM') {
-                finalRole = document.getElementById('custom-role-input').value || 'CUSTOM';
-            }
-            
-            const channels = document.getElementById('channel-slider').value;
-            
-            localStorage.setItem('av_comm_id', currentId);
-            localStorage.setItem('av_comm_pin', currentPin);
-            localStorage.setItem('av_comm_role', finalRole);
-            localStorage.setItem('av_comm_channels', channels);
-            
-            // Visual feedback before "redirect"
-            const btn = document.querySelector('button[onclick="initializeUplink()"]');
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> <span class="font-headline font-bold">ESTABLISHING LINK...</span>';
-            btn.classList.replace('bg-primary-container', 'bg-surface-container-highest');
-            btn.classList.replace('text-on-primary-container', 'text-primary-container');
-
-            setTimeout(() => {
-                window.location.href = 'grid.html';
-            }, 800);
-        }
-    </script>
+<!-- Side Decoration (Industrial Aesthetics) -->
+<div class="fixed left-0 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-20 pointer-events-none">
+<div class="h-24 w-1 bg-primary-container"></div>
+<div class="h-4 w-1 bg-outline-variant"></div>
+<div class="h-4 w-1 bg-outline-variant"></div>
+<div class="h-32 w-1 bg-primary-container"></div>
+</div>
+<div class="fixed right-4 bottom-24 text-right pointer-events-none opacity-20 hidden md:block">
+<div class="font-headline text-[8px] uppercase tracking-widest leading-tight">
+            Terminal Architecture v4.2<br/>
+            Signal Integrity: 99.8%<br/>
+            Uplink Status: Standby
+        </div>
+</div>
 </body></html>
