@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;600;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -84,7 +85,7 @@
         overflow: hidden;
       }
       .scroll-container {
-        height: calc(100vh - 80px - 68px); /* Height minus header and footer */
+        height: 100%;
         overflow-y: auto;
         scrollbar-width: none;
       }
@@ -96,45 +97,49 @@
         color: #003907;
         box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
       }
+      .role-btn.active span {
+        color: inherit;
+        opacity: 0.8;
+      }
     </style>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container flex flex-col">
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container flex flex-col h-screen overflow-hidden">
 <!-- Top Navigation -->
 <header class="bg-[#131313] text-[#00FF41] font-['Space_Grotesk'] uppercase tracking-widest text-sm border-b-2 border-[#00FF41]/30 flex justify-between items-center w-full px-4 py-3 shrink-0">
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-xl">terminal</span>
 <h1 class="font-bold tracking-tighter text-lg">SESSION: CONFIG</h1>
 </div>
-<span class="px-2 py-0.5 bg-surface-container-high border border-primary-container/30 text-[9px] font-black tracking-widest">SETUP_MODE</span>
+<span class="px-2 py-0.5 bg-surface-container-high border border-primary-container/30 text-[9px] font-black tracking-widest text-primary-fixed animate-pulse" id="connection-status">CONNECTING...</span>
 </header>
-<main class="flex-grow scroll-container px-4 py-4">
-<div class="max-w-md mx-auto space-y-4">
+<main class="flex-grow scroll-container px-4 py-3 flex flex-col">
+<div class="max-w-md mx-auto w-full flex-grow flex flex-col gap-3">
 <!-- Section 01: Credentials -->
-<section class="bg-surface-container-low border-l-2 border-primary-container p-4">
-<div class="flex items-center justify-between mb-4">
+<section class="bg-surface-container-low border-l-2 border-primary-container p-4 shrink-0">
+<div class="flex items-center justify-between mb-3">
 <h2 class="font-headline font-bold text-[10px] uppercase tracking-widest text-primary-fixed">01: SYSTEM AUTH</h2>
 <span class="material-symbols-outlined text-primary-container/40 text-sm">fingerprint</span>
 </div>
 <div class="grid grid-cols-2 gap-4">
 <div>
 <label class="font-label text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-1 block">System ID</label>
-<div class="bg-surface-container-lowest p-3 border-l-2 border-primary-container">
-<span class="font-headline text-3xl font-light tracking-tighter text-primary-container glitch-subtle" id="system-id">----</span>
+<div class="bg-surface-container-lowest p-3 border-l-2 border-primary-container h-12 flex items-center">
+<span class="font-headline text-2xl font-light tracking-tighter text-primary-container glitch-subtle" id="system-id">----</span>
 </div>
 </div>
 <div>
 <label class="font-label text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-1 block">Access Pin</label>
-<div class="bg-surface-container-lowest p-3 border-l-2 border-secondary-container">
-<span class="font-headline text-3xl font-light tracking-tighter text-secondary-container" id="access-pin">----</span>
+<div class="bg-surface-container-lowest p-3 border-l-2 border-secondary-container h-12 flex items-center">
+<span class="font-headline text-2xl font-light tracking-tighter text-secondary-container" id="access-pin">----</span>
 </div>
 </div>
 </div>
 </section>
 <!-- Section 02: Role Assignment -->
-<section class="bg-surface-container-low p-4">
-<h2 class="font-headline font-bold text-[10px] uppercase tracking-[0.2em] text-primary-container mb-4 text-center">02: OPERATIONAL ROLE</h2>
-<div class="grid grid-cols-2 gap-2 mb-4" id="role-grid">
-<button class="role-btn bg-surface-container-high p-3 text-left transition-all" onclick="selectRole('FOH')">
+<section class="bg-surface-container-low p-4 shrink-0">
+<h2 class="font-headline font-bold text-[10px] uppercase tracking-[0.2em] text-primary-container mb-3 text-center">02: OPERATIONAL ROLE</h2>
+<div class="grid grid-cols-2 gap-2 mb-3" id="role-grid">
+<button class="role-btn bg-surface-container-high p-3 text-left transition-all active" onclick="selectRole('FOH')">
 <span class="font-label text-[8px] block opacity-50 mb-1">FRONT OF HOUSE</span>
 <span class="font-headline text-sm font-bold uppercase">FOH</span>
 </button>
@@ -157,17 +162,17 @@
 <div class="p-3 bg-surface-container-high text-primary-container">
 <span class="material-symbols-outlined text-sm">edit_note</span>
 </div>
-<input class="bg-transparent border-none text-on-surface font-headline font-bold uppercase tracking-widest focus:ring-0 w-full px-4 py-2 text-sm" id="custom-role-input" placeholder="ENTER ROLE..." type="text"/>
+<input class="bg-transparent border-none text-on-surface font-headline font-bold uppercase tracking-widest focus:ring-0 w-full px-4 py-2 text-xs" id="custom-role-input" placeholder="ENTER ROLE..." type="text"/>
 </div>
 </div>
 </section>
 <!-- Section 03: Channel Density -->
-<section class="bg-surface-container-low p-4">
-<h2 class="font-headline font-bold text-[10px] uppercase tracking-[0.2em] text-primary-container mb-4 text-center">03: CHANNEL DENSITY</h2>
-<div class="space-y-4">
+<section class="bg-surface-container-low p-4 shrink-0">
+<h2 class="font-headline font-bold text-[10px] uppercase tracking-[0.2em] text-primary-container mb-3 text-center">03: CHANNEL DENSITY</h2>
+<div class="space-y-3">
 <div class="flex justify-between items-end">
 <div>
-<span class="font-headline text-4xl font-black text-on-surface" id="channel-display">12</span>
+<span class="font-headline text-3xl font-black text-on-surface" id="channel-display">12</span>
 <span class="font-label text-[10px] uppercase text-on-surface-variant tracking-widest ml-1">Active</span>
 </div>
 <div class="text-right">
@@ -176,9 +181,9 @@
 </div>
 </div>
 <!-- Range Slider -->
-<div class="relative py-2">
+<div class="relative py-1">
 <input class="w-full h-1.5 bg-surface-container-highest rounded-none appearance-none cursor-pointer accent-primary-container" id="channel-slider" max="24" min="1" oninput="updateChannels(this.value)" type="range" value="12"/>
-<div class="flex justify-between font-label text-[8px] font-black text-on-surface-variant/50 mt-2">
+<div class="flex justify-between font-label text-[8px] font-black text-on-surface-variant/50 mt-1.5">
 <span>01_CH</span>
 <span>12_CH</span>
 <span>24_MAX</span>
@@ -187,27 +192,29 @@
 </div>
 </section>
 <!-- Primary Action -->
-<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-sm font-headline font-black text-sm uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(0,255,65,0.2)] active:scale-[0.98] transition-all flex items-center justify-center gap-3" onclick="initializeUplink()">
+<div class="mt-auto pt-2">
+<button class="w-full bg-primary-container text-on-primary-container py-4 rounded-sm font-headline font-black text-sm uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(0,255,65,0.2)] active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="uplink-btn" onclick="initializeUplink()">
 <span class="material-symbols-outlined text-lg">cloud_upload</span>
-            INITIALIZE UPLINK
-        </button>
+<span id="btn-text">INITIALIZE UPLINK</span>
+</button>
+</div>
 </div>
 </main>
 <!-- Bottom Navigation (Fixed) -->
 <nav class="shrink-0 w-full flex justify-around items-center px-2 bg-[#0e0e0e] h-[68px] border-t border-white/5 z-50">
-<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 pointer-events-none" href="#">
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-30 pointer-events-none" href="#">
 <span class="material-symbols-outlined text-xl mb-0.5">hub</span>
 <span class="font-['Inter'] text-[8px] uppercase font-black tracking-tighter">Channels</span>
 </a>
-<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 pointer-events-none" href="#">
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-30 pointer-events-none" href="#">
 <span class="material-symbols-outlined text-xl mb-0.5">forum</span>
 <span class="font-['Inter'] text-[8px] uppercase font-black tracking-tighter">Messages</span>
 </a>
-<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 pointer-events-none" href="#">
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-30 pointer-events-none" href="#">
 <span class="material-symbols-outlined text-xl mb-0.5">mic</span>
 <span class="font-['Inter'] text-[8px] uppercase font-black tracking-tighter">PTT</span>
 </a>
-<a class="flex flex-col items-center justify-center text-gray-400 opacity-60 pointer-events-none" href="#">
+<a class="flex flex-col items-center justify-center text-gray-400 opacity-30 pointer-events-none" href="#">
 <span class="material-symbols-outlined text-xl mb-0.5">notifications_active</span>
 <span class="font-['Inter'] text-[8px] uppercase font-black tracking-tighter">Alerts</span>
 </a>
@@ -217,35 +224,81 @@
 </a>
 </nav>
 <script>
-    let selectedRole = 'CUSTOM';
+    let socket;
+    let selectedRole = 'FOH';
     let currentId = '';
     let currentPin = '';
 
-    function generateCredentials() {
-        currentId = Math.floor(1000 + Math.random() * 9000).toString();
-        currentPin = Math.floor(1000 + Math.random() * 9000).toString();
-        document.getElementById('system-id').innerText = currentId;
-        document.getElementById('access-pin').innerText = currentPin;
+    function connectSocket() {
+        const statusEl = document.getElementById('connection-status');
+        const uplinkBtn = document.getElementById('uplink-btn');
+        
+        // Using common socket path for production environments
+        socket = io();
+
+        socket.on('connect', () => {
+            statusEl.innerText = 'ONLINE';
+            statusEl.classList.remove('animate-pulse', 'text-primary-fixed');
+            statusEl.classList.add('bg-primary-container', 'text-on-primary-container');
+            uplinkBtn.disabled = false;
+        });
+
+        socket.on('disconnect', () => {
+            statusEl.innerText = 'OFFLINE';
+            statusEl.classList.add('animate-pulse', 'text-primary-fixed');
+            statusEl.classList.remove('bg-primary-container', 'text-on-primary-container');
+            uplinkBtn.disabled = true;
+        });
+
+        socket.on('show_created', (data) => {
+            currentId = data.id;
+            currentPin = data.pin;
+            
+            document.getElementById('system-id').innerText = currentId;
+            document.getElementById('access-pin').innerText = currentPin;
+
+            // Visual feedback before redirect
+            const btn = document.getElementById('uplink-btn');
+            btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> LINK ESTABLISHED';
+            btn.classList.replace('bg-primary-container', 'bg-primary-fixed');
+            
+            const config = {
+                id: currentId,
+                pin: currentPin,
+                role: selectedRole === 'CUSTOM' ? (document.getElementById('custom-role-input').value || 'CUSTOM_USER') : selectedRole,
+                channels: document.getElementById('channel-slider').value
+            };
+            localStorage.setItem('av_comm_config', JSON.stringify(config));
+
+            setTimeout(() => {
+                window.location.href = 'grid.html';
+            }, 1000);
+        });
+
+        socket.on('error', (err) => {
+            statusEl.innerText = 'ERROR';
+            statusEl.classList.add('bg-error-container', 'text-on-error-container');
+            console.error('Socket error:', err);
+        });
     }
 
     function selectRole(role) {
         selectedRole = role;
         
-        // Update UI buttons
         const buttons = document.querySelectorAll('.role-btn');
         buttons.forEach(btn => {
             const roleName = btn.querySelector('.font-headline').innerText;
-            if (roleName === role || (role === 'CUSTOM' && roleName === 'CUSTOM')) {
+            if (roleName === role) {
                 btn.classList.add('active');
             } else {
                 btn.classList.remove('active');
             }
         });
 
-        // Toggle custom input
         const container = document.getElementById('custom-role-container');
         if (role === 'CUSTOM') {
             container.classList.remove('hidden');
+            document.getElementById('custom-role-input').focus();
         } else {
             container.classList.add('hidden');
         }
@@ -258,35 +311,34 @@
     }
 
     function initializeUplink() {
+        const btn = document.getElementById('uplink-btn');
+        const btnText = document.getElementById('btn-text');
+        
         let roleToSave = selectedRole;
         if (selectedRole === 'CUSTOM') {
             roleToSave = document.getElementById('custom-role-input').value || 'CUSTOM_USER';
         }
 
-        const config = {
-            id: currentId,
-            pin: currentPin,
+        const requestData = {
             role: roleToSave,
             channels: document.getElementById('channel-slider').value
         };
 
-        localStorage.setItem('av_comm_config', JSON.stringify(config));
+        // Emit creation request to server
+        socket.emit('create_show', requestData);
         
-        // Visual feedback
-        const btn = event.currentTarget;
-        btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> UPLINKING...';
+        // Update UI status
         btn.disabled = true;
-
-        setTimeout(() => {
-            window.location.href = 'grid.html';
-        }, 800);
+        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> UPLINKING...';
+        
+        document.getElementById('connection-status').innerText = 'EMITTING...';
     }
 
     // Init
     window.onload = () => {
-        generateCredentials();
-        selectRole('CUSTOM');
-        updateChannels(12);
+        connectSocket();
+        selectRole('FOH'); // Default role
+        updateChannels(12); // Default 12 channels
         document.getElementById('custom-role-input').value = 'A1 - LEAD';
     };
 </script>
