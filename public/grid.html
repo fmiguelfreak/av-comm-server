@@ -16,13 +16,51 @@
             colors: {
               "primary-fixed-dim": "#00e639",
               "primary-container": "#00ff41",
-              "background": "#131313",
-              "surface-container-low": "#1c1b1b",
-              "surface-container-high": "#2a2a2a",
-              "on-surface": "#e5e2e1",
-              "outline-variant": "#3b4b37",
+              "outline": "#84967e",
+              "on-secondary-fixed": "#2e1500",
+              "on-tertiary-container": "#b82a00",
               "secondary-container": "#fd9000",
+              "on-primary-container": "#007117",
+              "tertiary": "#fff8f6",
+              "tertiary-container": "#ffd3c8",
+              "surface-container-low": "#1c1b1b",
+              "background": "#131313",
               "error": "#ffb4ab",
+              "surface-variant": "#353534",
+              "secondary-fixed-dim": "#ffb778",
+              "surface-container-high": "#2a2a2a",
+              "on-background": "#e5e2e1",
+              "primary": "#ebffe2",
+              "on-error": "#690005",
+              "inverse-on-surface": "#313030",
+              "secondary": "#ffb778",
+              "outline-variant": "#3b4b37",
+              "inverse-primary": "#006e16",
+              "on-secondary": "#4c2700",
+              "surface-container": "#201f1f",
+              "surface-bright": "#393939",
+              "primary-fixed": "#72ff70",
+              "on-secondary-container": "#613400",
+              "on-surface-variant": "#b9ccb2",
+              "error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#8a1d00",
+              "surface-container-lowest": "#0e0e0e",
+              "on-primary-fixed-variant": "#00530e",
+              "surface-tint": "#00e639",
+              "surface": "#131313",
+              "on-secondary-fixed-variant": "#6c3a00",
+              "surface-dim": "#131313",
+              "on-surface": "#e5e2e1",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-highest": "#353534",
+              "tertiary-fixed-dim": "#ffb4a2",
+              "secondary-fixed": "#ffdcc1",
+              "on-tertiary": "#621100",
+              "on-primary": "#003907",
+              "on-error-container": "#ffdad6",
+              "on-primary-fixed": "#002203",
+              "on-tertiary-fixed": "#3c0700",
+              "tertiary-fixed": "#ffdad2"
             },
             fontFamily: {
               "headline": ["Space Grotesk"],
@@ -41,199 +79,205 @@
       body {
         overscroll-behavior: none;
         background-color: #131313;
-        height: 100dvh;
         overflow: hidden;
+        height: 100vh;
       }
       .tactical-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(6, 1fr);
-        height: calc(100dvh - 4rem - 5rem);
-        gap: 0.5rem;
-        padding: 0.5rem;
+        height: calc(100vh - 4rem - 5rem); /* viewport minus Header and Nav */
+        gap: 4px;
+        padding: 4px;
       }
       .channel-card {
-        transition: all 0.1s ease;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      .channel-card:active {
-        background-color: #353534;
-      }
-      .state-ready { border-left-color: #00ff41 !important; }
-      .state-ready .status-bar { background-color: #00ff41; box-shadow: 0 0 10px rgba(0,255,65,0.4); }
-      .state-ready .ch-label { color: #00ff41; }
-      
-      .state-alert { border-left-color: #fd9000 !important; }
-      .state-alert .status-bar { background-color: #fd9000; box-shadow: 0 0 10px rgba(253,144,0,0.4); }
-      .state-alert .ch-label { color: #fd9000; }
-
-      #message-popup {
-        transform: translateY(100px);
-        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-      #message-popup.show {
-        transform: translateY(0);
+        min-height: 0; /* Important for grid item shrinking */
       }
     </style>
 </head>
-<body class="font-body text-on-surface bg-background">
+<body class="font-body text-on-surface bg-background select-none flex flex-col h-screen">
 <!-- TOP APP BAR -->
-<header class="w-full border-t-4 border-[#00FF41] bg-[#131313] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-6 h-16 sticky top-0 z-50">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[#00FF41]">terminal</span>
-<span class="font-headline font-bold text-xl tracking-tighter text-[#00FF41]">ST-AUTHORITY</span>
-</div>
-<button class="flex flex-col items-end font-headline uppercase tracking-widest text-sm text-[#00FF41] hover:bg-[#2a2a2a] transition-colors p-1 rounded-sm active:scale-95 duration-75" id="header-config-trigger">
+<header class="w-full border-t-4 border-[#00FF41] bg-[#131313] shadow-[0_0_20px_rgba(0,255,65,0.15)] flex justify-between items-center px-4 h-16 shrink-0 z-50">
 <div class="flex items-center gap-2">
-<div class="w-2 h-2 rounded-full bg-neutral-600" id="connection-indicator"></div>
-<span id="header-info-display">OFFLINE</span>
+<span class="material-symbols-outlined text-[#00FF41]">terminal</span>
+<span class="font-headline font-bold text-lg tracking-tighter text-[#00FF41]">ST-AUTHORITY</span>
 </div>
-<span class="text-[10px] opacity-60" id="header-id-display">--</span>
+<!-- INTERACTIVE ROLE | ID | PIN -->
+<button class="flex flex-col items-end font-headline uppercase tracking-widest text-[#00FF41] hover:bg-[#2a2a2a] transition-colors px-2 py-1 rounded-sm active:scale-95 duration-75 border border-primary-container/20" id="header-auth-trigger">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-variant shadow-[0_0_8px_rgba(255,255,255,0.1)] transition-all duration-300" id="status-indicator"></div>
+<span class="font-bold text-sm" id="role-display">LOADING...</span>
+</div>
+<div class="flex gap-2 text-[10px] font-mono opacity-80">
+<span>ID:<span id="id-display">----</span></span>
+<span>PIN:<span id="pin-display">----</span></span>
+</div>
 </button>
 </header>
-<!-- MAIN TACTICAL CANVAS -->
-<main class="tactical-grid bg-[#1c1b1b]" id="grid-container">
-<!-- Channels 01-12 generated by JS -->
+<!-- MAIN TACTICAL CANVAS (Zero Scroll Optimized) -->
+<main class="tactical-grid bg-[#1c1b1b] flex-grow" id="tactical-canvas">
+<!-- Channels will be dynamically injected here -->
 </main>
-<!-- BOTTOM NAV BAR -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-4 bg-[#131313] border-t border-[#3b4b37]/20 h-20">
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
+<!-- BOTTOM NAV BAR / PTT CONSOLE -->
+<nav class="shrink-0 w-full z-50 flex justify-around items-center px-2 pb-4 bg-[#131313] border-t border-[#3b4b37]/20 h-20">
+<!-- SYSTEM TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">settings_input_component</span>
-<span class="font-bold text-[10px] tracking-widest uppercase">SYSTEM</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">SYSTEM</span>
 </div>
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
+<!-- PATCH TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">settings_ethernet</span>
-<span class="font-bold text-[10px] tracking-widest uppercase">PATCH</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PATCH</span>
 </div>
-<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 scale-110 shadow-[0_0_20px_rgba(0,255,65,0.4)] active:scale-100 transition-all cursor-pointer" id="ptt-btn">
+<!-- CENTRAL PTT BUTTON (PTT TAB ACTIVE) -->
+<div class="flex flex-col items-center justify-center bg-[#00FF41] text-[#007117] rounded-sm px-6 py-2 scale-110 shadow-[0_0_20px_rgba(0,255,65,0.4)] active:scale-100 transition-all cursor-pointer">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">mic</span>
-<span class="font-bold text-[10px] tracking-widest uppercase">PTT</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">PTT</span>
 </div>
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
+<!-- COMMS TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">hub</span>
-<span class="font-bold text-[10px] tracking-widest uppercase">COMMS</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">COMMS</span>
 </div>
-<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60">
+<!-- LOGS TAB -->
+<div class="flex flex-col items-center justify-center text-[#2a2a2a] opacity-60 hover:text-[#00FF41] active:bg-[#72ff70] transition-all">
 <span class="material-symbols-outlined">list_alt</span>
-<span class="font-bold text-[10px] tracking-widest uppercase">LOGS</span>
+<span class="font-['Inter'] font-bold text-[10px] tracking-widest uppercase">LOGS</span>
 </div>
 </nav>
-<!-- Message Popup -->
-<div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] bg-primary-container text-on-primary-container px-4 py-2 rounded-sm font-bold shadow-lg flex items-center gap-2 pointer-events-none" id="message-popup">
-<span class="material-symbols-outlined">notifications_active</span>
-<span>NEW MESSAGE RECEIVED</span>
-</div>
+<!-- Overlay Signal / Alert State (Ghost) -->
+<div class="fixed inset-0 pointer-events-none border-4 border-primary-container/10 z-[60]"></div>
 <script>
-    // 1. Session & Config Initialization
-    let session = JSON.parse(localStorage.getItem('av_comm_session') || '{"roomID":"MAIN_HUB","pin":"4492","role":"FOH","userID":"8829"}');
-    const roles = ['FOH', 'BOH', 'MICS', 'CUSTOM'];
-    const channelNames = ["STAGE_L", "STAGE_R", "DIRECTOR", "PRODUCER", "LIGHTS_1", "VIDEO", "RIGGING", "SPOT_01", "SPOT_02", "PYRO", "SYS_ERR", "SPARE"];
-    
-    // 2. DOM Elements
-    const gridContainer = document.getElementById('grid-container');
-    const headerInfo = document.getElementById('header-info-display');
-    const headerId = document.getElementById('header-id-display');
-    const connIndicator = document.getElementById('connection-indicator');
-    const pttBtn = document.getElementById('ptt-btn');
-    const msgPopup = document.getElementById('message-popup');
+    const SERVER_URL = 'https://av-comm-server-production.up.railway.app';
+    const ROLES = ['FOH', 'STAGE', 'MON', 'LD', 'PROD', 'TECH'];
+    let currentRoleIndex = 0;
+    let config = {
+        id: '8829',
+        pin: '4492',
+        role: 'FOH',
+        channels: [
+            { id: '01', name: 'STAGE_LEFT', status: 'READY', active: true },
+            { id: '02', name: 'STAGE_RIGHT', status: 'STANDBY', active: false },
+            { id: '03', name: 'DIRECTOR_W', status: 'ALERT', active: true, color: 'secondary-container' },
+            { id: '04', name: 'PRODUCER', status: 'IDLE', active: false },
+            { id: '05', name: 'LIGHTING_1', status: 'READY', active: true },
+            { id: '06', name: 'VIDEO_WALL', status: 'IDLE', active: false },
+            { id: '07', name: 'RIGGING_M', status: 'IDLE', active: false },
+            { id: '08', name: 'SPOT_01', status: 'READY', active: true },
+            { id: '09', name: 'SPOT_02', status: 'IDLE', active: false },
+            { id: '10', name: 'PYRO_SAFE', status: 'IDLE', active: false },
+            { id: '11', name: 'SYSTEM_ERR', status: 'EMERGENCY', active: true, color: 'error-container' },
+            { id: '12', name: 'SPARE_LINE', status: 'IDLE', active: false }
+        ]
+    };
 
-    // 3. Socket Connection
-    const socket = io('https://av-comm-server-production.up.railway.app');
-
-    socket.on('connect', () => {
-        connIndicator.classList.remove('bg-neutral-600', 'bg-red-500');
-        connIndicator.classList.add('bg-[#00FF41]', 'shadow-[0_0_8px_#00FF41]');
-        socket.emit('join_room', session);
-    });
-
-    socket.on('joined_success', (data) => {
+    function loadConfig() {
+        const stored = localStorage.getItem('av_comm_config');
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                config = { ...config, ...parsed };
+                currentRoleIndex = ROLES.indexOf(config.role);
+                if (currentRoleIndex === -1) currentRoleIndex = 0;
+            } catch (e) { console.error("Config parse error", e); }
+        }
         updateHeader();
-    });
-
-    socket.on('new_message', () => {
-        msgPopup.classList.add('show');
-        setTimeout(() => msgPopup.classList.remove('show'), 3000);
-    });
-
-    // 4. Grid Rendering
-    function renderGrid() {
-        gridContainer.innerHTML = '';
-        for (let i = 1; i <= 12; i++) {
-            const ch = document.createElement('div');
-            ch.className = `channel-card bg-surface-container-high relative flex flex-col justify-between p-3 rounded-sm border-l-4 border-outline-variant`;
-            ch.dataset.id = i;
-            ch.innerHTML = `
-                <div class="flex justify-between items-start pointer-events-none">
-                    <span class="ch-label font-headline text-lg font-bold">CH ${i.toString().padStart(2, '0')}</span>
-                    <span class="status-text text-[10px] font-label text-outline opacity-50 uppercase">IDLE</span>
-                </div>
-                <div class="flex flex-col gap-1 pointer-events-none">
-                    <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">${channelNames[i-1]}</span>
-                    <div class="status-bar h-1 w-full bg-outline-variant/30"></div>
-                </div>
-            `;
-            
-            // Handshake Logic (Multi-tap)
-            let tapCount = 0;
-            let tapTimer = null;
-
-            ch.addEventListener('pointerdown', (e) => {
-                tapCount++;
-                if (tapTimer) clearTimeout(tapTimer);
-                
-                tapTimer = setTimeout(() => {
-                    const state = tapCount === 1 ? 'READY' : 'ALERT';
-                    updateChannelState(ch, state);
-                    socket.emit('update_channel', { channel: i, state: state, user: session.userID });
-                    tapCount = 0;
-                }, 250);
-            });
-            
-            gridContainer.appendChild(ch);
-        }
+        renderChannels();
     }
 
-    function updateChannelState(el, state) {
-        el.classList.remove('state-ready', 'state-alert');
-        const statusText = el.querySelector('.status-text');
-        
-        if (state === 'READY') {
-            el.classList.add('state-ready');
-            statusText.innerText = 'READY';
-        } else if (state === 'ALERT') {
-            el.classList.add('state-alert');
-            statusText.innerText = 'ALERT';
-        }
+    function saveConfig() {
+        localStorage.setItem('av_comm_config', JSON.stringify(config));
     }
 
-    // 5. Header Logic
     function updateHeader() {
-        headerInfo.innerText = `${session.role} | ${session.userID} | ${session.pin}`;
-        headerId.innerText = `ID: ${session.roomID}`;
+        document.getElementById('role-display').textContent = config.role;
+        document.getElementById('id-display').textContent = config.id;
+        document.getElementById('pin-display').textContent = config.pin;
     }
 
-    document.getElementById('header-config-trigger').addEventListener('click', () => {
-        const currentIdx = roles.indexOf(session.role);
-        session.role = roles[(currentIdx + 1) % roles.length];
-        localStorage.setItem('av_comm_session', JSON.stringify(session));
+    function renderChannels() {
+        const canvas = document.getElementById('tactical-canvas');
+        canvas.innerHTML = '';
+        
+        // Always enforce 12 slots for the zero-scroll grid layout
+        const displayChannels = config.channels.slice(0, 12);
+        
+        displayChannels.forEach(ch => {
+            const card = document.createElement('div');
+            const borderColor = ch.color ? `border-${ch.color}` : (ch.active ? 'border-primary-container' : 'border-outline-variant');
+            const textColor = ch.color ? `text-${ch.color.split('-')[0]}` : (ch.active ? 'text-primary-container' : 'text-on-surface');
+            const barColor = ch.color ? `bg-${ch.color.split('-')[0]}` : (ch.active ? 'bg-primary-container shadow-[0_0_10px_rgba(0,255,65,0.4)]' : 'bg-outline-variant/30');
+
+            card.className = `channel-card bg-surface-container-high relative flex flex-col justify-between p-2 rounded-sm border-l-4 ${borderColor}`;
+            
+            card.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <span class="font-headline text-base font-bold ${textColor}">CH ${ch.id}</span>
+                    <span class="text-[8px] font-label text-outline opacity-50 uppercase">${ch.status || ''}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="font-label text-[9px] uppercase tracking-wider text-on-surface-variant truncate">${ch.name}</span>
+                    <div class="h-1 w-full ${barColor}"></div>
+                </div>
+                ${ch.status === 'READY' || ch.status === 'ALERT' ? `
+                    <div class="absolute bottom-1 right-1">
+                        <span class="text-[8px] font-bold px-1 rounded-sm ${ch.status === 'ALERT' ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-container text-on-primary-container'}">${ch.status}</span>
+                    </div>
+                ` : ''}
+            `;
+            canvas.appendChild(card);
+        });
+    }
+
+    // Interactive Role Switching
+    document.getElementById('header-auth-trigger').addEventListener('click', () => {
+        currentRoleIndex = (currentRoleIndex + 1) % ROLES.length;
+        config.role = ROLES[currentRoleIndex];
         updateHeader();
-        socket.emit('update_role', { role: session.role, userID: session.userID });
+        saveConfig();
+        
+        // Notify server of role change if connected
+        if (socket && socket.connected) {
+            socket.emit('join_room', { 
+                room: config.id, 
+                pin: config.pin, 
+                role: config.role 
+            });
+        }
     });
 
-    // 6. PTT (Mock)
-    pttBtn.addEventListener('pointerdown', () => {
-        pttBtn.classList.add('brightness-125');
-        // socket.emit('ptt_start');
-    });
-    pttBtn.addEventListener('pointerup', () => {
-        pttBtn.classList.remove('brightness-125');
-        // socket.emit('ptt_stop');
-    });
+    // Socket Connection
+    let socket;
+    function initSocket() {
+        socket = io(SERVER_URL);
+        const indicator = document.getElementById('status-indicator');
 
-    // Initial Load
-    renderGrid();
-    updateHeader();
+        socket.on('connect', () => {
+            indicator.className = "w-2.5 h-2.5 rounded-full bg-primary-container shadow-[0_0_8px_#00FF41]";
+            socket.emit('join_room', { 
+                room: config.id, 
+                pin: config.pin, 
+                role: config.role 
+            });
+        });
 
+        socket.on('joined_success', (data) => {
+            console.log('Successfully joined:', data);
+            // Flash indicator
+            indicator.classList.add('animate-pulse');
+            setTimeout(() => indicator.classList.remove('animate-pulse'), 1000);
+        });
+
+        socket.on('disconnect', () => {
+            indicator.className = "w-2.5 h-2.5 rounded-full bg-error shadow-[0_0_8px_#ffb4ab]";
+        });
+    }
+
+    // Initialize
+    window.addEventListener('load', () => {
+        loadConfig();
+        initSocket();
+    });
 </script>
 </body></html>
