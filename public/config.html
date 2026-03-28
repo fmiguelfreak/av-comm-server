@@ -1,10 +1,27 @@
 <script>
-const session = JSON.parse(localStorage.getItem('av_session'));
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById('system-id').innerText = session.roomID;
-document.getElementById('access-pin').innerText = session.pin;
+    const sessionRaw = localStorage.getItem('av_session');
 
-document.getElementById('uplink-btn').onclick = () => {
-    window.location.href = "grid.html";
-};
+    if (!sessionRaw) {
+        window.location.href = "/";
+        return;
+    }
+
+    const session = JSON.parse(sessionRaw);
+
+    const idEl = document.getElementById('system-id');
+    const pinEl = document.getElementById('access-pin');
+    const btn = document.getElementById('uplink-btn');
+
+    if (idEl) idEl.innerText = session.roomID;
+    if (pinEl) pinEl.innerText = session.pin;
+
+    if (btn) {
+        btn.onclick = () => {
+            window.location.href = "grid.html";
+        };
+    }
+
+});
 </script>
