@@ -1,19 +1,12 @@
-// Card markup retained from the reference snapshot; session and transport logic are new.
+// Presentation template; gestures are bound separately using the existing Socket.IO contract.
 const channelMarkup = ch => `
-            <div id="ch-${ch.id}" class="channel-card bg-surface-container-high relative flex flex-col justify-between p-2.5 rounded-sm border-l-4 border-zinc-700" role="button" tabindex="0" aria-label="Channel ${ch.id}">
-                <div class="flex justify-between items-start">
-                    <span class="font-headline text-base font-bold text-zinc-400 ch-num">CH ${ch.id < 10 ? '0' + ch.id : ch.id}</span>
-                    <span class="text-[9px] font-label text-outline opacity-50 status-text">IDLE</span>
-                </div>
-                <div class="flex flex-col gap-1">
-                    <span class="font-label text-[9px] uppercase tracking-widest text-zinc-500">${ch.label}</span>
-                    <div class="h-1 w-full bg-zinc-800 indicator-bar"></div>
-                </div>
-                <div class="absolute bottom-1 right-1 hidden badge">
-                    <span class="text-[8px] font-bold px-1 rounded-sm"></span>
-                </div>
-            </div>
-        `;
+  <div id="ch-${ch.id}" class="channel-card" data-status="IDLE" role="button" tabindex="0" aria-label="Channel ${ch.id}">
+    <div class="channel-top"><span class="ch-num">CH ${String(ch.id).padStart(2, '0')}</span><span class="status-text">IDLE</span></div>
+    <div class="channel-name">${ch.label.replaceAll('_', ' ')}</div>
+    <div class="channel-bottom"><div class="indicator-bar"></div><span class="channel-caption">PRODUCTION INTERCOM</span></div>
+    <div class="badge hidden"><span></span></div>
+  </div>
+`;
 (() => {
   let session = AV.required();
   if (!session) return;
@@ -22,19 +15,25 @@ const channelMarkup = ch => `
   const info = document.getElementById('session-info');
   const dot = document.getElementById('status-dot');
   const labels = ['STAGE_LEFT', 'STAGE_RIGHT', 'DIRECTOR_W', 'PRODUCER', 'LIGHTING_1', 'VIDEO_WALL', 'RIGGING_M', 'SPOT_01', 'SPOT_02', 'PYRO_SAFE', 'SYSTEM_ERR', 'SPARE_LINE'];
-  const timers = new Map();
+  let gestures = [];
   let joined = false;
   let count = 0;
-  const colors = { IDLE: '#71717a', READY: '#00ff41', ALERT: '#fd9000', EMERGENCY: '#ffb4ab' };
+  const colors = { IDLE: '#71717a', READY: '#00ff41', ALERT: '#ffad42', EMERGENCY: '#ff5059' };
   document.getElementById('device-id').textContent = `ID: ${session.showId}`;
-  function availability() {
+  function availability(connectionState) {
     grid.querySelectorAll('.channel-card').forEach(card => card.setAttribute('aria-disabled', String(!joined)));
-    dot.className = joined ? 'w-2 h-2 rounded-full bg-[#00FF41] shadow-[0_0_8px_#00FF41]' : 'w-2 h-2 rounded-full bg-zinc-600';
-    info.textContent = joined ? `${session.role} | ${session.showId} | ${session.pin}` : 'OFFLINE';
+    dot.className = 'small-led';
+    info.textContent = `${session.role} | SHOW ID ${session.showId} | PIN ${session.pin}`;
+    document.getElementById('show-name').textContent = session.name;
+    document.getElementById('show-name').title = session.name;
+    const state = connectionState || (joined ? 'ONLINE' : navigator.onLine && socket.active ? 'RECONNECTING' : 'OFFLINE');
+    document.getElementById('connection-label').textContent = state;
+    document.getElementById('connection-status').dataset.state = state;
   }
   function update(chId, status) {
     const card = document.getElementById(`ch-${chId}`);
     if (!card || !colors[status]) return;
+    card.dataset.status = status;
     const active = status !== 'IDLE';
     card.style.borderLeftColor = active ? colors[status] : '';
     card.querySelector('.ch-num').style.color = active ? colors[status] : '';
@@ -42,7 +41,7 @@ const channelMarkup = ch => `
     const bar = card.querySelector('.indicator-bar');
     bar.style.backgroundColor = active ? colors[status] : '';
     bar.style.boxShadow = status === 'READY' ? '0 0 10px rgba(0,255,65,0.4)' : '';
-    bar.classList.toggle('animate-pulse', status === 'EMERGENCY');
+    // A steady red indicator is readable without decorative emergency flashing.
     const badge = card.querySelector('.badge');
     badge.classList.toggle('hidden', !['READY', 'ALERT'].includes(status));
     badge.children[0].textContent = status;
@@ -53,22 +52,20 @@ const channelMarkup = ch => `
     if (!joined || !socket.connected) return;
     socket.emit('update_channel', { showId: session.showId, chId, status });
   }
-  function clearTimers() { timers.forEach(clearTimeout); timers.clear(); }
+  function clearTimers() { gestures.forEach(gesture => gesture.cancel()); }
+  window.addEventListener('blur', clearTimers);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimers(); });
   function build(channels) {
-    clearTimers(); count = channels;
+    gestures.forEach(gesture => gesture.destroy());
+    gestures = []; count = channels;
     grid.innerHTML = Array.from({ length: channels }, (_, i) => channelMarkup({ id: i + 1, label: labels[i] || `CHANNEL_${String(i + 1).padStart(2, '0')}` })).join('');
-    // Exactly the reference's 2 × 6 at 12 channels; additional channels retain readable cards.
-    grid.style.gridTemplateRows = `repeat(${Math.ceil(channels / 2)}, minmax(56px, 1fr))`;
-    grid.style.overflowY = 'auto';
+    // Responsive columns and row sizing belong to the presentation stylesheet.
+    document.getElementById('channel-total').textContent = `${channels} CHANNEL${channels === 1 ? '' : 'S'}`;
     grid.querySelectorAll('.channel-card').forEach((card, i) => {
-      card.addEventListener('click', () => {
-        if (!joined) return;
-        if (timers.has(i)) { clearTimeout(timers.get(i)); timers.delete(i); send(i + 1, 'ALERT'); }
-        else timers.set(i, setTimeout(() => { timers.delete(i); send(i + 1, 'READY'); }, 250));
-      });
-      card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); send(i + 1, e.shiftKey ? 'ALERT' : 'READY'); }
-      });
+      gestures.push(bindChannelGestures(card, {
+        enabled: () => joined && socket.connected,
+        send: status => send(i + 1, status)
+      }));
     });
     availability();
   }
@@ -84,7 +81,10 @@ const channelMarkup = ch => `
   socket.on('join_success', data => { joined = true; AV.error(''); snapshot(data); });
   socket.on('show_configured', snapshot);
   socket.on('disconnect', () => { joined = false; clearTimers(); availability(); });
-  socket.on('join_error', () => { joined = false; availability(); });
+  socket.on('join_error', () => { joined = false; clearTimers(); availability('OFFLINE'); });
+  socket.on('connect_error', () => availability(navigator.onLine && socket.active ? 'RECONNECTING' : 'OFFLINE'));
+  socket.io.on('reconnect_attempt', () => availability(navigator.onLine ? 'RECONNECTING' : 'OFFLINE'));
+  window.addEventListener('offline', () => availability('OFFLINE'));
   socket.on('state_changed', data => { if (joined && data.showId === session.showId) update(data.chId, data.status); });
   build(session.channels);
 
@@ -93,8 +93,8 @@ const channelMarkup = ch => `
   const overlay = document.getElementById('ptt-overlay');
   overlay.style.pointerEvents = 'none';
   let pttTimer;
-  const stopPTT = () => { clearTimeout(pttTimer); overlay.classList.add('hidden'); };
-  const startPTT = () => { stopPTT(); overlay.classList.remove('hidden'); pttTimer = setTimeout(stopPTT, 3000); };
+  const stopPTT = () => { clearTimeout(pttTimer); overlay.classList.add('hidden'); ptt.classList.remove('is-listening'); ptt.setAttribute('aria-pressed', 'false'); };
+  const startPTT = () => { stopPTT(); overlay.classList.remove('hidden'); ptt.classList.add('is-listening'); ptt.setAttribute('aria-pressed', 'true'); pttTimer = setTimeout(stopPTT, 3000); };
   ptt.setAttribute('role', 'button'); ptt.tabIndex = 0; ptt.style.touchAction = 'none';
   ptt.addEventListener('pointerdown', e => { e.preventDefault(); ptt.setPointerCapture(e.pointerId); startPTT(); });
   ['pointerup', 'pointercancel', 'lostpointercapture', 'blur'].forEach(event => ptt.addEventListener(event, stopPTT));

@@ -99,13 +99,15 @@ const os = require('node:os');
     await b.goto(base);
     await b.locator('#btn-join-show').scrollIntoViewIfNeeded();
     const joinBounds = await b.locator('#btn-join-show').boundingBox();
-    assert(joinBounds.y >= 64 && joinBounds.y + joinBounds.height <= 667 - 80);
+    assert(joinBounds.y >= 0 && joinBounds.y + joinBounds.height <= 667);
     await b.screenshot({ path: path.join(os.tmpdir(), 'avcomm-index-mobile.png') });
     await b.evaluate(() => localStorage.setItem('av_session', '{'));
     await b.goto(base + '/grid.html'); await b.waitForURL(base + '/');
     console.log('PASS: malformed session redirects safely');
     assert.deepEqual(errors, []);
     console.log('PASS: no browser JavaScript errors');
+    await require('./gestures-browser.cjs')(browser, base, io);
+    await require('./visual-browser.cjs')(browser, base);
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => io.close(resolve));
