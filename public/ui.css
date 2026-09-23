@@ -1415,3 +1415,12 @@ input::placeholder {
 @media (prefers-reduced-motion: reduce) {
   .channel-card.is-holding::after { transform: scaleX(1); opacity: .5; }
 }
+/* Native voice recognition and the existing text-message overlay. */
+.ptt-control[aria-disabled="true"] { filter: saturate(.15); }
+.ptt-control[aria-disabled="true"] small { font-size: 7px; }
+.ptt-overlay:not([data-voice-state="listening"]) .level-bars { visibility: hidden; }
+#ptt-transcript { font-size: 20px; line-height: 1.4; margin: 17px 0; overflow-wrap: anywhere; max-height: 25dvh; overflow: auto; }
+#ptt-mic-state { color: var(--green); }
+.message-overlay:not(.hidden) { animation: none !important; visibility: visible; }
+#message-text { overflow-wrap: anywhere; max-height: 30dvh; overflow: hidden; }
+#message-time { margin-left: auto; font-size: 11px; color: var(--muted); }

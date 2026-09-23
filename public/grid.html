@@ -63,7 +63,7 @@
 <span class="material-symbols-outlined" aria-hidden="true">settings_ethernet</span>
 <span>PATCH</span>
 </div>
-<div id="ptt-btn" class="ptt-control" role="button" tabindex="0" aria-label="Hold PTT to preview listening interface">
+<div id="ptt-btn" class="ptt-control" role="button" tabindex="0" aria-label="Hold PTT to speak; release to send text">
 <span class="ptt-icon">
 <span class="material-symbols-outlined" aria-hidden="true">mic</span>
 </span>
@@ -88,12 +88,12 @@
 <div class="overlay-heading">
 <span class="small-led">
 </span>
-<strong>LISTENING...</strong>
-<span class="visual-only">VISUAL PREVIEW</span>
+<strong id="ptt-heading">LISTENING...</strong>
+<span class="visual-only" id="ptt-mic-state">pt-PT</span>
 </div>
-<p class="transcript-placeholder">Preciso do microfone 3 no palco</p>
+<p id="ptt-transcript" class="transcript-placeholder"></p>
 <div class="listening-footer">
-<span>TRANSCRIPT PREVIEW · VOICE INPUT NOT CONNECTED</span>
+<span id="ptt-feedback">LARGA PTT PARA ENVIAR · APENAS TEXTO</span>
 <div class="level-bars" aria-hidden="true">
 <i>
 </i>
@@ -114,16 +114,18 @@
 </section>
 <section id="message-overlay" class="message-overlay hidden" aria-live="polite" aria-label="Received message">
 <div class="overlay-heading">
-<span class="message-source">FOH</span>
+<span class="message-source"></span>
 <span class="eyebrow">INCOMING MESSAGE</span>
+<time id="message-time"></time>
 </div>
-<p>PRECISO DO MICROFONE 3 NO PALCO</p>
+<p id="message-text"></p>
 </section>
 <script src="/socket.io/socket.io.js">
 </script>
 <script src="/session.js">
 </script>
 <script src="/channel-gestures.js"></script>
+<script src="/voice-ptt.js"></script>
 <script src="/grid.js">
 </script>
 </body>

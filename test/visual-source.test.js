@@ -29,6 +29,7 @@ test('visual revision preserves backend, session, setup logic and channel action
   const events = s => [...s.matchAll(/socket\.emit\([^;]+;/g)].map(m => m[0]);
   assert.deepEqual(events(current), events(old));
   for (const hook of ['ch-num', 'status-text', 'indicator-bar', 'badge']) assert(current.includes(hook));
-  assert.match(current, /setTimeout\(stopPTT, 3000\)/);
-  assert(!/getUserMedia|SpeechRecognition|MediaRecorder/.test(current));
+  assert(current.includes('bindVoicePTT'));
+  assert(!/getUserMedia|MediaRecorder/.test(current));
+  assert.equal(fs.readFileSync('public/channel-gestures.js', 'utf8'), execFileSync('git', ['show', '28e00c9:public/channel-gestures.js'], { encoding: 'utf8' }));
 });

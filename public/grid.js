@@ -88,17 +88,5 @@ const channelMarkup = ch => `
   socket.on('state_changed', data => { if (joined && data.showId === session.showId) update(data.chId, data.status); });
   build(session.channels);
 
-  // Visual PTT only: no microphone, recording, transcription, or audio transport.
-  const ptt = document.getElementById('ptt-btn');
-  const overlay = document.getElementById('ptt-overlay');
-  overlay.style.pointerEvents = 'none';
-  let pttTimer;
-  const stopPTT = () => { clearTimeout(pttTimer); overlay.classList.add('hidden'); ptt.classList.remove('is-listening'); ptt.setAttribute('aria-pressed', 'false'); };
-  const startPTT = () => { stopPTT(); overlay.classList.remove('hidden'); ptt.classList.add('is-listening'); ptt.setAttribute('aria-pressed', 'true'); pttTimer = setTimeout(stopPTT, 3000); };
-  ptt.setAttribute('role', 'button'); ptt.tabIndex = 0; ptt.style.touchAction = 'none';
-  ptt.addEventListener('pointerdown', e => { e.preventDefault(); ptt.setPointerCapture(e.pointerId); startPTT(); });
-  ['pointerup', 'pointercancel', 'lostpointercapture', 'blur'].forEach(event => ptt.addEventListener(event, stopPTT));
-  ptt.addEventListener('keydown', e => { if (!e.repeat && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); startPTT(); } });
-  ptt.addEventListener('keyup', stopPTT);
-  window.addEventListener('blur', stopPTT);
+  bindVoicePTT({ socket, getSession: () => session, allowed: () => joined && socket.connected });
 })();

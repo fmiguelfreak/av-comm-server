@@ -22,6 +22,7 @@ module.exports = async function visualReview(browser, base) {
       ['ipad',820,1180,2], ['tablet-landscape',1024,768,2], ['mobile',390,844,2], ['narrow-mobile',320,568,1]
     ]) {
       const context = await browser.newContext({ viewport: { width, height }, isMobile: width < 700, hasTouch: width <= 1100 });
+      await context.addInitScript(require('./speech-mock.cjs'));
       const page = await context.newPage();
       const errors = []; page.on('pageerror', error => errors.push(error.message));
       await page.addInitScript(data => localStorage.setItem('av_session', JSON.stringify(data)), session);
@@ -56,10 +57,10 @@ module.exports = async function visualReview(browser, base) {
         assert.equal(await page.locator('#ptt-overlay').isVisible(), true);
         await page.screenshot({ path: path.join(output, 'grid-listening-desktop.png') });
         await page.locator('#ptt-btn').dispatchEvent('keyup', { key: 'Enter' });
-        // UI template preview only; this is not a received/transcribed message.
-        await page.locator('#message-overlay').evaluate(el => el.classList.remove('hidden'));
+        client.emit('new_message', { showId: session.showId, text: 'PRECISO DO MICROFONE 3 NO PALCO', sender: 'FOH' });
+        await page.waitForFunction(() => !document.getElementById('message-overlay').classList.contains('hidden'));
         await page.screenshot({ path: path.join(output, 'grid-message-preview-desktop.png') });
-        await page.waitForFunction(() => getComputedStyle(document.getElementById('message-overlay')).visibility === 'hidden', null, { timeout: 8000 });
+        await page.waitForFunction(() => document.getElementById('message-overlay').classList.contains('hidden'), null, { timeout: 8000 });
       }
       assert.deepEqual(errors, [], `${name} JS errors`);
       console.log(`PASS VISUAL: ${name} ${width}×${height} — 3 pages, ${columns} grid columns, hooks and viewport bounds`);
